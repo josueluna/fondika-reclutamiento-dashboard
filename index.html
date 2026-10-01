@@ -149,6 +149,9 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
 .data-state[hidden]{display:none}
 .shell.no-data .page{display:none!important}
 .stages-title{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#777b7f;margin-top:18px}
+.kpi-scope{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#777b7f;margin:0 0 8px}
+.kpi-scope span{font-weight:600;text-transform:none;letter-spacing:0;color:#929699}
+.funnel-note{font-size:10px;color:#929699;margin-top:10px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -218,6 +221,7 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
         <div class="snapshot"><span class="pulse"></span><span id="overviewSnapshot">—</span></div>
       </div>
 
+      <div class="kpi-scope">Procesos activos · acumulado al corte <span>· Cubiertos, pausados y cancelados en Histórico</span></div>
       <div class="kpis" id="kpiGrid"></div>
 
       <div class="grid-main">
@@ -312,6 +316,7 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
         <div class="card">
           <div class="card-head"><div><div class="card-title">Conversión del proceso</div><div class="card-sub">Hitos acumulados de la requisición</div></div></div>
           <div class="funnel" id="detailFunnel" style="grid-template-columns:1fr;gap:9px"></div>
+          <div class="funnel-note">Las métricas reflejan evidencia registrada y no necesariamente una secuencia completa de etapas.</div>
         </div>
       </div>
 
@@ -324,15 +329,15 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
     </section>
 
     <div class="footer">
-      <span>Maqueta conceptual · FÓNDIKA Capital Humano</span>
-      <span>Datos simulados · No representa información real</span>
+      <span>FÓNDIKA Capital Humano</span>
+      <span id="footerSource">—</span>
     </div>
   </main>
 </div>
 
 <script>
 /* ===== Configuración ===== */
-const DATA_URL = 'data/dashboard.sample.json';
+const DATA_URL = 'data/dashboard.json';
 const SUPPORTED_SCHEMA_MAJOR = 1;
 const MIN_SCHEMA_MINOR = 1;   // 1.1.0 añade contactados/entrevistados/ofertas a la foto de cada vacante
 
@@ -496,12 +501,19 @@ function setDataState(message, isError){
 const emptyTotals = () => Object.fromEntries(METRIC_KEYS.map(k => [k, 0]));
 const activeVacantes = () => store.vacantes.filter(v => v.estatus === 'Activa');
 const inactiveVacantes = () => store.vacantes.filter(v => v.estatus !== 'Activa');
-const daysOpen = v => daysBetween(v.fechaApertura, v.fechaCierre || store.generatedDate);
+// Activa/Pausada: hasta el corte. Cubierta/Cancelada: hasta fechaCierre; sin cierre registrado no se calcula (null).
+const isOpenStatus = v => v.estatus === 'Activa' || v.estatus === 'Pausada';
+const daysOpen = v => v.fechaCierre ? daysBetween(v.fechaApertura, v.fechaCierre)
+  : isOpenStatus(v) ? daysBetween(v.fechaApertura, store.generatedDate) : null;
+const closeLabel = v => v.fechaCierre ? fmtDate(v.fechaCierre) : isOpenStatus(v) ? '—' : 'No registrado';
 
 /*
   Separación estructural de fuentes:
-  - Foto al corte (KPIs, tablas, pulso, funnel): exclusivamente estadoActual.vacantes[].metricas.
-  - Actividad a través del tiempo (gráficas Semanal/Mensual/Anual): exclusivamente historico.actividad.
+  - Foto al corte (KPIs de Overview/Histórico/detalle, tablas, funnel, estado actual, etapas y los
+    datos de snapshot del pulso): exclusivamente estadoActual.vacantes[].metricas.
+  - Evidencia de actividad histórica: exclusivamente historico.actividad. Incluye las gráficas
+    Semanal/Mensual/Anual, la gráfica del detalle y los indicadores que miden actividad
+    explícitamente (p. ej. "Procesos con actividad esta semana" del pulso).
   Nunca se reconstruye la foto sumando historico.actividad: la actividad recuperable puede ser menor que el acumulado.
 */
 
@@ -656,6 +668,7 @@ function renderPulse(rows){
   const count = rows.length;
   document.getElementById('activeCount').textContent = count;
 
+  // Indicador de actividad histórica (historico.actividad), no un acumulado al corte.
   // "Esta semana" = semana (lun–dom) que contiene la fecha de generación.
   // Si la evidencia no llega a esa semana, el dato es desconocido y no se muestra como 0.
   const weekStart = bucketStart(store.generatedDate, 'week');
@@ -680,7 +693,7 @@ function renderActiveRows(rows){
     const t = v.metricas;   // foto al corte
     return `<tr class="clickable" data-vacante-id="${esc(v.vacanteId)}">
       <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div><div class="subtext">${statusBadge(v.estatus)}</div></td>
-      <td>${esc(v.area)}</td><td>${esc(v.hiringManager)}</td><td>${daysOpen(v)}</td>
+      <td>${esc(v.area)}</td><td>${esc(v.hiringManager)}</td><td>${fmtNum(daysOpen(v))}</td>
       <td><b>${fmtNum(t.contactados)}</b></td><td>${fmtNum(t.entrevistados)}</td><td>${fmtNum(t.ofertas)}</td><td>${fmtNum(t.contrataciones)}</td><td><span class="arrow">›</span></td>
     </tr>`;
   }).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
@@ -733,11 +746,11 @@ function renderHistory(){
   ]);
 
   document.getElementById('historyRows').innerHTML = rows.map(v => {
-    // Foto del proceso al corte (estadoActual); historico.actividad sólo alimenta las gráficas.
+    // Foto del proceso al corte (estadoActual); historico.actividad nunca reconstruye estos acumulados.
     const s = v.metricas;
     return `<tr class="clickable" data-vacante-id="${esc(v.vacanteId)}">
       <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div></td>
-      <td>${statusBadge(v.estatus)}</td><td>${fmtDate(v.fechaApertura)}</td><td>${fmtDate(v.fechaCierre)}</td>
+      <td>${statusBadge(v.estatus)}</td><td>${fmtDate(v.fechaApertura)}</td><td>${esc(closeLabel(v))}</td>
       <td>${fmtNum(s.contactados)}</td><td>${fmtNum(s.entrevistados)}</td><td>${fmtNum(s.ofertas)}</td><td>${fmtNum(s.contrataciones)}</td><td><span class="arrow">›</span></td>
     </tr>`;
   }).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos históricos que coincidan con los filtros seleccionados.</td></tr>`;
@@ -758,19 +771,21 @@ function showPage(page){
   }
 }
 
-const pctOf = (n, d, of) => (n !== null && d) ? ` · ${Math.round(n/d*100)}% DE ${of}` : '';
+// Conversión secuencial. Si el numerador supera a la etapa anterior, la evidencia no forma una
+// secuencia completa: se muestra — en lugar de un porcentaje > 100%. Los conteos no se alteran.
+const pctOf = (n, d, of) => (n === null || !d) ? '' : n > d ? ` · — DE ${of}` : ` · ${Math.round(n/d*100)}% DE ${of}`;
 
 function openDetail(vacanteId){
   const v = store.vacById[vacanteId];
   if(!v) return;
   previousPage = v.estatus === 'Activa' ? 'overview' : 'history';
-  const m = v.metricas;   // foto al corte: KPIs y funnel; historico.actividad sólo alimenta la gráfica
+  const m = v.metricas;   // foto al corte: KPIs y funnel; historico.actividad sólo alimenta la gráfica de actividad del detalle
 
   document.getElementById('detailReq').textContent = v.reqId;
   document.getElementById('detailName').textContent = v.nombre;
   document.getElementById('detailMeta').innerHTML = [
     ['Estatus', v.estatus], ['Área', v.area], ['HM', v.hiringManager], ['Posiciones', v.posiciones],
-    ['Apertura', fmtDate(v.fechaApertura)], ['Cierre', fmtDate(v.fechaCierre)], ['Días abierta', daysOpen(v)]
+    ['Apertura', fmtDate(v.fechaApertura)], ['Cierre', closeLabel(v)], ['Días abierta', daysOpen(v) ?? 'No disponible']
   ].map(([k, val]) => `<span><b>${k}:</b> ${esc(val)}</span>`).join('');
   document.getElementById('detailCut').textContent = `Snapshot ${fmtDate(store.generatedDate)}`;
 
@@ -833,6 +848,8 @@ async function init(){
   document.getElementById('headerCut').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('overviewSnapshot').textContent = `Generado ${fmtGenerated()}`;
   document.getElementById('historySnapshot').textContent = `Evidencia ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
+  document.getElementById('footerSource').textContent =
+    `Fuente: ${store.metadata.source} · Snapshot ${fmtDate(store.generatedDate)} · Evidencia histórica: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
 
   refreshFilterOptions();
   refreshHistoryOptions();
