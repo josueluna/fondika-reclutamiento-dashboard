@@ -258,7 +258,7 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
         </div>
         <table>
           <thead><tr>
-            <th>Requisición / Vacante</th><th>Área</th><th>Hiring Manager</th><th>Días abierta</th><th>Contactados</th><th>Entrevistados</th><th>Ofertas</th><th>Contrataciones</th><th></th>
+            <th>Requisición / Vacante</th><th>Área</th><th>Hiring Manager</th><th>Días abierta</th><th>Nuevo</th><th>Contactados</th><th>Entrevistados</th><th>Ofertas</th><th>Contrataciones</th><th></th>
           </tr></thead>
           <tbody id="activeRows"></tbody>
         </table>
@@ -688,15 +688,18 @@ function renderPulse(rows){
   document.getElementById('stale7').textContent = fmtNum(sumNullable(rows, 'sinMovimiento7d'));
 }
 
+// Cantidad actual en una etapa (estadoActual.vacantes[].etapas[]); 0 si la etapa no existe.
+const getStageCount = (v, id) => (v.etapas || []).find(e => e.id === id)?.cantidad ?? 0;
+
 function renderActiveRows(rows){
   document.getElementById('activeRows').innerHTML = rows.map(v => {
     const t = v.metricas;   // foto al corte
     return `<tr class="clickable" data-vacante-id="${esc(v.vacanteId)}">
       <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div><div class="subtext">${statusBadge(v.estatus)}</div></td>
       <td>${esc(v.area)}</td><td>${esc(v.hiringManager)}</td><td>${fmtNum(daysOpen(v))}</td>
-      <td><b>${fmtNum(t.contactados)}</b></td><td>${fmtNum(t.entrevistados)}</td><td>${fmtNum(t.ofertas)}</td><td>${fmtNum(t.contrataciones)}</td><td><span class="arrow">›</span></td>
+      <td>${fmtNum(getStageCount(v, 'nuevo'))}</td><td><b>${fmtNum(t.contactados)}</b></td><td>${fmtNum(t.entrevistados)}</td><td>${fmtNum(t.ofertas)}</td><td>${fmtNum(t.contrataciones)}</td><td><span class="arrow">›</span></td>
     </tr>`;
-  }).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
+  }).join('') || `<tr><td colspan="10" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
   document.getElementById('activeCountBadge').textContent = plural(rows.length, 'proceso activo', 'procesos activos');
 }
 
