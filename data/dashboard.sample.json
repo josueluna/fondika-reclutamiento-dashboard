@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "1.1.0",
+  "metadata": {
+    "generatedAt": "2026-07-22T19:00:00-06:00",
+    "timezone": "America/Mexico_City",
+    "source": "Hira",
+    "dimensionSemantics": "vacante_actual_al_generar",
+    "cobertura": {
+      "desdeEvidencia": "2026-06-01",
+      "hastaEvidencia": "2026-07-22"
+    },
+    "metricas": [
+      "contactados",
+      "entrevistados",
+      "ofertas",
+      "contrataciones"
+    ]
+  },
+  "estadoActual": {
+    "vacantes": [
+      {
+        "vacanteId": "demo-v01",
+        "reqId": "REQ-DEMO-001",
+        "nombre": "Analista de Datos",
+        "area": "Tecnología",
+        "hiringManager": "Laura Méndez",
+        "estatus": "Activa",
+        "posiciones": 1,
+        "fechaApertura": "2026-05-25",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 27,
+          "activas": 5,
+          "contactados": 14,
+          "entrevistados": 8,
+          "ofertas": 1,
+          "contrataciones": 0,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "etapas": [
+          { "id": "contactado", "label": "Contactado", "orden": 1, "cantidad": 2 },
+          { "id": "entrevista", "label": "Entrevista", "orden": 2, "cantidad": 2 },
+          { "id": "oferta", "label": "Oferta", "orden": 3, "cantidad": 1 }
+        ]
+      },
+      {
+        "vacanteId": "demo-v02",
+        "reqId": "REQ-DEMO-002",
+        "nombre": "Ejecutivo de Cuenta",
+        "area": "Ventas",
+        "hiringManager": "Ricardo Salas",
+        "estatus": "Activa",
+        "posiciones": 2,
+        "fechaApertura": "2026-06-01",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 33,
+          "activas": 6,
+          "contactados": 16,
+          "entrevistados": 9,
+          "ofertas": 2,
+          "contrataciones": 1,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "etapas": [
+          { "id": "contactado", "label": "Contactado", "orden": 1, "cantidad": 3 },
+          { "id": "entrevista-rh", "label": "Entrevista RH", "orden": 2, "cantidad": 2 },
+          { "id": "entrevista-hm", "label": "Entrevista HM", "orden": 3, "cantidad": 1 },
+          { "id": "oferta", "label": "Oferta", "orden": 4, "cantidad": 0 }
+        ]
+      },
+      {
+        "vacanteId": "demo-v03",
+        "reqId": "REQ-DEMO-003",
+        "nombre": "Contador Senior",
+        "area": "Finanzas",
+        "hiringManager": "Sofía Ibarra",
+        "estatus": "Cubierta",
+        "posiciones": 1,
+        "fechaApertura": "2026-05-18",
+        "fechaCierre": "2026-07-10",
+        "metricas": {
+          "postulaciones": 12,
+          "activas": 0,
+          "contactados": 6,
+          "entrevistados": 3,
+          "ofertas": 1,
+          "contrataciones": 1,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "etapas": [
+          { "id": "contactado", "label": "Contactado", "orden": 1, "cantidad": 0 },
+          { "id": "entrevista", "label": "Entrevista", "orden": 2, "cantidad": 0 },
+          { "id": "oferta", "label": "Oferta", "orden": 3, "cantidad": 0 }
+        ]
+      },
+      {
+        "vacanteId": "demo-v04",
+        "reqId": "REQ-DEMO-004",
+        "nombre": "Coordinador de Logística",
+        "area": "Operaciones",
+        "hiringManager": "Ricardo Salas",
+        "estatus": "Pausada",
+        "posiciones": 1,
+        "fechaApertura": "2026-06-08",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 7,
+          "activas": 2,
+          "contactados": 3,
+          "entrevistados": 1,
+          "ofertas": 0,
+          "contrataciones": 0,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "etapas": [
+          { "id": "contactado", "label": "Contactado", "orden": 1, "cantidad": 1 },
+          { "id": "entrevista", "label": "Entrevista", "orden": 2, "cantidad": 1 },
+          { "id": "oferta", "label": "Oferta", "orden": 3, "cantidad": 0 }
+        ]
+      },
+      {
+        "vacanteId": "demo-v05",
+        "reqId": "REQ-DEMO-005",
+        "nombre": "Desarrollador Backend",
+        "area": "Tecnología",
+        "hiringManager": "Laura Méndez",
+        "estatus": "Cancelada",
+        "posiciones": 1,
+        "fechaApertura": "2026-06-01",
+        "fechaCierre": "2026-07-03",
+        "metricas": {
+          "postulaciones": 5,
+          "activas": 0,
+          "contactados": 2,
+          "entrevistados": 1,
+          "ofertas": 0,
+          "contrataciones": 0,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "etapas": [
+          { "id": "contactado", "label": "Contactado", "orden": 1, "cantidad": 0 },
+          { "id": "entrevista", "label": "Entrevista", "orden": 2, "cantidad": 0 }
+        ]
+      }
+    ]
+  },
+  "historico": {
+    "actividad": [
+      { "fecha": "2026-06-01", "metrica": "contactados", "vacanteId": "demo-v03", "cantidad": 3 },
+      { "fecha": "2026-06-02", "metrica": "contactados", "vacanteId": "demo-v01", "cantidad": 4 },
+      { "fecha": "2026-06-03", "metrica": "contactados", "vacanteId": "demo-v02", "cantidad": 5 },
+      { "fecha": "2026-06-04", "metrica": "contactados", "vacanteId": "demo-v01", "cantidad": 2 },
+      { "fecha": "2026-06-05", "metrica": "entrevistados", "vacanteId": "demo-v03", "cantidad": 2 },
+      { "fecha": "2026-06-08", "metrica": "contactados", "vacanteId": "demo-v05", "cantidad": 2 },
+      { "fecha": "2026-06-09", "metrica": "contactados", "vacanteId": "demo-v02", "cantidad": 3 },
+      { "fecha": "2026-06-10", "metrica": "contactados", "vacanteId": "demo-v04", "cantidad": 2 },
+      { "fecha": "2026-06-10", "metrica": "entrevistados", "vacanteId": "demo-v01", "cantidad": 3 },
+      { "fecha": "2026-06-11", "metrica": "contactados", "vacanteId": "demo-v01", "cantidad": 3 },
+      { "fecha": "2026-06-12", "metrica": "entrevistados", "vacanteId": "demo-v02", "cantidad": 4 },
+      { "fecha": "2026-06-15", "metrica": "contactados", "vacanteId": "demo-v03", "cantidad": 1 },
+      { "fecha": "2026-06-16", "metrica": "contactados", "vacanteId": "demo-v02", "cantidad": 2 },
+      { "fecha": "2026-06-17", "metrica": "entrevistados", "vacanteId": "demo-v01", "cantidad": 2 },
+      { "fecha": "2026-06-17", "metrica": "entrevistados", "vacanteId": "demo-v05", "cantidad": 1 },
+      { "fecha": "2026-06-18", "metrica": "entrevistados", "vacanteId": "demo-v02", "cantidad": 2 },
+      { "fecha": "2026-06-19", "metrica": "entrevistados", "vacanteId": "demo-v03", "cantidad": 1 },
+      { "fecha": "2026-06-22", "metrica": "contactados", "vacanteId": "demo-v04", "cantidad": 1 },
+      { "fecha": "2026-06-23", "metrica": "ofertas", "vacanteId": "demo-v02", "cantidad": 1 },
+      { "fecha": "2026-06-24", "metrica": "contactados", "vacanteId": "demo-v01", "cantidad": 2 },
+      { "fecha": "2026-06-24", "metrica": "entrevistados", "vacanteId": "demo-v04", "cantidad": 1 },
+      { "fecha": "2026-06-25", "metrica": "entrevistados", "vacanteId": "demo-v02", "cantidad": 1 },
+      { "fecha": "2026-06-26", "metrica": "ofertas", "vacanteId": "demo-v03", "cantidad": 1 },
+      { "fecha": "2026-07-07", "metrica": "entrevistados", "vacanteId": "demo-v01", "cantidad": 2 },
+      { "fecha": "2026-07-08", "metrica": "ofertas", "vacanteId": "demo-v01", "cantidad": 1 },
+      { "fecha": "2026-07-08", "metrica": "contrataciones", "vacanteId": "demo-v03", "cantidad": 1 },
+      { "fecha": "2026-07-09", "metrica": "contactados", "vacanteId": "demo-v02", "cantidad": 4 },
+      { "fecha": "2026-07-14", "metrica": "ofertas", "vacanteId": "demo-v02", "cantidad": 1 },
+      { "fecha": "2026-07-15", "metrica": "contactados", "vacanteId": "demo-v01", "cantidad": 3 },
+      { "fecha": "2026-07-16", "metrica": "entrevistados", "vacanteId": "demo-v02", "cantidad": 2 },
+      { "fecha": "2026-07-20", "metrica": "contrataciones", "vacanteId": "demo-v02", "cantidad": 1 },
+      { "fecha": "2026-07-21", "metrica": "entrevistados", "vacanteId": "demo-v01", "cantidad": 1 },
+      { "fecha": "2026-07-22", "metrica": "contactados", "vacanteId": "demo-v02", "cantidad": 2 }
+    ]
+  }
+}

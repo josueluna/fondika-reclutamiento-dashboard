@@ -143,6 +143,12 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
   .funnel{grid-template-columns:1fr 1fr} .toolbar{align-items:flex-start}
 }
 .empty-row{padding:28px 16px!important;text-align:center;color:#7a7d80;font-size:13px}
+.chart-empty{grid-column:1/-1;align-self:center;text-align:center;font-size:12px;color:#7a7d80}
+.data-state{margin-bottom:16px;padding:14px 16px;border-radius:14px;background:#fff;border:1px solid var(--line);font-size:13px;color:var(--muted)}
+.data-state.error{background:var(--danger-soft);border-color:#f3c8c1;color:var(--danger)}
+.data-state[hidden]{display:none}
+.shell.no-data .page{display:none!important}
+.stages-title{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#777b7f;margin-top:18px}
 </style>
 </head>
 <body>
@@ -159,7 +165,7 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
     <div style="font-size:9px;color:#a0a4a7;text-align:center;line-height:1.35">CAPITAL<br>HUMANO</div>
   </aside>
 
-  <main class="shell">
+  <main class="shell no-data">
     <header class="header">
       <div class="brand"><svg class="brand-svg" xmlns="http://www.w3.org/2000/svg" viewBox="44.92 17.36 1182.06 276.03" width="1182.06" height="276.03" role="img" aria-label="FÓNDIKA">
   <title>FÓNDIKA</title>
@@ -180,9 +186,11 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
       </div>
       <div class="header-actions">
         <span class="badge dot">Vista general</span>
-        <span class="badge">Corte 30 sep 2026</span>
+        <span class="badge" id="headerCut">Corte —</span>
       </div>
     </header>
+
+    <div class="data-state" id="dataState" role="status">Cargando datos del dashboard…</div>
 
     <section id="overview" class="page active">
       <div class="toolbar">
@@ -195,24 +203,19 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
           </div>
         </div>
         <div class="control">
-          <label>Vacante</label>
-          <select id="vacancyFilter" onchange="applyVacancyFilter(this.value)">
-            <option value="all">Todas las activas</option>
-            <option value="REQ-2026-0001">REQ-2026-0001 · Asesor de Servicios Financieros</option>
-            <option value="REQ-2026-0004">REQ-2026-0004 · Asesor CAP</option>
-            <option value="REQ-2026-0005">REQ-2026-0005 · Director Comercial</option>
-          </select>
+          <label>Área</label>
+          <select id="areaFilter" onchange="applyFilters()"></select>
         </div>
         <div class="control">
-          <label>Área</label>
-          <select id="areaFilter" onchange="applyFilters()"><option value="all">Todas</option><option value="Fuerza Comercial">Fuerza Comercial</option><option value="Comercial">Comercial</option><option value="Sistemas">Sistemas</option></select>
+          <label>Vacante</label>
+          <select id="vacancyFilter" onchange="applyFilters()"></select>
         </div>
         <div class="control">
           <label>Hiring Manager</label>
-          <select id="hmFilter" onchange="applyFilters()"><option value="all">Todos</option><option value="Giovani Montes">Giovani Montes</option><option value="Juan Carlos Pelayo">Juan Carlos Pelayo</option><option value="Maricela Curiel">Maricela Curiel</option><option value="Luis Castro">Luis Castro</option></select>
+          <select id="hmFilter" onchange="applyFilters()"></select>
         </div>
         <div class="spacer"></div>
-        <div class="snapshot"><span class="pulse"></span><span>Snapshot semanal automático · viernes 18:00</span></div>
+        <div class="snapshot"><span class="pulse"></span><span id="overviewSnapshot">—</span></div>
       </div>
 
       <div class="kpis" id="kpiGrid"></div>
@@ -221,31 +224,25 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
         <div class="card">
           <div class="card-head">
             <div>
-              <div class="card-title" id="chartTitle">Actividad semanal</div>
-              <div class="card-sub" id="chartSub">Comparativo de los últimos 6 cortes · sólo vacantes activas</div>
+              <div class="card-title" id="chartTitle">Actividad mensual</div>
+              <div class="card-sub" id="chartSub">—</div>
             </div>
             <div class="legend">
               <span class="l1">Contactados</span><span class="l2">Entrevistados</span><span class="l3">Ofertas</span><span class="l4">Contrataciones</span>
             </div>
           </div>
           <div class="chart">
-            <div class="gridlines">
-              <div class="gridline"><span>40</span></div>
-              <div class="gridline"><span>30</span></div>
-              <div class="gridline"><span>20</span></div>
-              <div class="gridline"><span>10</span></div>
-              <div class="gridline"><span>0</span></div>
-            </div>
+            <div class="gridlines"></div>
             <div class="bars" id="bars"></div>
           </div>
         </div>
         <div class="card">
           <div class="card-head"><div><div class="card-title">Pulso de procesos activos</div><div class="card-sub">Lectura rápida del portafolio actual</div></div></div>
           <div class="side-stats">
-            <div class="mini"><div><div class="name">Vacantes activas</div><div class="note">Excluye cerradas, pausadas y canceladas</div></div><div class="num" id="activeCount">3</div></div>
-            <div class="mini"><div style="width:70%"><div class="name">Procesos con actividad esta semana</div><div class="progress"><span style="width:75%"></span></div></div><div class="num" id="activityCount">3/3</div></div>
-            <div class="mini"><div><div class="name">Feedback HM pendiente</div><div class="note">Candidatos enviados sin definición</div></div><div class="num" id="feedbackPending">6</div></div>
-            <div class="mini"><div><div class="name">Sin movimiento +7 días</div><div class="note">Sólo candidatos activos</div></div><div class="num" id="stale7">11</div></div>
+            <div class="mini"><div><div class="name">Vacantes activas</div><div class="note">Excluye cerradas, pausadas y canceladas</div></div><div class="num" id="activeCount">—</div></div>
+            <div class="mini"><div style="width:70%"><div class="name">Procesos con actividad esta semana</div><div class="progress"><span style="width:0%"></span></div></div><div class="num" id="activityCount">—</div></div>
+            <div class="mini"><div><div class="name">Feedback HM pendiente</div><div class="note">Candidatos enviados sin definición</div></div><div class="num" id="feedbackPending">—</div></div>
+            <div class="mini"><div><div class="name">Sin movimiento +7 días</div><div class="note">Sólo candidatos activos</div></div><div class="num" id="stale7">—</div></div>
           </div>
         </div>
       </div>
@@ -253,7 +250,7 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
       <div class="card table-card">
         <div class="table-head">
           <div><div class="card-title">Vacantes activas</div><div class="card-sub">Haz clic en una requisición para abrir su detalle</div></div>
-          <span class="badge" id="activeCountBadge">3 procesos activos</span>
+          <span class="badge" id="activeCountBadge">—</span>
         </div>
         <table>
           <thead><tr>
@@ -268,33 +265,25 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
 
     <section id="history" class="page">
       <div class="toolbar">
-        <div class="control"><label>Periodo</label><select><option>2026</option><option>2025</option></select></div>
-        <div class="control"><label>Área</label><select id="historyAreaFilter"><option value="all">Todas</option><option value="Fuerza Comercial">Fuerza Comercial</option><option value="Comercial">Comercial</option><option value="Sistemas">Sistemas</option></select></div>
-        <div class="history-filters">
-          <button class="chip active">Todas históricas</button>
-          <button class="chip">Cerradas</button>
-          <button class="chip">Pausadas</button>
-          <button class="chip">Canceladas</button>
+        <div class="control"><label>Periodo</label><select id="historyYearFilter" onchange="renderHistory()"></select></div>
+        <div class="control"><label>Área</label><select id="historyAreaFilter" onchange="renderHistory()"></select></div>
+        <div class="history-filters" id="historyStatusChips">
+          <button class="chip active" data-status="all" onclick="setHistoryStatus('all')">Todas históricas</button>
+          <button class="chip" data-status="Cubierta" onclick="setHistoryStatus('Cubierta')">Cerradas</button>
+          <button class="chip" data-status="Pausada" onclick="setHistoryStatus('Pausada')">Pausadas</button>
+          <button class="chip" data-status="Cancelada" onclick="setHistoryStatus('Cancelada')">Canceladas</button>
         </div>
         <div class="spacer"></div>
-        <div class="snapshot"><span class="pulse"></span><span>Snapshots semanales + cierre mensual</span></div>
+        <div class="snapshot"><span class="pulse"></span><span id="historySnapshot">—</span></div>
       </div>
 
-      <div class="kpis">
-        <div class="kpi"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="calendario" data-fondika="calendario"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2.1"/><path d="M3.6 10.2h16.8"/><path d="M8.2 3v4.4"/><path d="M15.8 3v4.4"/><path d="M7.6 14h2M11 14h2M14.4 14h2M7.6 17.2h2M11 17.2h2"/></svg></div><div class="kpi-label">Procesos concluidos</div></div><div class="kpi-value">2</div><div class="delta"><span class="muted">Procesos no activos</span></div></div>
-        <div class="kpi"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuario-check" data-fondika="usuario-check"><circle cx="9.6" cy="8.2" r="4"/><path d="M2.6 20.4a7 7 0 0 1 12.4-4.4"/><path d="M15.4 17.9l2 2 4-4.4"/></svg></div><div class="kpi-label">Contactados históricos</div></div><div class="kpi-value">15</div><div class="delta"><span class="muted">Procesos no activos</span></div></div>
-        <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="contrato" data-fondika="contrato"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8V8.6z"/><path d="M13.4 3.2v5.4h5.6"/><path d="M8.2 12h7.6"/><path d="M8.2 16.6c1.2-.1 1.7-2 2.6-2s.9 1.5 1.8 1.5 1.5-1.5 2.4-1.5"/><path d="M8.2 19.4h7.6"/></svg></div><div class="kpi-label">Ofertas históricas</div></div><div class="kpi-value">1</div><div class="delta"><span class="muted">Ofertas registradas</span></div></div>
-        <div class="kpi"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="documento-check" data-fondika="documento-check"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h4.6"/><path d="M13.4 3.2v5.4h5.6V11"/><path d="M14 18.2l2 2 4.4-4.6"/></svg></div><div class="kpi-label">Contrataciones históricos</div></div><div class="kpi-value">1</div><div class="delta"><span class="muted">Contrataciones</span></div></div>
-      </div>
+      <div class="kpis" id="historyKpis"></div>
 
       <div class="card table-card">
         <div class="table-head"><div><div class="card-title">Histórico de requisiciones</div><div class="card-sub">Los KPIs se mantienen consultables después del cierre del proceso</div></div></div>
         <table>
           <thead><tr><th>Requisición / Vacante</th><th>Estatus</th><th>Apertura</th><th>Cierre / pausa</th><th>Contactados</th><th>Entrevistados</th><th>Ofertas</th><th>Contrataciones</th><th></th></tr></thead>
-          <tbody id="historyRows">
-            <tr class="clickable" onclick="openDetail('REQ-2026-0002', true)"><td><div class="req">REQ-2026-0002</div><div class="vacancy">Líder de Sistemas</div></td><td><span class="status paused">Pausada</span></td><td>07 jul</td><td>30 sep</td><td>11</td><td>4</td><td>0</td><td>0</td><td><span class="arrow">›</span></td></tr>
-            <tr class="clickable" onclick="openDetail('REQ-2026-0003', true)"><td><div class="req">REQ-2026-0003</div><div class="vacancy">Arquitecto de Software</div></td><td><span class="status closed">Cubierta</span></td><td>28 jul</td><td>08 sep</td><td>4</td><td>4</td><td>1</td><td>1</td><td><span class="arrow">›</span></td></tr>
-          </tbody>
+          <tbody id="historyRows"></tbody>
         </table>
       </div>
     </section>
@@ -303,46 +292,34 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
       <div class="detail-hero">
         <button class="back" onclick="backFromDetail()">← Volver</button>
         <div>
-          <div class="eyebrow" id="detailReq">REQ-2026-0001</div>
-          <div class="detail-title" id="detailName">Asesor de Servicios Financieros</div>
-          <div class="meta"><span id="detailStatus"><b>Estatus:</b> Activa</span><span><b>HM:</b> Juan Carlos</span><span><b>Responsable CH:</b> Josué</span><span><b>Apertura:</b> 15 may 2026</span></div>
+          <div class="eyebrow" id="detailReq"></div>
+          <div class="detail-title" id="detailName"></div>
+          <div class="meta" id="detailMeta"></div>
         </div>
-        <div class="detail-actions"><span class="badge dot" id="detailCut">Snapshot 27 sep</span></div>
+        <div class="detail-actions"><span class="badge dot" id="detailCut"></span></div>
       </div>
 
       <div class="kpis" id="detailKpis"></div>
 
       <div class="grid-main">
         <div class="card">
-          <div class="card-head"><div><div class="card-title">Evolución semanal de la requisición</div><div class="card-sub">Comparativo de hitos por semana</div></div></div>
+          <div class="card-head"><div><div class="card-title">Evolución semanal de la requisición</div><div class="card-sub" id="detailChartSub">Comparativo de hitos por semana</div></div></div>
           <div class="chart">
-            <div class="gridlines">
-              <div class="gridline"><span>40</span></div><div class="gridline"><span>30</span></div><div class="gridline"><span>20</span></div><div class="gridline"><span>10</span></div><div class="gridline"><span>0</span></div>
-            </div>
+            <div class="gridlines"></div>
             <div class="bars" id="detailBars"></div>
           </div>
         </div>
         <div class="card">
           <div class="card-head"><div><div class="card-title">Conversión del proceso</div><div class="card-sub">Hitos acumulados de la requisición</div></div></div>
-          <div class="funnel" style="grid-template-columns:1fr;gap:9px">
-            <div class="stage"><div class="snum">82</div><div class="slabel">CANDIDATOS CAPTADOS</div></div>
-            <div class="stage"><div class="snum">59</div><div class="slabel">CONTACTADOS · 72%</div></div>
-            <div class="stage"><div class="snum">24</div><div class="slabel">ENTREVISTADOS · 41% DE CONTACTADOS</div></div>
-            <div class="stage highlight"><div class="snum">6</div><div class="slabel">OFERTAS · 25% DE ENTREVISTADOS</div></div>
-            <div class="stage"><div class="snum">3</div><div class="slabel">VINCULADOS · 50% DE OFERTAS</div></div>
-          </div>
+          <div class="funnel" id="detailFunnel" style="grid-template-columns:1fr;gap:9px"></div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-head"><div><div class="card-title">Detalle operativo</div><div class="card-sub">Información que puede incorporarse después del MVP sin cambiar la arquitectura</div></div></div>
-        <div class="funnel">
-          <div class="stage"><div class="snum">8</div><div class="slabel">ACTIVOS HOY</div></div>
-          <div class="stage"><div class="snum">2</div><div class="slabel">FEEDBACK HM PENDIENTE</div></div>
-          <div class="stage"><div class="snum">3</div><div class="slabel">SIN MOVIMIENTO +7D</div></div>
-          <div class="stage"><div class="snum">5.1 d</div><div class="slabel">RESPUESTA HM PROMEDIO</div></div>
-          <div class="stage"><div class="snum">48%</div><div class="slabel">VIABILIDAD CH</div></div>
-        </div>
+        <div class="card-head"><div><div class="card-title">Estado actual de la requisición</div><div class="card-sub" id="detailCurrentSub"></div></div></div>
+        <div class="funnel" id="detailCurrent"></div>
+        <div class="stages-title">Etapas actuales</div>
+        <div class="funnel" id="detailStages"></div>
       </div>
     </section>
 
@@ -354,259 +331,519 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
 </div>
 
 <script>
-const activeVacancies = [
-  {
-    req:'REQ-2026-0001',
-    name:'Asesor de Servicios Financieros',
-    area:'Fuerza Comercial',
-    hm:'Giovani Montes',
-    days:147,
-    contacted:32, interviewed:14, offers:2, linked:1,
-    periodStats:{
-      weekly:{contacted:24, interviewed:10, offers:2, linked:1},
-      monthly:{contacted:48, interviewed:21, offers:3, linked:1},
-      annual:{contacted:220, interviewed:95, offers:13, linked:3}
-    },
-    feedbackPending:3,
-    stale7:5,
-    activeThisWeek:true
-  },
-  {
-    req:'REQ-2026-0004',
-    name:'Asesor CAP',
-    area:'Comercial',
-    hm:'Maricela Curiel',
-    days:45,
-    contacted:18, interviewed:9, offers:2, linked:0,
-    periodStats:{
-      weekly:{contacted:12, interviewed:5, offers:2, linked:0},
-      monthly:{contacted:24, interviewed:11, offers:2, linked:1},
-      annual:{contacted:90, interviewed:40, offers:8, linked:2}
-    },
-    feedbackPending:2,
-    stale7:3,
-    activeThisWeek:true
-  },
-  {
-    req:'REQ-2026-0005',
-    name:'Director Comercial',
-    area:'Comercial',
-    hm:'Juan Carlos Pelayo',
-    days:35,
-    contacted:22, interviewed:5, offers:1, linked:0,
-    periodStats:{
-      weekly:{contacted:12, interviewed:4, offers:1, linked:0},
-      monthly:{contacted:24, interviewed:10, offers:2, linked:0},
-      annual:{contacted:89, interviewed:36, offers:6, linked:1}
-    },
-    feedbackPending:1,
-    stale7:3,
-    activeThisWeek:true
-  }
-];
+/* ===== Configuración ===== */
+const DATA_URL = 'data/dashboard.sample.json';
+const SUPPORTED_SCHEMA_MAJOR = 1;
+const MIN_SCHEMA_MINOR = 1;   // 1.1.0 añade contactados/entrevistados/ofertas a la foto de cada vacante
 
-const historicalVacancies = [
-  {req:'REQ-2026-0002', name:'Líder de Sistemas', area:'Sistemas', hm:'Juan Carlos Pelayo', status:'Pausada', statusClass:'paused', open:'07 jul', close:'30 sep', contacted:11, interviewed:4, offers:0, linked:0},
-  {req:'REQ-2026-0003', name:'Arquitecto de Software', area:'Sistemas', hm:'Luis Castro', status:'Cubierta', statusClass:'closed', open:'28 jul', close:'08 sep', contacted:4, interviewed:4, offers:1, linked:1}
+const METRICS = [
+  {key:'contactados',    label:'Candidatos contactados',   short:'Contactados',    icon:'contacted',   cls:''},
+  {key:'entrevistados',  label:'Candidatos entrevistados', short:'Entrevistados',  icon:'interviewed', cls:''},
+  {key:'ofertas',        label:'Ofertas realizadas',       short:'Ofertas',        icon:'offers',      cls:'orange'},
+  {key:'contrataciones', label:'Contrataciones',           short:'Contrataciones', icon:'linked',      cls:''}
 ];
+const METRIC_KEYS = METRICS.map(m=>m.key);
+// Campos de estadoActual.vacantes[].metricas. Los "nullable" usan null cuando el dato no es calculable con evidencia confiable.
+const SNAPSHOT_REQUIRED = ['postulaciones','activas','contrataciones'];
+const SNAPSHOT_NULLABLE = ['contactados','entrevistados','ofertas','feedbackPendiente','sinMovimiento7d'];
+const STATUSES = ['Activa','Pausada','Cubierta','Cancelada'];
+const STATUS_CLASS = {Activa:'active', Pausada:'paused', Cubierta:'closed', Cancelada:'cancelled'};
 
 /*
-  Historial de cortes: todavía no se carga el CSV real de Hira.
-  Por eso no se muestran tendencias históricas inventadas.
-  La gráfica usa únicamente el corte actual disponible en activeVacancies.
+  Ventanas de actividad. Sólo se agrupan registros existentes de historico.actividad:
+  nunca se crean buckets sin evidencia.
+  - limit: últimos N buckets con actividad.
+  - windowMonths: buckets con actividad dentro de los últimos N meses de evidencia.
+  Ampliación futura (hasta 4 años con actividad): {granularity:'year', limit:4}.
 */
+const PERIODS = {
+  weekly:  {granularity:'week',  limit:5,         title:'Actividad semanal', unit:['semana','semanas'], last:'Últimas'},
+  monthly: {granularity:'month', limit:3,         title:'Actividad mensual', unit:['mes','meses'], last:'Últimos'},
+  annual:  {granularity:'month', windowMonths:12, title:'Actividad anual',   unit:['mes','meses']}
+};
+
 const iconMap = {
   contacted: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuario-check" data-fondika="usuario-check"><circle cx="9.6" cy="8.2" r="4"/><path d="M2.6 20.4a7 7 0 0 1 12.4-4.4"/><path d="M15.4 17.9l2 2 4-4.4"/></svg>`,
   interviewed: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuarios" data-fondika="usuarios"><circle cx="9.4" cy="8.4" r="3.6"/><path d="M3.2 20.4a6.2 6.2 0 0 1 12.4 0"/><path d="M16 5.2a3.6 3.6 0 0 1 0 6.9"/><path d="M17.4 14.9a6.2 6.2 0 0 1 3.4 5.5"/></svg>`,
   offers: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="contrato" data-fondika="contrato"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8V8.6z"/><path d="M13.4 3.2v5.4h5.6"/><path d="M8.2 12h7.6"/><path d="M8.2 16.6c1.2-.1 1.7-2 2.6-2s.9 1.5 1.8 1.5 1.5-1.5 2.4-1.5"/><path d="M8.2 19.4h7.6"/></svg>`,
-  linked: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="documento-check" data-fondika="documento-check"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h4.6"/><path d="M13.4 3.2v5.4h5.6V11"/><path d="M14 18.2l2 2 4.4-4.6"/></svg>`
+  linked: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="documento-check" data-fondika="documento-check"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h4.6"/><path d="M13.4 3.2v5.4h5.6V11"/><path d="M14 18.2l2 2 4.4-4.6"/></svg>`,
+  calendar: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="calendario" data-fondika="calendario"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2.1"/><path d="M3.6 10.2h16.8"/><path d="M8.2 3v4.4"/><path d="M15.8 3v4.4"/><path d="M7.6 14h2M11 14h2M14.4 14h2M7.6 17.2h2M11 17.2h2"/></svg>`
 };
-let currentPeriod='monthly';
-let previousPage='overview';
 
+/* ===== Estado ===== */
+let store = null;          // {metadata, vacantes, vacById, actividad, generatedDate}
+let currentPeriod = 'monthly';
+let previousPage = 'overview';
+let historyStatus = 'all';
+
+/* ===== Utilidades ===== */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtNum = v => (v === null || v === undefined) ? '—' : String(v);
+const plural = (n, one, many) => `${n} ${n===1?one:many}`;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+// Fechas de calendario (YYYY-MM-DD) se manejan en UTC para evitar corrimientos de zona horaria.
+const parseDate = s => new Date(s + 'T00:00:00Z');
+const toISO = d => d.toISOString().slice(0,10);
+const addDays = (s, n) => { const d=parseDate(s); d.setUTCDate(d.getUTCDate()+n); return toISO(d); };
+const addMonths = (s, n) => { const d=parseDate(s); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth()+n); return toISO(d); };
+const daysBetween = (a, b) => Math.round((parseDate(b) - parseDate(a)) / 86400000);
+
+function bucketStart(s, g){
+  if(g==='week'){ const d=parseDate(s); return addDays(s, -((d.getUTCDay()+6)%7)); } // lunes
+  if(g==='month') return s.slice(0,7) + '-01';
+  if(g==='year')  return s.slice(0,4) + '-01-01';
+}
+function bucketEnd(start, g){
+  if(g==='week')  return addDays(start, 6);
+  if(g==='month') return addDays(addMonths(start, 1), -1);
+  if(g==='year')  return start.slice(0,4) + '-12-31';
+}
+
+const fmtDay      = s => parseDate(s).toLocaleDateString('es-MX', {day:'numeric', month:'short', timeZone:'UTC'}).replace('.', '');
+const fmtDate     = s => s ? parseDate(s).toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric', timeZone:'UTC'}).replace('.', '') : '—';
+const fmtMonth    = s => parseDate(s).toLocaleDateString('es-MX', {month:'short', year:'2-digit', timeZone:'UTC'}).replace('.', '');
+function bucketLabel(b, g){
+  const base = g==='week' ? fmtDay(b.start) : g==='month' ? fmtMonth(b.start) : b.start.slice(0,4);
+  return b.partial ? `${base} · parcial` : base;
+}
+
+function localDateIn(iso, tz){
+  return new Intl.DateTimeFormat('en-CA', {timeZone:tz, year:'numeric', month:'2-digit', day:'2-digit'}).format(new Date(iso));
+}
+function fmtGenerated(){
+  const {generatedAt, timezone} = store.metadata;
+  return new Date(generatedAt).toLocaleString('es-MX', {timeZone:timezone, day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}).replace('.', '');
+}
+
+/* ===== Carga y validación ===== */
+class DataError extends Error {}
+
+function validate(d){
+  const fail = msg => { throw new DataError(msg); };
+  if(!d || typeof d !== 'object') fail('El archivo no contiene un objeto JSON.');
+  const [major, minor] = String(d.schemaVersion || '').split('.').map(Number);
+  if(!d.schemaVersion || major !== SUPPORTED_SCHEMA_MAJOR || !(minor >= MIN_SCHEMA_MINOR))
+    fail(`schemaVersion incompatible: se recibió "${d.schemaVersion ?? 'sin versión'}", se esperaba ${SUPPORTED_SCHEMA_MAJOR}.${MIN_SCHEMA_MINOR}.x o posterior dentro de ${SUPPORTED_SCHEMA_MAJOR}.x.x.`);
+  const m = d.metadata || fail('Falta metadata.');
+  if(isNaN(Date.parse(m.generatedAt))) fail('metadata.generatedAt no es una fecha válida.');
+  if(!m.timezone) fail('Falta metadata.timezone.');
+  const cob = m.cobertura || {};
+  if(!ISO_DATE.test(cob.desdeEvidencia||'') || !ISO_DATE.test(cob.hastaEvidencia||'')) fail('metadata.cobertura incompleta.');
+  if(!Array.isArray(m.metricas)) fail('Falta metadata.metricas.');
+  const vacantes = d.estadoActual && d.estadoActual.vacantes;
+  if(!Array.isArray(vacantes)) fail('Falta estadoActual.vacantes.');
+  const actividad = d.historico && d.historico.actividad;
+  if(!Array.isArray(actividad)) fail('Falta historico.actividad.');
+
+  const ids = new Set();
+  vacantes.forEach(v => {
+    if(!v.vacanteId || ids.has(v.vacanteId)) fail(`vacanteId ausente o duplicado: ${v.vacanteId}`);
+    ids.add(v.vacanteId);
+    if(!STATUSES.includes(v.estatus)) fail(`Estatus no válido en ${v.vacanteId}: ${v.estatus}`);
+    if(!ISO_DATE.test(v.fechaApertura||'')) fail(`fechaApertura no válida en ${v.vacanteId}`);
+    const vm = v.metricas || fail(`Faltan metricas en ${v.vacanteId}`);
+    const isCount = x => Number.isInteger(x) && x >= 0;
+    SNAPSHOT_REQUIRED.forEach(f => { if(!isCount(vm[f])) fail(`metricas.${f} debe ser entero ≥ 0 en ${v.vacanteId}.`); });
+    SNAPSHOT_NULLABLE.forEach(f => {
+      if(!(f in vm)) fail(`Falta metricas.${f} en ${v.vacanteId}.`);
+      if(vm[f] !== null && !isCount(vm[f])) fail(`metricas.${f} debe ser entero ≥ 0 o null en ${v.vacanteId}.`);
+    });
+  });
+  const keys = new Set();
+  actividad.forEach(r => {
+    if(!ids.has(r.vacanteId)) fail(`historico.actividad referencia una vacante inexistente: ${r.vacanteId}`);
+    if(!m.metricas.includes(r.metrica)) fail(`Métrica fuera del catálogo: ${r.metrica}`);
+    if(!ISO_DATE.test(r.fecha||'')) fail(`Fecha no válida en historico.actividad: ${r.fecha}`);
+    if(!Number.isInteger(r.cantidad) || r.cantidad < 1) fail(`cantidad debe ser entero ≥ 1 (${r.fecha} · ${r.metrica} · ${r.vacanteId}).`);
+    const k = `${r.fecha}|${r.metrica}|${r.vacanteId}`;
+    if(keys.has(k)) fail(`Registro duplicado en historico.actividad: ${k}`);
+    keys.add(k);
+  });
+  return d;
+}
+
+async function loadDashboard(){
+  let res;
+  try { res = await fetch(DATA_URL, {cache:'no-store'}); }
+  catch(e){ throw new DataError(`No se pudo cargar ${DATA_URL}. Si abriste index.html directamente desde el disco, sírvelo con un servidor local (por ejemplo: python3 -m http.server).`); }
+  if(!res.ok) throw new DataError(`No se pudo cargar ${DATA_URL} (HTTP ${res.status}).`);
+  let json;
+  try { json = await res.json(); }
+  catch(e){ throw new DataError(`${DATA_URL} no contiene JSON válido.`); }
+  return validate(json);
+}
+
+function buildStore(d){
+  const vacantes = d.estadoActual.vacantes;
+  return {
+    metadata: d.metadata,
+    vacantes,
+    vacById: Object.fromEntries(vacantes.map(v => [v.vacanteId, v])),
+    actividad: d.historico.actividad,
+    generatedDate: localDateIn(d.metadata.generatedAt, d.metadata.timezone)
+  };
+}
+
+function setDataState(message, isError){
+  const el = document.getElementById('dataState');
+  el.textContent = message || '';
+  el.hidden = !message;
+  el.classList.toggle('error', !!isError);
+}
+
+/* ===== Derivaciones ===== */
+const emptyTotals = () => Object.fromEntries(METRIC_KEYS.map(k => [k, 0]));
+const activeVacantes = () => store.vacantes.filter(v => v.estatus === 'Activa');
+const inactiveVacantes = () => store.vacantes.filter(v => v.estatus !== 'Activa');
+const daysOpen = v => daysBetween(v.fechaApertura, v.fechaCierre || store.generatedDate);
+
+/*
+  Separación estructural de fuentes:
+  - Foto al corte (KPIs, tablas, pulso, funnel): exclusivamente estadoActual.vacantes[].metricas.
+  - Actividad a través del tiempo (gráficas Semanal/Mensual/Anual): exclusivamente historico.actividad.
+  Nunca se reconstruye la foto sumando historico.actividad: la actividad recuperable puede ser menor que el acumulado.
+*/
+
+// Suma una métrica de la foto: si alguna vacante del scope no tiene el dato, el agregado es desconocido (null), nunca 0 ni suma parcial.
+function sumNullable(vacs, field){
+  if(vacs.some(v => v.metricas[field] === null || v.metricas[field] === undefined)) return null;
+  return vacs.reduce((s, v) => s + v.metricas[field], 0);
+}
+
+// Acumulado al corte de las métricas del funnel para un conjunto de vacantes.
+const snapshotTotals = vacs => Object.fromEntries(METRIC_KEYS.map(k => [k, sumNullable(vacs, k)]));
+
+// Agrupa historico.actividad en buckets con evidencia para el scope dado.
+function buildSeries(vacIds, periodKey){
+  const cfg = PERIODS[periodKey];
+  const g = cfg.granularity;
+  const {desdeEvidencia, hastaEvidencia} = store.metadata.cobertura;
+  const ids = new Set(vacIds);
+  const windowStart = cfg.windowMonths ? addMonths(bucketStart(hastaEvidencia, 'month'), -(cfg.windowMonths - 1)) : null;
+  const buckets = new Map();
+  store.actividad.forEach(r => {
+    if(!ids.has(r.vacanteId) || !METRIC_KEYS.includes(r.metrica)) return;
+    const start = bucketStart(r.fecha, g);
+    if(windowStart && start < windowStart) return;
+    if(!buckets.has(start)) buckets.set(start, emptyTotals());
+    buckets.get(start)[r.metrica] += r.cantidad;
+  });
+  let starts = [...buckets.keys()].sort();
+  if(cfg.limit) starts = starts.slice(-cfg.limit);
+  return starts.map(start => {
+    const end = bucketEnd(start, g);
+    return {start, end, partial: start < desdeEvidencia || end > hastaEvidencia, values: buckets.get(start)};
+  });
+}
+
+/* ===== Render: componentes ===== */
 function renderKpis(target, kpis){
-  target.innerHTML = kpis.map(k=>`
+  target.innerHTML = kpis.map(k => `
     <div class="kpi ${k.cls||''}">
-      <div class="kpi-top"><div class="kpi-icon">${iconMap[k.icon]}</div><div class="kpi-label">${k.label}</div></div>
-      <div class="kpi-value">${k.value}</div>
-      <div class="delta">${k.delta} <span class="muted">· corte actual</span></div>
+      <div class="kpi-top"><div class="kpi-icon">${iconMap[k.icon]}</div><div class="kpi-label">${esc(k.label)}</div></div>
+      <div class="kpi-value">${fmtNum(k.value)}</div>
+      <div class="delta"><span class="muted">${esc(k.note||'')}</span></div>
     </div>`).join('');
 }
 
-function renderBars(target, period){
-  // Sin CSV de Hira no tenemos cortes históricos confiables.
-  // Mostramos únicamente el corte actual de los procesos filtrados.
-  const rows=getCurrentScope();
-  const totals=rows.reduce((acc,v)=>{
-    const s=(v.periodStats && v.periodStats[period]) || {};
-    acc.contacted += Number(s.contacted||0);
-    acc.interviewed += Number(s.interviewed||0);
-    acc.offers += Number(s.offers||0);
-    acc.linked += Number(s.linked||0);
-    return acc;
-  },{contacted:0,interviewed:0,offers:0,linked:0});
-
-  const values=[totals.contacted,totals.interviewed,totals.offers,totals.linked];
-  const max=Math.max(1,...values);
-  const label=period==='annual' ? '2026' : (period==='monthly' ? 'Sep 26' : '28 sep');
-  const bars=values.map((v,j)=>`<div class="bar b${j+1}" style="height:${Math.max(v===0?0:2,(v/max*100))}%" title="${v}"></div>`).join('');
-  target.innerHTML=`<div class="group">${bars}<span class="xlabel">${label}</span></div>`;
+function niceTop(max){
+  if(max <= 4) return 4;
+  // Paso "redondo" y entero para que las 5 marcas del eje sean legibles.
+  const raw = max / 4, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1,1.5,2,2.5,3,4,5,6,8,10].map(f => f*mag).filter(Number.isInteger).find(s => s >= raw);
+  return step * 4;
 }
 
-function getCurrentScope(){
-  return getFilteredActiveVacancies();
+function renderBars(target, series, granularity){
+  const chart = target.parentElement;
+  const grid = chart.querySelector('.gridlines');
+  const max = Math.max(0, ...series.flatMap(b => METRIC_KEYS.map(k => b.values[k])));
+  const top = niceTop(max);
+  grid.innerHTML = [4,3,2,1,0].map(i => `<div class="gridline"><span>${top*i/4}</span></div>`).join('');
+  target.style.gridTemplateColumns = `repeat(${Math.max(series.length,1)},1fr)`;
+  target.style.gap = series.length > 6 ? '8px' : '';
+  if(!series.length){
+    target.innerHTML = `<div class="chart-empty">Sin actividad registrada para el filtro seleccionado.</div>`;
+    return;
+  }
+  target.innerHTML = series.map(b => {
+    const bars = METRICS.map((m, j) => {
+      const v = b.values[m.key];
+      return `<div class="bar b${j+1}" style="height:${v ? Math.max(2, v/top*100) : 0}%" title="${m.short}: ${v}"></div>`;
+    }).join('');
+    const range = b.start === b.end ? fmtDate(b.start) : `${fmtDate(b.start)} – ${fmtDate(b.end)}`;
+    return `<div class="group" title="${esc(range)}${b.partial ? ' · periodo parcial de evidencia' : ''}">${bars}<span class="xlabel">${esc(bucketLabel(b, granularity))}</span></div>`;
+  }).join('');
 }
 
-function getScopedKpis(period){
-  const rows=getCurrentScope();
-  const totals=rows.reduce((acc,v)=>{
-    const s=(v.periodStats && v.periodStats[period]) || {
-      contacted:Number(v.contacted||0),
-      interviewed:Number(v.interviewed||0),
-      offers:Number(v.offers||0),
-      linked:Number(v.linked||0)
-    };
-    acc.contacted += Number(s.contacted||0);
-    acc.interviewed += Number(s.interviewed||0);
-    acc.offers += Number(s.offers||0);
-    acc.linked += Number(s.linked||0);
-    return acc;
-  },{contacted:0,interviewed:0,offers:0,linked:0});
-
-  const periodLabel = period==='annual' ? 'año' : (period==='monthly' ? 'mes' : 'semana');
-  const suffix=rows.length===0
-    ? 'Sin procesos activos en el filtro'
-    : `${rows.length} proceso${rows.length===1?'':'s'} activo${rows.length===1?'':'s'} · corte actual`;
-
-  return [
-    {label:'Candidatos contactados',value:totals.contacted,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'',icon:'contacted'},
-    {label:'Candidatos entrevistados',value:totals.interviewed,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'',icon:'interviewed'},
-    {label:'Ofertas realizadas',value:totals.offers,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'orange',icon:'offers'},
-    {label:'Contrataciones',value:totals.linked,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'',icon:'linked'}
-  ];
+function stageHtml(num, label, highlight){
+  return `<div class="stage${highlight?' highlight':''}"><div class="snum">${fmtNum(num)}</div><div class="slabel">${esc(label)}</div></div>`;
 }
 
-function setPeriod(period){
-  currentPeriod=period;
-  document.querySelectorAll('.periodBtn').forEach(b=>b.classList.toggle('active',b.dataset.period===period));
-  const titles={
-    annual:'Actividad anual',
-    weekly:'Actividad semanal',
-    monthly:'Actividad mensual'
-  };
-  const subtitles={
-    annual:'Corte actual 2026 · sólo vacantes activas',
-    weekly:'Corte actual · sólo vacantes activas',
-    monthly:'Corte actual · sólo vacantes activas'
-  };
-  document.getElementById('chartTitle').textContent=titles[period];
-  document.getElementById('chartSub').textContent=subtitles[period];
-  renderKpis(document.getElementById('kpiGrid'),getScopedKpis(period));
-  renderBars(document.getElementById('bars'),period);
+const statusBadge = s => `<span class="status ${STATUS_CLASS[s]||''}">${esc(s)}</span>`;
+
+function fillSelect(sel, options, allLabel){
+  const prev = sel.value;
+  sel.innerHTML = `<option value="all">${esc(allLabel)}</option>` +
+    options.map(o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('');
+  sel.value = options.some(o => o.value === prev) ? prev : 'all';
+}
+const uniqueSorted = arr => [...new Set(arr)].sort((a,b) => a.localeCompare(b, 'es'));
+
+/* ===== Overview ===== */
+// Cascada Área → Vacante → Hiring Manager sobre las vacantes activas.
+function refreshFilterOptions(){
+  const areaSel = document.getElementById('areaFilter');
+  const vacSel  = document.getElementById('vacancyFilter');
+  const hmSel   = document.getElementById('hmFilter');
+  const base = activeVacantes();
+
+  fillSelect(areaSel, uniqueSorted(base.map(v => v.area)).map(a => ({value:a, label:a})), 'Todas');
+  const byArea = base.filter(v => areaSel.value === 'all' || v.area === areaSel.value);
+
+  fillSelect(vacSel, byArea.slice().sort((a,b) => a.reqId.localeCompare(b.reqId))
+    .map(v => ({value:v.vacanteId, label:`${v.reqId} · ${v.nombre}`})), 'Todas las activas');
+  const byVac = byArea.filter(v => vacSel.value === 'all' || v.vacanteId === vacSel.value);
+
+  fillSelect(hmSel, uniqueSorted(byVac.map(v => v.hiringManager)).map(h => ({value:h, label:h})), 'Todos');
 }
 
-function getFilteredActiveVacancies(){
-  const area = document.getElementById('areaFilter')?.value || 'all';
-  const hm = document.getElementById('hmFilter')?.value || 'all';
-  const vacancy = document.getElementById('vacancyFilter')?.value || 'all';
-  return activeVacancies.filter(v =>
-    (area==='all' || v.area===area) &&
-    (hm==='all' || v.hm===hm) &&
-    (vacancy==='all' || v.req===vacancy)
-  );
+function getScope(){
+  const area = document.getElementById('areaFilter').value;
+  const vac  = document.getElementById('vacancyFilter').value;
+  const hm   = document.getElementById('hmFilter').value;
+  return activeVacantes().filter(v =>
+    (area === 'all' || v.area === area) &&
+    (vac  === 'all' || v.vacanteId === vac) &&
+    (hm   === 'all' || v.hiringManager === hm));
+}
+
+function scopeSuffix(rows){
+  return rows.length ? plural(rows.length, 'proceso activo', 'procesos activos') : 'Sin procesos activos en el filtro';
+}
+
+function windowDescription(periodKey, series){
+  const cfg = PERIODS[periodKey], [one, many] = cfg.unit;
+  if(!series.length) return 'Sin actividad registrada';
+  if(cfg.windowMonths) return `${plural(series.length, `${one} con actividad`, `${many} con actividad`)} · últimos ${cfg.windowMonths} meses de evidencia`;
+  return series.length < cfg.limit
+    ? plural(series.length, `${one} con actividad`, `${many} con actividad`)
+    : `${cfg.last} ${cfg.limit} ${many} con actividad`;
+}
+
+function renderOverview(){
+  const rows = getScope();
+  const series = buildSeries(rows.map(v => v.vacanteId), currentPeriod);
+  const cfg = PERIODS[currentPeriod];
+  const desc = windowDescription(currentPeriod, series);
+
+  document.getElementById('chartTitle').textContent = cfg.title;
+  document.getElementById('chartSub').textContent = `${desc} · sólo vacantes activas`;
+  renderBars(document.getElementById('bars'), series, cfg.granularity);
+
+  // KPIs = foto acumulada al corte; no dependen de la ventana de la gráfica.
+  const totals = snapshotTotals(rows);
+  renderKpis(document.getElementById('kpiGrid'), METRICS.map(m => ({
+    label:m.label, value:totals[m.key], icon:m.icon, cls:m.cls, note:`Acumulado al corte · ${scopeSuffix(rows)}`
+  })));
+
+  renderPulse(rows);
+  renderActiveRows(rows);
 }
 
 function renderPulse(rows){
-  // El pulso usa exactamente el mismo universo filtrado que la tabla y los KPIs.
-  // Esto evita que las métricas de portafolio sigan mostrando los 3 procesos globales
-  // cuando se selecciona un Área, Hiring Manager o Vacante.
-  const scopedRows=Array.isArray(rows) ? rows : getFilteredActiveVacancies();
-  const count=scopedRows.length;
-  const activeThisWeek=scopedRows.filter(v=>v.activeThisWeek).length;
-  const feedback=scopedRows.reduce((sum,v)=>sum+Number(v.feedbackPending||0),0);
-  const stale=scopedRows.reduce((sum,v)=>sum+Number(v.stale7||0),0);
-  const pct=count ? Math.round((activeThisWeek/count)*100) : 0;
+  const count = rows.length;
+  document.getElementById('activeCount').textContent = count;
 
-  const activeCount=document.getElementById('activeCount');
-  const activityCount=document.getElementById('activityCount');
-  const feedbackPending=document.getElementById('feedbackPending');
-  const stale7=document.getElementById('stale7');
-  const progress=document.querySelector('#activityCount')?.parentElement?.querySelector('.progress span');
+  // "Esta semana" = semana (lun–dom) que contiene la fecha de generación.
+  // Si la evidencia no llega a esa semana, el dato es desconocido y no se muestra como 0.
+  const weekStart = bucketStart(store.generatedDate, 'week');
+  const weekEnd = bucketEnd(weekStart, 'week');
+  const progress = document.querySelector('#activityCount').parentElement.querySelector('.progress span');
+  if(store.metadata.cobertura.hastaEvidencia < weekStart){
+    document.getElementById('activityCount').textContent = '—';
+    progress.style.width = '0%';
+  } else {
+    const ids = new Set(rows.map(v => v.vacanteId));
+    const withActivity = new Set(store.actividad.filter(r => ids.has(r.vacanteId) && r.fecha >= weekStart && r.fecha <= weekEnd).map(r => r.vacanteId)).size;
+    document.getElementById('activityCount').textContent = `${withActivity}/${count}`;
+    progress.style.width = `${count ? Math.round(withActivity/count*100) : 0}%`;
+  }
 
-  if(activeCount) activeCount.textContent=count;
-  if(activityCount) activityCount.textContent=`${activeThisWeek}/${count}`;
-  if(feedbackPending) feedbackPending.textContent=feedback;
-  if(stale7) stale7.textContent=stale;
-  if(progress) progress.style.width=`${pct}%`;
+  document.getElementById('feedbackPending').textContent = fmtNum(sumNullable(rows, 'feedbackPendiente'));
+  document.getElementById('stale7').textContent = fmtNum(sumNullable(rows, 'sinMovimiento7d'));
 }
 
-function renderActiveRows(){
-  const rows=getFilteredActiveVacancies();
-  document.getElementById('activeRows').innerHTML=rows.map(v=>`
-  <tr class="clickable" onclick="openDetail('${v.req}', false)">
-    <td><div class="req">${v.req}</div><div class="vacancy">${v.name}</div><div class="subtext"><span class="status active">Activa</span></div></td>
-    <td>${v.area}</td><td>${v.hm}</td><td>${v.days}</td><td><b>${v.contacted}</b></td><td>${v.interviewed}</td><td>${v.offers}</td><td>${v.linked}</td><td><span class="arrow">›</span></td>
-  </tr>`).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
-  const count=rows.length;
-  document.getElementById('activeCountBadge').textContent=`${count} proceso${count===1?'':'s'} activo${count===1?'':'s'}`;
-  renderPulse(rows);
-  renderKpis(document.getElementById('kpiGrid'),getScopedKpis(currentPeriod));
+function renderActiveRows(rows){
+  document.getElementById('activeRows').innerHTML = rows.map(v => {
+    const t = v.metricas;   // foto al corte
+    return `<tr class="clickable" data-vacante-id="${esc(v.vacanteId)}">
+      <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div><div class="subtext">${statusBadge(v.estatus)}</div></td>
+      <td>${esc(v.area)}</td><td>${esc(v.hiringManager)}</td><td>${daysOpen(v)}</td>
+      <td><b>${fmtNum(t.contactados)}</b></td><td>${fmtNum(t.entrevistados)}</td><td>${fmtNum(t.ofertas)}</td><td>${fmtNum(t.contrataciones)}</td><td><span class="arrow">›</span></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
+  document.getElementById('activeCountBadge').textContent = plural(rows.length, 'proceso activo', 'procesos activos');
 }
 
 function applyFilters(){
-  const vacancy=document.getElementById('vacancyFilter');
-  if(vacancy) vacancy.value='all';
-  renderActiveRows();
+  refreshFilterOptions();
+  renderOverview();
 }
 
+function setPeriod(period){
+  currentPeriod = period;
+  document.querySelectorAll('.periodBtn').forEach(b => b.classList.toggle('active', b.dataset.period === period));
+  renderOverview();
+}
+
+/* ===== Histórico ===== */
+const historyYear = v => (v.fechaCierre || v.fechaApertura).slice(0,4);
+
+function refreshHistoryOptions(){
+  const base = inactiveVacantes();
+  fillSelect(document.getElementById('historyYearFilter'),
+    [...new Set(base.map(historyYear))].sort().reverse().map(y => ({value:y, label:y})), 'Todos');
+  fillSelect(document.getElementById('historyAreaFilter'),
+    uniqueSorted(base.map(v => v.area)).map(a => ({value:a, label:a})), 'Todas');
+}
+
+function setHistoryStatus(status){
+  historyStatus = status;
+  document.querySelectorAll('#historyStatusChips .chip').forEach(c => c.classList.toggle('active', c.dataset.status === status));
+  renderHistory();
+}
+
+function renderHistory(){
+  const year = document.getElementById('historyYearFilter').value;
+  const area = document.getElementById('historyAreaFilter').value;
+  const rows = inactiveVacantes().filter(v =>
+    (year === 'all' || historyYear(v) === year) &&
+    (area === 'all' || v.area === area) &&
+    (historyStatus === 'all' || v.estatus === historyStatus))
+    .sort((a,b) => (b.fechaCierre || b.fechaApertura).localeCompare(a.fechaCierre || a.fechaApertura));
+  const t = snapshotTotals(rows);   // foto al corte de los procesos filtrados
+
+  renderKpis(document.getElementById('historyKpis'), [
+    {label:'Procesos históricos',        value:rows.length,      icon:'calendar', note:'Procesos no activos'},
+    {label:'Contactados históricos',    value:t.contactados,    icon:'contacted', note:'Procesos no activos'},
+    {label:'Ofertas históricas',        value:t.ofertas,        icon:'offers', cls:'orange', note:'Ofertas registradas'},
+    {label:'Contrataciones históricas', value:t.contrataciones, icon:'linked', note:'Contrataciones'}
+  ]);
+
+  document.getElementById('historyRows').innerHTML = rows.map(v => {
+    // Foto del proceso al corte (estadoActual); historico.actividad sólo alimenta las gráficas.
+    const s = v.metricas;
+    return `<tr class="clickable" data-vacante-id="${esc(v.vacanteId)}">
+      <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div></td>
+      <td>${statusBadge(v.estatus)}</td><td>${fmtDate(v.fechaApertura)}</td><td>${fmtDate(v.fechaCierre)}</td>
+      <td>${fmtNum(s.contactados)}</td><td>${fmtNum(s.entrevistados)}</td><td>${fmtNum(s.ofertas)}</td><td>${fmtNum(s.contrataciones)}</td><td><span class="arrow">›</span></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos históricos que coincidan con los filtros seleccionados.</td></tr>`;
+}
+
+/* ===== Navegación y detalle ===== */
 function showPage(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(page).classList.add('active');
-  document.getElementById('navOverview').classList.toggle('active',page==='overview');
-  document.getElementById('navHistory').classList.toggle('active',page==='history');
-  if(page==='overview'){
-    document.getElementById('mainTitle').textContent='Avance de reclutamiento';
-    document.getElementById('mainSubtitle').textContent='Visibilidad ejecutiva de todos los procesos de reclutamiento';
-  } else if(page==='history'){
-    document.getElementById('mainTitle').textContent='Histórico de reclutamiento';
-    document.getElementById('mainSubtitle').textContent='Procesos no activos · snapshots preservados';
+  document.getElementById('navOverview').classList.toggle('active', page === 'overview');
+  document.getElementById('navHistory').classList.toggle('active', page === 'history');
+  if(page === 'overview'){
+    document.getElementById('mainTitle').textContent = 'Avance de reclutamiento';
+    document.getElementById('mainSubtitle').textContent = 'Visibilidad ejecutiva de todos los procesos de reclutamiento';
+  } else if(page === 'history'){
+    document.getElementById('mainTitle').textContent = 'Histórico de reclutamiento';
+    document.getElementById('mainSubtitle').textContent = 'Procesos no activos · snapshots preservados';
   }
 }
 
-function openDetail(req, historical){
-  previousPage=historical?'history':'overview';
-  const v=activeVacancies.find(x=>x.req===req) || historicalVacancies.find(x=>x.req===req) || {req:req,name:'Proceso',area:'',hm:'',contacted:0,interviewed:0,offers:0,linked:0};
-  document.getElementById('detailReq').textContent=v.req;
-  document.getElementById('detailName').textContent=v.name;
-  document.getElementById('detailStatus').innerHTML=`<b>Estatus:</b> ${historical ? (v.status || 'No activo') : 'Activa'}`;
-  document.getElementById('detailCut').textContent=historical?'Snapshot de cierre':'Snapshot 30 sep';
-  const kp=[
-    {label:'Contactados',value:v.contacted,delta:'Corte actual',cls:'',icon:'contacted'},
-    {label:'Entrevistados',value:v.interviewed,delta:'Corte actual',cls:'',icon:'interviewed'},
-    {label:'Ofertas',value:v.offers,delta:'Corte actual',cls:'orange',icon:'offers'},
-    {label:'Contrataciones',value:v.linked,delta:'Corte actual',cls:'',icon:'linked'}
-  ];
-  renderKpis(document.getElementById('detailKpis'),kp);
-  renderBars(document.getElementById('detailBars'),'weekly');
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+const pctOf = (n, d, of) => (n !== null && d) ? ` · ${Math.round(n/d*100)}% DE ${of}` : '';
+
+function openDetail(vacanteId){
+  const v = store.vacById[vacanteId];
+  if(!v) return;
+  previousPage = v.estatus === 'Activa' ? 'overview' : 'history';
+  const m = v.metricas;   // foto al corte: KPIs y funnel; historico.actividad sólo alimenta la gráfica
+
+  document.getElementById('detailReq').textContent = v.reqId;
+  document.getElementById('detailName').textContent = v.nombre;
+  document.getElementById('detailMeta').innerHTML = [
+    ['Estatus', v.estatus], ['Área', v.area], ['HM', v.hiringManager], ['Posiciones', v.posiciones],
+    ['Apertura', fmtDate(v.fechaApertura)], ['Cierre', fmtDate(v.fechaCierre)], ['Días abierta', daysOpen(v)]
+  ].map(([k, val]) => `<span><b>${k}:</b> ${esc(val)}</span>`).join('');
+  document.getElementById('detailCut').textContent = `Snapshot ${fmtDate(store.generatedDate)}`;
+
+  renderKpis(document.getElementById('detailKpis'), METRICS.map(mt => ({
+    label:mt.short, value:m[mt.key], icon:mt.icon, cls:mt.cls, note:'Acumulado al corte'
+  })));
+
+  const series = buildSeries([v.vacanteId], 'weekly');
+  document.getElementById('detailChartSub').textContent = windowDescription('weekly', series);
+  renderBars(document.getElementById('detailBars'), series, PERIODS.weekly.granularity);
+
+  document.getElementById('detailFunnel').innerHTML = [
+    stageHtml(m.contactados, 'CONTACTADOS'),
+    stageHtml(m.entrevistados, `ENTREVISTADOS${pctOf(m.entrevistados, m.contactados, 'CONTACTADOS')}`),
+    stageHtml(m.ofertas, `OFERTAS${pctOf(m.ofertas, m.entrevistados, 'ENTREVISTADOS')}`, true),
+    stageHtml(m.contrataciones, `CONTRATACIONES${pctOf(m.contrataciones, m.ofertas, 'OFERTAS')}`)
+  ].join('');
+
+  document.getElementById('detailCurrentSub').textContent = `Foto al corte · ${fmtDate(store.generatedDate)}`;
+  document.getElementById('detailCurrent').innerHTML = [
+    stageHtml(m.postulaciones, 'POSTULACIONES'),
+    stageHtml(m.activas, 'ACTIVAS HOY'),
+    stageHtml(m.contrataciones, 'CONTRATACIONES'),
+    stageHtml(m.feedbackPendiente, 'FEEDBACK HM PENDIENTE'),
+    stageHtml(m.sinMovimiento7d, 'SIN MOVIMIENTO +7D')
+  ].join('');
+
+  const etapas = (v.etapas || []).slice().sort((a,b) => a.orden - b.orden);
+  const stagesEl = document.getElementById('detailStages');
+  stagesEl.style.gridTemplateColumns = `repeat(${Math.max(etapas.length,1)},1fr)`;
+  stagesEl.innerHTML = etapas.map(e => stageHtml(e.cantidad, e.label.toUpperCase())).join('')
+    || `<div class="chart-empty">Sin etapas registradas.</div>`;
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('detail').classList.add('active');
-  document.getElementById('mainTitle').textContent='Detalle de requisición';
-  document.getElementById('mainSubtitle').textContent='KPIs, evolución y conversión de una vacante';
-  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('mainTitle').textContent = 'Detalle de requisición';
+  document.getElementById('mainSubtitle').textContent = 'KPIs, evolución y conversión de una vacante';
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function backFromDetail(){ showPage(previousPage); }
 
-function applyVacancyFilter(val){
-  if(val!=='all'){
-    const v=activeVacancies.find(x=>x.req===val);
-    if(v){ openDetail(val,false); return; }
+['activeRows', 'historyRows'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    const row = e.target.closest('tr[data-vacante-id]');
+    if(row) openDetail(row.dataset.vacanteId);
+  });
+});
+
+/* ===== Inicio ===== */
+async function init(){
+  try {
+    store = buildStore(await loadDashboard());
+  } catch(e){
+    console.error(e);
+    setDataState(e instanceof DataError ? e.message : `Error inesperado al cargar los datos: ${e.message}`, true);
+    return;
   }
-  renderActiveRows();
+  const {desdeEvidencia, hastaEvidencia} = store.metadata.cobertura;
+  document.getElementById('headerCut').textContent = `Corte ${fmtDate(store.generatedDate)}`;
+  document.getElementById('overviewSnapshot').textContent = `Generado ${fmtGenerated()}`;
+  document.getElementById('historySnapshot').textContent = `Evidencia ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
+
+  refreshFilterOptions();
+  refreshHistoryOptions();
+  renderHistory();
+  setPeriod('monthly');
+
+  setDataState('');
+  document.querySelector('.shell').classList.remove('no-data');
 }
 
-renderActiveRows();
-setPeriod('monthly');
+init();
 </script>
 </body>
 </html>
