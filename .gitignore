@@ -16,3 +16,6 @@ data/private/
 
 data/*.csv
 data/dashboard.json
+
+# Python
+__pycache__/
