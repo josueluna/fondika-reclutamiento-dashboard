@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FÓNDIKA | Dashboard de Reclutamiento</title>
+<style>
+:root {
+  --orange:#ff9f19;
+  --orange-soft:#fff4e3;
+  --turq:#0092a6;
+  --turq-text:#007b8c;
+  --turq-soft:#ebf6f8;
+  --ink:#535659;
+  --muted:#5f6266;
+  --line:#e5e7e8;
+  --bg:#f7f8f8;
+  --white:#fff;
+  --danger:#ad332b;
+  --danger-soft:#ffeae6;
+  --shadow:0 10px 30px rgba(83,86,89,.08);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif}
+button,select{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:92px 1fr}
+.rail{background:#fff;border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;align-items:center;gap:16px;position:sticky;top:0;height:100vh}
+.logo-mark{width:48px;height:48px;border-radius:15px;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#222;font:800 22px Outfit,Arial}
+.rail-btn{width:56px;height:56px;border:0;background:transparent;border-radius:14px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:.18s}
+.rail-btn:hover{background:#f1f1f2}
+.rail-btn.active{background:var(--turq-soft);color:var(--turq-text)}
+.rail-btn svg{width:23px;height:23px}
+.rail-spacer{flex:1}
+.shell{padding:24px 28px 42px;max-width:1540px;width:100%;margin:0 auto}
+.header{display:flex;align-items:center;gap:24px;margin-bottom:18px}
+.brand{width:152px;height:44px;display:flex;align-items:center}
+.brand-svg{width:100%;height:auto;display:block}
+.header-copy{border-left:1px solid var(--line);padding-left:22px}
+.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;color:var(--turq-text);margin-bottom:3px}
+h1{font-family:Outfit,Inter,sans-serif;font-size:30px;line-height:1.05;margin:0;color:var(--ink);font-weight:700}
+.subtitle{margin-top:6px;font-size:13px;color:var(--muted)}
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.badge{padding:8px 11px;border-radius:99px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:700;color:var(--muted)}
+.badge.dot:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--turq);margin-right:7px}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(83,86,89,.035);margin-bottom:16px;flex-wrap:wrap}
+.control{display:flex;align-items:center;gap:8px;padding:0 8px}
+.control label{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#777b7f}
+select{border:1px solid var(--line);border-radius:10px;padding:8px 30px 8px 10px;background:#fff;color:var(--ink);font-size:13px;font-weight:650}
+.segment{display:flex;border:1px solid var(--line);padding:3px;border-radius:11px;background:#fafafa}
+.segment button{border:0;background:transparent;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:750;color:var(--muted)}
+.segment button.active{background:#fff;color:var(--turq-text);box-shadow:0 2px 7px rgba(83,86,89,.10)}
+.spacer{flex:1}
+.snapshot{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.snapshot .pulse{width:8px;height:8px;background:var(--turq);border-radius:50%;box-shadow:0 0 0 4px rgba(0,146,166,.10)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden;min-height:145px}
+.kpi:after{content:"";position:absolute;right:-30px;top:-36px;width:104px;height:104px;border-radius:50%;background:var(--turq-soft)}
+.kpi.orange:after{background:var(--orange-soft)}
+.kpi-top{display:flex;align-items:center;gap:9px;position:relative;z-index:1}
+.kpi-icon{width:35px;height:35px;border-radius:10px;background:var(--turq-soft);color:var(--turq-text);display:flex;align-items:center;justify-content:center}
+.kpi.orange .kpi-icon{background:var(--orange-soft);color:#8c5300}
+.kpi-icon-svg{width:19px;height:19px;display:block}
+.kpi-label{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.02em}
+.kpi-value{font:700 37px/1 Outfit,Inter,sans-serif;margin:17px 0 8px;position:relative;z-index:1}
+.delta{font-size:12px;font-weight:750;color:var(--turq-text);position:relative;z-index:1}
+.delta .muted{color:#85888b;font-weight:600}
+.delta.down{color:var(--danger)}
+.grid-main{display:grid;grid-template-columns:1.35fr .65fr;gap:16px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-title{font:700 17px Outfit,Inter,sans-serif;color:var(--ink)}
+.card-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;font-weight:700;color:var(--muted)}
+.legend span:before{content:"";width:8px;height:8px;border-radius:3px;display:inline-block;margin-right:5px}
+.legend .l1:before{background:var(--turq)}
+.legend .l2:before{background:#52bcc8}
+.legend .l3:before{background:var(--orange)}
+.legend .l4:before{background:#535659}
+.chart{height:260px;position:relative;padding:10px 6px 30px 40px}
+.gridlines{position:absolute;left:40px;right:8px;top:10px;bottom:30px;display:flex;flex-direction:column;justify-content:space-between}
+.gridline{height:1px;background:#edf0f1;position:relative}
+.gridline span{position:absolute;left:-38px;top:-7px;width:30px;text-align:right;font-size:10px;color:#9a9da0}
+.bars{position:absolute;left:46px;right:8px;top:10px;bottom:30px;display:grid;grid-template-columns:repeat(6,1fr);align-items:end;gap:17px}
+.group{height:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;position:relative}
+.bar{width:17%;min-width:7px;max-width:14px;border-radius:4px 4px 1px 1px;transition:.2s;position:relative}
+.bar:hover{filter:brightness(.95);transform:translateY(-2px)}
+.bar.b1{background:var(--turq)}
+.bar.b2{background:#52bcc8}
+.bar.b3{background:var(--orange)}
+.bar.b4{background:#535659}
+.xlabel{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;color:#85888b}
+.side-stats{display:grid;gap:12px}
+.mini{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center}
+.mini .name{font-size:12px;color:var(--muted);font-weight:700}
+.mini .num{font:700 23px Outfit,Inter,sans-serif}
+.mini .note{font-size:10px;color:#8c9093;margin-top:3px}
+.progress{height:7px;background:#edf0f1;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress > span{display:block;height:100%;background:var(--turq);border-radius:99px}
+.table-card{padding:0;overflow:hidden}
+.table-head{padding:18px 18px 12px;display:flex;align-items:center;justify-content:space-between}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th{text-align:left;color:#777b7f;font-size:10px;letter-spacing:.055em;text-transform:uppercase;padding:10px 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fbfbfb}
+td{padding:12px 14px;border-bottom:1px solid #eff1f1;vertical-align:middle}
+tbody tr{transition:.15s}
+tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
+.req{font-weight:800;color:var(--turq-text)}
+.vacancy{font-weight:750;color:var(--ink)}
+.subtext{font-size:10px;color:#8b8e91;margin-top:2px}
+.status{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:99px;font-size:10px;font-weight:800}
+.status.active{background:#e7f6f8;color:var(--turq-text)}
+.status.closed{background:#eef0f0;color:#5f6266}
+.status.paused{background:#fff4e3;color:#8c5300}
+.status.cancelled{background:var(--danger-soft);color:var(--danger)}
+.status:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.arrow{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;color:var(--turq-text);background:#fff}
+.fake-link{color:var(--turq-text);font-weight:800}
+.note-banner{margin-top:12px;padding:10px 12px;border-radius:12px;background:#fff;border:1px dashed #d8dcdd;font-size:11px;color:#777b7f}
+.page{display:none}
+.page.active{display:block}
+.detail-hero{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.back{border:1px solid var(--line);background:#fff;color:var(--turq-text);border-radius:11px;padding:9px 11px;font-weight:800;font-size:12px}
+.detail-title{font:700 26px Outfit,Inter,sans-serif;margin:2px 0 4px}
+.meta{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.detail-actions{margin-left:auto}
+.funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}
+.stage{position:relative;background:#f6f8f8;border-radius:12px;padding:14px 12px;min-height:84px;border:1px solid #edf0f1}
+.stage:not(:last-child):after{content:"›";position:absolute;right:-8px;top:31px;width:16px;height:22px;background:#fff;color:#a1a4a6;text-align:center;font-size:20px;z-index:2}
+.stage .snum{font:700 25px Outfit,Inter,sans-serif}
+.stage .slabel{font-size:10px;color:var(--muted);font-weight:750;margin-top:4px}
+.stage.highlight{background:var(--orange-soft);border-color:#ffe1b7}
+.history-filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 11px;font-size:11px;font-weight:800;color:var(--muted)}
+.chip.active{background:var(--turq-soft);border-color:#ccebee;color:var(--turq-text)}
+.footer{margin-top:18px;display:flex;justify-content:space-between;font-size:10px;color:#929699}
+@media(max-width:1050px){
+  .app{grid-template-columns:1fr} .rail{display:none} .shell{padding:18px}
+  .kpis{grid-template-columns:repeat(2,1fr)} .grid-main{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .kpis{grid-template-columns:1fr} .header{align-items:flex-start;flex-wrap:wrap} .header-actions{margin-left:0}
+  .funnel{grid-template-columns:1fr 1fr} .toolbar{align-items:flex-start}
+}
+.empty-row{padding:28px 16px!important;text-align:center;color:#7a7d80;font-size:13px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="logo-mark">F</div>
+    <button class="rail-btn active" id="navOverview" title="Overview" onclick="showPage('overview')">
+      <svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="grafica-linea" data-fondika="grafica-linea"><path d="M3.6 3.6v15.2a1.6 1.6 0 0 0 1.6 1.6h15.2"/><path d="M7 15.4l3.6-4.4 3 2.6 4.8-6.2"/></svg>
+    </button>
+    <button class="rail-btn" id="navHistory" title="Histórico" onclick="showPage('history')">
+      <svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="calendario" data-fondika="calendario"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2.1"/><path d="M3.6 10.2h16.8"/><path d="M8.2 3v4.4"/><path d="M15.8 3v4.4"/><path d="M7.6 14h2M11 14h2M14.4 14h2M7.6 17.2h2M11 17.2h2"/></svg>
+    </button>
+    <div class="rail-spacer"></div>
+    <div style="font-size:9px;color:#a0a4a7;text-align:center;line-height:1.35">CAPITAL<br>HUMANO</div>
+  </aside>
+
+  <main class="shell">
+    <header class="header">
+      <div class="brand"><svg class="brand-svg" xmlns="http://www.w3.org/2000/svg" viewBox="44.92 17.36 1182.06 276.03" width="1182.06" height="276.03" role="img" aria-label="FÓNDIKA">
+  <title>FÓNDIKA</title>
+  <path fill="#0092A6" d="M360.917 17.363L232.059 64.183L232.059 72.945L360.917 72.945Z"/>
+  <path fill="#ff9f19" d="M44.918 106.182L185.067 106.182L185.067 142.996L85.415 142.996L85.415 182.168L173.234 182.168L173.234 218.982L85.415 218.982L85.415 290.241L44.918 290.241Z"/>
+  <path fill="#ff9f19" d="M347.807 198.736L347.807 198.204C347.807 166.659 324.673 140.364 292.064 140.364C259.456 140.364 236.844 166.128 236.844 197.682L236.844 198.204C236.844 229.759 259.988 256.054 292.597 256.054C325.195 256.054 347.807 230.291 347.807 198.736M194.51 198.736L194.51 198.204C194.51 145.884 235.8 103.028 292.597 103.028C349.383 103.028 390.141 145.362 390.141 197.682L390.141 198.204C390.141 250.534 348.861 293.389 292.064 293.389C235.268 293.389 194.51 251.066 194.51 198.736"/>
+  <path fill="#ff9f19" d="M415.623 106.182L452.957 106.182L539.202 219.504L539.202 106.182L579.167 106.182L579.167 290.241L544.721 290.241L455.587 173.226L455.587 290.241L415.623 290.241Z"/>
+  <path fill="#ff9f19" d="M681.955 253.69C715.086 253.69 737.437 231.339 737.437 198.73L737.437 198.208C737.437 165.61 715.086 142.727 681.955 142.727L650.671 142.727L650.671 253.69ZM610.174 106.184L681.955 106.184C739.805 106.184 779.77 145.888 779.77 197.687L779.77 198.208C779.77 250.007 739.805 290.233 681.955 290.233L610.174 290.233Z"/>
+  <path fill="#ff9f19" d="M804.467 106.177L844.964 106.177L844.964 290.236L804.467 290.236Z"/>
+  <path fill="#ff9f19" d="M885.707 106.182L926.194 106.182L926.194 186.644L1000.875 106.182L1049.784 106.182L974.841 184.276L1053.196 290.241L1004.549 290.241L947.492 211.886L926.194 233.966L926.194 290.241L885.707 290.241Z"/>
+  <path fill="#ff9f19" d="M1153.359 213.197L1128.91 153.51L1104.451 213.197ZM1110.764 104.863L1148.1 104.863L1226.977 290.237L1184.653 290.237L1167.821 248.957L1089.988 248.957L1073.168 290.237L1031.877 290.237Z"/>
+</svg>
+</div>
+      <div class="header-copy">
+        <div class="eyebrow">Capital Humano</div>
+        <h1 id="mainTitle">Avance de reclutamiento</h1>
+        <div class="subtitle" id="mainSubtitle">Visibilidad ejecutiva de todos los procesos de reclutamiento</div>
+      </div>
+      <div class="header-actions">
+        <span class="badge dot">Vista general</span>
+        <span class="badge">Corte 30 sep 2026</span>
+      </div>
+    </header>
+
+    <section id="overview" class="page active">
+      <div class="toolbar">
+        <div class="control">
+          <label>Vista</label>
+          <div class="segment">
+            <button class="periodBtn" data-period="weekly" onclick="setPeriod('weekly')">Semanal</button>
+            <button class="periodBtn" data-period="monthly" onclick="setPeriod('monthly')">Mensual</button>
+            <button class="periodBtn" data-period="annual" onclick="setPeriod('annual')">Anual</button>
+          </div>
+        </div>
+        <div class="control">
+          <label>Vacante</label>
+          <select id="vacancyFilter" onchange="applyVacancyFilter(this.value)">
+            <option value="all">Todas las activas</option>
+            <option value="REQ-2026-0001">REQ-2026-0001 · Asesor de Servicios Financieros</option>
+            <option value="REQ-2026-0004">REQ-2026-0004 · Asesor CAP</option>
+            <option value="REQ-2026-0005">REQ-2026-0005 · Director Comercial</option>
+          </select>
+        </div>
+        <div class="control">
+          <label>Área</label>
+          <select id="areaFilter" onchange="applyFilters()"><option value="all">Todas</option><option value="Fuerza Comercial">Fuerza Comercial</option><option value="Comercial">Comercial</option><option value="Sistemas">Sistemas</option></select>
+        </div>
+        <div class="control">
+          <label>Hiring Manager</label>
+          <select id="hmFilter" onchange="applyFilters()"><option value="all">Todos</option><option value="Giovani Montes">Giovani Montes</option><option value="Juan Carlos Pelayo">Juan Carlos Pelayo</option><option value="Maricela Curiel">Maricela Curiel</option><option value="Luis Castro">Luis Castro</option></select>
+        </div>
+        <div class="spacer"></div>
+        <div class="snapshot"><span class="pulse"></span><span>Snapshot semanal automático · viernes 18:00</span></div>
+      </div>
+
+      <div class="kpis" id="kpiGrid"></div>
+
+      <div class="grid-main">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title" id="chartTitle">Actividad semanal</div>
+              <div class="card-sub" id="chartSub">Comparativo de los últimos 6 cortes · sólo vacantes activas</div>
+            </div>
+            <div class="legend">
+              <span class="l1">Contactados</span><span class="l2">Entrevistados</span><span class="l3">Ofertas</span><span class="l4">Contrataciones</span>
+            </div>
+          </div>
+          <div class="chart">
+            <div class="gridlines">
+              <div class="gridline"><span>40</span></div>
+              <div class="gridline"><span>30</span></div>
+              <div class="gridline"><span>20</span></div>
+              <div class="gridline"><span>10</span></div>
+              <div class="gridline"><span>0</span></div>
+            </div>
+            <div class="bars" id="bars"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Pulso de procesos activos</div><div class="card-sub">Lectura rápida del portafolio actual</div></div></div>
+          <div class="side-stats">
+            <div class="mini"><div><div class="name">Vacantes activas</div><div class="note">Excluye cerradas, pausadas y canceladas</div></div><div class="num" id="activeCount">3</div></div>
+            <div class="mini"><div style="width:70%"><div class="name">Procesos con actividad esta semana</div><div class="progress"><span style="width:75%"></span></div></div><div class="num" id="activityCount">3/3</div></div>
+            <div class="mini"><div><div class="name">Feedback HM pendiente</div><div class="note">Candidatos enviados sin definición</div></div><div class="num" id="feedbackPending">6</div></div>
+            <div class="mini"><div><div class="name">Sin movimiento +7 días</div><div class="note">Sólo candidatos activos</div></div><div class="num" id="stale7">11</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-head">
+          <div><div class="card-title">Vacantes activas</div><div class="card-sub">Haz clic en una requisición para abrir su detalle</div></div>
+          <span class="badge" id="activeCountBadge">3 procesos activos</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Requisición / Vacante</th><th>Área</th><th>Hiring Manager</th><th>Días abierta</th><th>Contactados</th><th>Entrevistados</th><th>Ofertas</th><th>Contrataciones</th><th></th>
+          </tr></thead>
+          <tbody id="activeRows"></tbody>
+        </table>
+      </div>
+
+      <div class="note-banner">La vista ejecutiva excluye de forma predeterminada vacantes cerradas, pausadas y canceladas. El histórico se conserva en una vista separada para no mezclar actividad actual con procesos concluidos.</div>
+    </section>
+
+    <section id="history" class="page">
+      <div class="toolbar">
+        <div class="control"><label>Periodo</label><select><option>2026</option><option>2025</option></select></div>
+        <div class="control"><label>Área</label><select id="historyAreaFilter"><option value="all">Todas</option><option value="Fuerza Comercial">Fuerza Comercial</option><option value="Comercial">Comercial</option><option value="Sistemas">Sistemas</option></select></div>
+        <div class="history-filters">
+          <button class="chip active">Todas históricas</button>
+          <button class="chip">Cerradas</button>
+          <button class="chip">Pausadas</button>
+          <button class="chip">Canceladas</button>
+        </div>
+        <div class="spacer"></div>
+        <div class="snapshot"><span class="pulse"></span><span>Snapshots semanales + cierre mensual</span></div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="calendario" data-fondika="calendario"><rect x="3.6" y="5.4" width="16.8" height="15" rx="2.1"/><path d="M3.6 10.2h16.8"/><path d="M8.2 3v4.4"/><path d="M15.8 3v4.4"/><path d="M7.6 14h2M11 14h2M14.4 14h2M7.6 17.2h2M11 17.2h2"/></svg></div><div class="kpi-label">Procesos concluidos</div></div><div class="kpi-value">2</div><div class="delta"><span class="muted">Procesos no activos</span></div></div>
+        <div class="kpi"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuario-check" data-fondika="usuario-check"><circle cx="9.6" cy="8.2" r="4"/><path d="M2.6 20.4a7 7 0 0 1 12.4-4.4"/><path d="M15.4 17.9l2 2 4-4.4"/></svg></div><div class="kpi-label">Contactados históricos</div></div><div class="kpi-value">15</div><div class="delta"><span class="muted">Procesos no activos</span></div></div>
+        <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="contrato" data-fondika="contrato"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8V8.6z"/><path d="M13.4 3.2v5.4h5.6"/><path d="M8.2 12h7.6"/><path d="M8.2 16.6c1.2-.1 1.7-2 2.6-2s.9 1.5 1.8 1.5 1.5-1.5 2.4-1.5"/><path d="M8.2 19.4h7.6"/></svg></div><div class="kpi-label">Ofertas históricas</div></div><div class="kpi-value">1</div><div class="delta"><span class="muted">Ofertas registradas</span></div></div>
+        <div class="kpi"><div class="kpi-top"><div class="kpi-icon"><svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="documento-check" data-fondika="documento-check"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h4.6"/><path d="M13.4 3.2v5.4h5.6V11"/><path d="M14 18.2l2 2 4.4-4.6"/></svg></div><div class="kpi-label">Contrataciones históricos</div></div><div class="kpi-value">1</div><div class="delta"><span class="muted">Contrataciones</span></div></div>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-head"><div><div class="card-title">Histórico de requisiciones</div><div class="card-sub">Los KPIs se mantienen consultables después del cierre del proceso</div></div></div>
+        <table>
+          <thead><tr><th>Requisición / Vacante</th><th>Estatus</th><th>Apertura</th><th>Cierre / pausa</th><th>Contactados</th><th>Entrevistados</th><th>Ofertas</th><th>Contrataciones</th><th></th></tr></thead>
+          <tbody id="historyRows">
+            <tr class="clickable" onclick="openDetail('REQ-2026-0002', true)"><td><div class="req">REQ-2026-0002</div><div class="vacancy">Líder de Sistemas</div></td><td><span class="status paused">Pausada</span></td><td>07 jul</td><td>30 sep</td><td>11</td><td>4</td><td>0</td><td>0</td><td><span class="arrow">›</span></td></tr>
+            <tr class="clickable" onclick="openDetail('REQ-2026-0003', true)"><td><div class="req">REQ-2026-0003</div><div class="vacancy">Arquitecto de Software</div></td><td><span class="status closed">Cubierta</span></td><td>28 jul</td><td>08 sep</td><td>4</td><td>4</td><td>1</td><td>1</td><td><span class="arrow">›</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="detail" class="page">
+      <div class="detail-hero">
+        <button class="back" onclick="backFromDetail()">← Volver</button>
+        <div>
+          <div class="eyebrow" id="detailReq">REQ-2026-0001</div>
+          <div class="detail-title" id="detailName">Asesor de Servicios Financieros</div>
+          <div class="meta"><span id="detailStatus"><b>Estatus:</b> Activa</span><span><b>HM:</b> Juan Carlos</span><span><b>Responsable CH:</b> Josué</span><span><b>Apertura:</b> 15 may 2026</span></div>
+        </div>
+        <div class="detail-actions"><span class="badge dot" id="detailCut">Snapshot 27 sep</span></div>
+      </div>
+
+      <div class="kpis" id="detailKpis"></div>
+
+      <div class="grid-main">
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Evolución semanal de la requisición</div><div class="card-sub">Comparativo de hitos por semana</div></div></div>
+          <div class="chart">
+            <div class="gridlines">
+              <div class="gridline"><span>40</span></div><div class="gridline"><span>30</span></div><div class="gridline"><span>20</span></div><div class="gridline"><span>10</span></div><div class="gridline"><span>0</span></div>
+            </div>
+            <div class="bars" id="detailBars"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Conversión del proceso</div><div class="card-sub">Hitos acumulados de la requisición</div></div></div>
+          <div class="funnel" style="grid-template-columns:1fr;gap:9px">
+            <div class="stage"><div class="snum">82</div><div class="slabel">CANDIDATOS CAPTADOS</div></div>
+            <div class="stage"><div class="snum">59</div><div class="slabel">CONTACTADOS · 72%</div></div>
+            <div class="stage"><div class="snum">24</div><div class="slabel">ENTREVISTADOS · 41% DE CONTACTADOS</div></div>
+            <div class="stage highlight"><div class="snum">6</div><div class="slabel">OFERTAS · 25% DE ENTREVISTADOS</div></div>
+            <div class="stage"><div class="snum">3</div><div class="slabel">VINCULADOS · 50% DE OFERTAS</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Detalle operativo</div><div class="card-sub">Información que puede incorporarse después del MVP sin cambiar la arquitectura</div></div></div>
+        <div class="funnel">
+          <div class="stage"><div class="snum">8</div><div class="slabel">ACTIVOS HOY</div></div>
+          <div class="stage"><div class="snum">2</div><div class="slabel">FEEDBACK HM PENDIENTE</div></div>
+          <div class="stage"><div class="snum">3</div><div class="slabel">SIN MOVIMIENTO +7D</div></div>
+          <div class="stage"><div class="snum">5.1 d</div><div class="slabel">RESPUESTA HM PROMEDIO</div></div>
+          <div class="stage"><div class="snum">48%</div><div class="slabel">VIABILIDAD CH</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <span>Maqueta conceptual · FÓNDIKA Capital Humano</span>
+      <span>Datos simulados · No representa información real</span>
+    </div>
+  </main>
+</div>
+
+<script>
+const activeVacancies = [
+  {
+    req:'REQ-2026-0001',
+    name:'Asesor de Servicios Financieros',
+    area:'Fuerza Comercial',
+    hm:'Giovani Montes',
+    days:147,
+    contacted:32, interviewed:14, offers:2, linked:1,
+    periodStats:{
+      weekly:{contacted:24, interviewed:10, offers:2, linked:1},
+      monthly:{contacted:48, interviewed:21, offers:3, linked:1},
+      annual:{contacted:220, interviewed:95, offers:13, linked:3}
+    },
+    feedbackPending:3,
+    stale7:5,
+    activeThisWeek:true
+  },
+  {
+    req:'REQ-2026-0004',
+    name:'Asesor CAP',
+    area:'Comercial',
+    hm:'Maricela Curiel',
+    days:45,
+    contacted:18, interviewed:9, offers:2, linked:0,
+    periodStats:{
+      weekly:{contacted:12, interviewed:5, offers:2, linked:0},
+      monthly:{contacted:24, interviewed:11, offers:2, linked:1},
+      annual:{contacted:90, interviewed:40, offers:8, linked:2}
+    },
+    feedbackPending:2,
+    stale7:3,
+    activeThisWeek:true
+  },
+  {
+    req:'REQ-2026-0005',
+    name:'Director Comercial',
+    area:'Comercial',
+    hm:'Juan Carlos Pelayo',
+    days:35,
+    contacted:22, interviewed:5, offers:1, linked:0,
+    periodStats:{
+      weekly:{contacted:12, interviewed:4, offers:1, linked:0},
+      monthly:{contacted:24, interviewed:10, offers:2, linked:0},
+      annual:{contacted:89, interviewed:36, offers:6, linked:1}
+    },
+    feedbackPending:1,
+    stale7:3,
+    activeThisWeek:true
+  }
+];
+
+const historicalVacancies = [
+  {req:'REQ-2026-0002', name:'Líder de Sistemas', area:'Sistemas', hm:'Juan Carlos Pelayo', status:'Pausada', statusClass:'paused', open:'07 jul', close:'30 sep', contacted:11, interviewed:4, offers:0, linked:0},
+  {req:'REQ-2026-0003', name:'Arquitecto de Software', area:'Sistemas', hm:'Luis Castro', status:'Cubierta', statusClass:'closed', open:'28 jul', close:'08 sep', contacted:4, interviewed:4, offers:1, linked:1}
+];
+
+/*
+  Historial de cortes: todavía no se carga el CSV real de Hira.
+  Por eso no se muestran tendencias históricas inventadas.
+  La gráfica usa únicamente el corte actual disponible en activeVacancies.
+*/
+const iconMap = {
+  contacted: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuario-check" data-fondika="usuario-check"><circle cx="9.6" cy="8.2" r="4"/><path d="M2.6 20.4a7 7 0 0 1 12.4-4.4"/><path d="M15.4 17.9l2 2 4-4.4"/></svg>`,
+  interviewed: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuarios" data-fondika="usuarios"><circle cx="9.4" cy="8.4" r="3.6"/><path d="M3.2 20.4a6.2 6.2 0 0 1 12.4 0"/><path d="M16 5.2a3.6 3.6 0 0 1 0 6.9"/><path d="M17.4 14.9a6.2 6.2 0 0 1 3.4 5.5"/></svg>`,
+  offers: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="contrato" data-fondika="contrato"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8V8.6z"/><path d="M13.4 3.2v5.4h5.6"/><path d="M8.2 12h7.6"/><path d="M8.2 16.6c1.2-.1 1.7-2 2.6-2s.9 1.5 1.8 1.5 1.5-1.5 2.4-1.5"/><path d="M8.2 19.4h7.6"/></svg>`,
+  linked: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="documento-check" data-fondika="documento-check"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h4.6"/><path d="M13.4 3.2v5.4h5.6V11"/><path d="M14 18.2l2 2 4.4-4.6"/></svg>`
+};
+let currentPeriod='monthly';
+let previousPage='overview';
+
+function renderKpis(target, kpis){
+  target.innerHTML = kpis.map(k=>`
+    <div class="kpi ${k.cls||''}">
+      <div class="kpi-top"><div class="kpi-icon">${iconMap[k.icon]}</div><div class="kpi-label">${k.label}</div></div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="delta">${k.delta} <span class="muted">· corte actual</span></div>
+    </div>`).join('');
+}
+
+function renderBars(target, period){
+  // Sin CSV de Hira no tenemos cortes históricos confiables.
+  // Mostramos únicamente el corte actual de los procesos filtrados.
+  const rows=getCurrentScope();
+  const totals=rows.reduce((acc,v)=>{
+    const s=(v.periodStats && v.periodStats[period]) || {};
+    acc.contacted += Number(s.contacted||0);
+    acc.interviewed += Number(s.interviewed||0);
+    acc.offers += Number(s.offers||0);
+    acc.linked += Number(s.linked||0);
+    return acc;
+  },{contacted:0,interviewed:0,offers:0,linked:0});
+
+  const values=[totals.contacted,totals.interviewed,totals.offers,totals.linked];
+  const max=Math.max(1,...values);
+  const label=period==='annual' ? '2026' : (period==='monthly' ? 'Sep 26' : '28 sep');
+  const bars=values.map((v,j)=>`<div class="bar b${j+1}" style="height:${Math.max(v===0?0:2,(v/max*100))}%" title="${v}"></div>`).join('');
+  target.innerHTML=`<div class="group">${bars}<span class="xlabel">${label}</span></div>`;
+}
+
+function getCurrentScope(){
+  return getFilteredActiveVacancies();
+}
+
+function getScopedKpis(period){
+  const rows=getCurrentScope();
+  const totals=rows.reduce((acc,v)=>{
+    const s=(v.periodStats && v.periodStats[period]) || {
+      contacted:Number(v.contacted||0),
+      interviewed:Number(v.interviewed||0),
+      offers:Number(v.offers||0),
+      linked:Number(v.linked||0)
+    };
+    acc.contacted += Number(s.contacted||0);
+    acc.interviewed += Number(s.interviewed||0);
+    acc.offers += Number(s.offers||0);
+    acc.linked += Number(s.linked||0);
+    return acc;
+  },{contacted:0,interviewed:0,offers:0,linked:0});
+
+  const periodLabel = period==='annual' ? 'año' : (period==='monthly' ? 'mes' : 'semana');
+  const suffix=rows.length===0
+    ? 'Sin procesos activos en el filtro'
+    : `${rows.length} proceso${rows.length===1?'':'s'} activo${rows.length===1?'':'s'} · corte actual`;
+
+  return [
+    {label:'Candidatos contactados',value:totals.contacted,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'',icon:'contacted'},
+    {label:'Candidatos entrevistados',value:totals.interviewed,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'',icon:'interviewed'},
+    {label:'Ofertas realizadas',value:totals.offers,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'orange',icon:'offers'},
+    {label:'Contrataciones',value:totals.linked,delta:`Acumulado / corte por ${periodLabel} · ${suffix}`,cls:'',icon:'linked'}
+  ];
+}
+
+function setPeriod(period){
+  currentPeriod=period;
+  document.querySelectorAll('.periodBtn').forEach(b=>b.classList.toggle('active',b.dataset.period===period));
+  const titles={
+    annual:'Actividad anual',
+    weekly:'Actividad semanal',
+    monthly:'Actividad mensual'
+  };
+  const subtitles={
+    annual:'Corte actual 2026 · sólo vacantes activas',
+    weekly:'Corte actual · sólo vacantes activas',
+    monthly:'Corte actual · sólo vacantes activas'
+  };
+  document.getElementById('chartTitle').textContent=titles[period];
+  document.getElementById('chartSub').textContent=subtitles[period];
+  renderKpis(document.getElementById('kpiGrid'),getScopedKpis(period));
+  renderBars(document.getElementById('bars'),period);
+}
+
+function getFilteredActiveVacancies(){
+  const area = document.getElementById('areaFilter')?.value || 'all';
+  const hm = document.getElementById('hmFilter')?.value || 'all';
+  const vacancy = document.getElementById('vacancyFilter')?.value || 'all';
+  return activeVacancies.filter(v =>
+    (area==='all' || v.area===area) &&
+    (hm==='all' || v.hm===hm) &&
+    (vacancy==='all' || v.req===vacancy)
+  );
+}
+
+function renderPulse(rows){
+  // El pulso usa exactamente el mismo universo filtrado que la tabla y los KPIs.
+  // Esto evita que las métricas de portafolio sigan mostrando los 3 procesos globales
+  // cuando se selecciona un Área, Hiring Manager o Vacante.
+  const scopedRows=Array.isArray(rows) ? rows : getFilteredActiveVacancies();
+  const count=scopedRows.length;
+  const activeThisWeek=scopedRows.filter(v=>v.activeThisWeek).length;
+  const feedback=scopedRows.reduce((sum,v)=>sum+Number(v.feedbackPending||0),0);
+  const stale=scopedRows.reduce((sum,v)=>sum+Number(v.stale7||0),0);
+  const pct=count ? Math.round((activeThisWeek/count)*100) : 0;
+
+  const activeCount=document.getElementById('activeCount');
+  const activityCount=document.getElementById('activityCount');
+  const feedbackPending=document.getElementById('feedbackPending');
+  const stale7=document.getElementById('stale7');
+  const progress=document.querySelector('#activityCount')?.parentElement?.querySelector('.progress span');
+
+  if(activeCount) activeCount.textContent=count;
+  if(activityCount) activityCount.textContent=`${activeThisWeek}/${count}`;
+  if(feedbackPending) feedbackPending.textContent=feedback;
+  if(stale7) stale7.textContent=stale;
+  if(progress) progress.style.width=`${pct}%`;
+}
+
+function renderActiveRows(){
+  const rows=getFilteredActiveVacancies();
+  document.getElementById('activeRows').innerHTML=rows.map(v=>`
+  <tr class="clickable" onclick="openDetail('${v.req}', false)">
+    <td><div class="req">${v.req}</div><div class="vacancy">${v.name}</div><div class="subtext"><span class="status active">Activa</span></div></td>
+    <td>${v.area}</td><td>${v.hm}</td><td>${v.days}</td><td><b>${v.contacted}</b></td><td>${v.interviewed}</td><td>${v.offers}</td><td>${v.linked}</td><td><span class="arrow">›</span></td>
+  </tr>`).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
+  const count=rows.length;
+  document.getElementById('activeCountBadge').textContent=`${count} proceso${count===1?'':'s'} activo${count===1?'':'s'}`;
+  renderPulse(rows);
+  renderKpis(document.getElementById('kpiGrid'),getScopedKpis(currentPeriod));
+}
+
+function applyFilters(){
+  const vacancy=document.getElementById('vacancyFilter');
+  if(vacancy) vacancy.value='all';
+  renderActiveRows();
+}
+
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  document.getElementById('navOverview').classList.toggle('active',page==='overview');
+  document.getElementById('navHistory').classList.toggle('active',page==='history');
+  if(page==='overview'){
+    document.getElementById('mainTitle').textContent='Avance de reclutamiento';
+    document.getElementById('mainSubtitle').textContent='Visibilidad ejecutiva de todos los procesos de reclutamiento';
+  } else if(page==='history'){
+    document.getElementById('mainTitle').textContent='Histórico de reclutamiento';
+    document.getElementById('mainSubtitle').textContent='Procesos no activos · snapshots preservados';
+  }
+}
+
+function openDetail(req, historical){
+  previousPage=historical?'history':'overview';
+  const v=activeVacancies.find(x=>x.req===req) || historicalVacancies.find(x=>x.req===req) || {req:req,name:'Proceso',area:'',hm:'',contacted:0,interviewed:0,offers:0,linked:0};
+  document.getElementById('detailReq').textContent=v.req;
+  document.getElementById('detailName').textContent=v.name;
+  document.getElementById('detailStatus').innerHTML=`<b>Estatus:</b> ${historical ? (v.status || 'No activo') : 'Activa'}`;
+  document.getElementById('detailCut').textContent=historical?'Snapshot de cierre':'Snapshot 30 sep';
+  const kp=[
+    {label:'Contactados',value:v.contacted,delta:'Corte actual',cls:'',icon:'contacted'},
+    {label:'Entrevistados',value:v.interviewed,delta:'Corte actual',cls:'',icon:'interviewed'},
+    {label:'Ofertas',value:v.offers,delta:'Corte actual',cls:'orange',icon:'offers'},
+    {label:'Contrataciones',value:v.linked,delta:'Corte actual',cls:'',icon:'linked'}
+  ];
+  renderKpis(document.getElementById('detailKpis'),kp);
+  renderBars(document.getElementById('detailBars'),'weekly');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('detail').classList.add('active');
+  document.getElementById('mainTitle').textContent='Detalle de requisición';
+  document.getElementById('mainSubtitle').textContent='KPIs, evolución y conversión de una vacante';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function backFromDetail(){ showPage(previousPage); }
+
+function applyVacancyFilter(val){
+  if(val!=='all'){
+    const v=activeVacancies.find(x=>x.req===val);
+    if(v){ openDetail(val,false); return; }
+  }
+  renderActiveRows();
+}
+
+renderActiveRows();
+setPeriod('monthly');
+</script>
+</body>
+</html>

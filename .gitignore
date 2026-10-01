@@ -13,3 +13,5 @@ data/private/
 # Archivos Power BI
 *.pbix
 *.pbit
+
+data/*.csv
