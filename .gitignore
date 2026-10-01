@@ -1,0 +1,15 @@
+﻿# Sistema
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+*.swp
+
+# Datos privados de Hira
+data/raw/
+data/private/
+
+# Archivos Power BI
+*.pbix
+*.pbit
