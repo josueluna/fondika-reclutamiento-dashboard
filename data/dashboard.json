@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.2.0",
   "metadata": {
-    "generatedAt": "2026-10-01T23:37:19-06:00",
+    "generatedAt": "2026-10-02T15:21:23-06:00",
     "timezone": "America/Mexico_City",
     "source": "Hira",
     "dimensionSemantics": "vacante_actual_al_generar",
     "cobertura": {
       "desdeEvidencia": "2026-05-11",
-      "hastaEvidencia": "2026-10-01"
+      "hastaEvidencia": "2026-10-02"
     },
     "metricas": [
       "nuevos",
@@ -26,7 +26,7 @@
     "coberturaPorMetrica": {
       "nuevos": {
         "desdeEvidencia": "2026-05-11",
-        "hastaEvidencia": "2026-09-29"
+        "hastaEvidencia": "2026-10-01"
       },
       "rechazados": {
         "desdeEvidencia": "2026-05-28",
@@ -34,19 +34,19 @@
       },
       "contactados": {
         "desdeEvidencia": "2026-05-27",
-        "hastaEvidencia": "2026-09-21"
+        "hastaEvidencia": "2026-10-01"
       },
       "entrevistados_ch": {
         "desdeEvidencia": "2026-05-15",
-        "hastaEvidencia": "2026-09-29"
+        "hastaEvidencia": "2026-10-01"
       },
       "enviados_hm": {
         "desdeEvidencia": "2026-05-27",
-        "hastaEvidencia": "2026-09-29"
+        "hastaEvidencia": "2026-10-01"
       },
       "entrevistados_hm": {
         "desdeEvidencia": "2026-06-29",
-        "hastaEvidencia": "2026-10-01"
+        "hastaEvidencia": "2026-10-02"
       },
       "aprobados_hm": {
         "desdeEvidencia": "2026-05-16",
@@ -54,7 +54,7 @@
       },
       "contrataciones": {
         "desdeEvidencia": "2026-05-28",
-        "hastaEvidencia": "2026-09-08"
+        "hastaEvidencia": "2026-10-02"
       }
     },
     "etapasAlCorte": {
@@ -115,25 +115,25 @@
         "fechaApertura": "2026-05-06",
         "fechaCierre": null,
         "metricas": {
-          "postulaciones": 201,
-          "activas": 53,
-          "contactados": 144,
-          "entrevistados": 44,
+          "postulaciones": 206,
+          "activas": 56,
+          "contactados": 149,
+          "entrevistados": 45,
           "ofertas": 6,
-          "contrataciones": 9,
+          "contrataciones": 11,
           "feedbackPendiente": null,
           "sinMovimiento7d": null
         },
         "alCorte": {
           "nuevo": 10,
-          "contactado": 33,
-          "entrevistaCh": 3,
+          "contactado": 36,
+          "entrevistaCh": 4,
           "enviadoHm": 1,
           "entrevistaHm": 2,
-          "contratado": 9,
+          "contratado": 11,
           "rechazado": 139,
-          "otros": 4,
-          "fueraDeNuevo": 191
+          "otros": 3,
+          "fueraDeNuevo": 196
         },
         "etapas": [
           {
@@ -146,7 +146,7 @@
             "id": "contactado",
             "label": "Contactado",
             "orden": 2,
-            "cantidad": 33
+            "cantidad": 36
           },
           {
             "id": "screening",
@@ -158,7 +158,7 @@
             "id": "entrevista_ch_agendada",
             "label": "Entrevista CH agendada",
             "orden": 4,
-            "cantidad": 2
+            "cantidad": 3
           },
           {
             "id": "entrevista_ch_realizada",
@@ -170,7 +170,7 @@
             "id": "enviar_a_hm",
             "label": "Enviar a Hiring Manager",
             "orden": 6,
-            "cantidad": 1
+            "cantidad": 2
           },
           {
             "id": "enviado_a_hm",
@@ -183,18 +183,6 @@
             "label": "Entrevista con HM agendada",
             "orden": 8,
             "cantidad": 2
-          },
-          {
-            "id": "custom_stage_14fe1c33-3b48-457b-bb10-85785c44a38b",
-            "label": "Documentación solicitada",
-            "orden": 9,
-            "cantidad": 1
-          },
-          {
-            "id": "custom_stage_c3023a57-4e26-4cf3-8d45-d8ac449b895d",
-            "label": "Contrato enviado",
-            "orden": 10,
-            "cantidad": 1
           }
         ]
       },
@@ -366,8 +354,8 @@
           "nuevo": 6,
           "contactado": 10,
           "entrevistaCh": 2,
-          "enviadoHm": 2,
-          "entrevistaHm": 1,
+          "enviadoHm": 1,
+          "entrevistaHm": 2,
           "contratado": 0,
           "rechazado": 1,
           "otros": 0,
@@ -396,13 +384,13 @@
             "id": "enviado_a_hm",
             "label": "Enviado a Hiring Manager",
             "orden": 4,
-            "cantidad": 2
+            "cantidad": 1
           },
           {
             "id": "entrevista_hm_agendada",
             "label": "Entrevista con HM agendada",
             "orden": 5,
-            "cantidad": 1
+            "cantidad": 2
           }
         ]
       }
@@ -1846,9 +1834,45 @@
       },
       {
         "fecha": "2026-10-01",
-        "metrica": "entrevistados_hm",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 5
+      },
+      {
+        "fecha": "2026-10-01",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 5
+      },
+      {
+        "fecha": "2026-10-01",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-10-01",
+        "metrica": "enviados_hm",
         "vacanteId": "v-8lyzyt",
         "cantidad": 1
+      },
+      {
+        "fecha": "2026-10-01",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-10-02",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-10-02",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
       }
     ]
   }
