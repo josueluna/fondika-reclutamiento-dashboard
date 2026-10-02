@@ -1,0 +1,1855 @@
+{
+  "schemaVersion": "1.2.0",
+  "metadata": {
+    "generatedAt": "2026-10-01T23:37:19-06:00",
+    "timezone": "America/Mexico_City",
+    "source": "Hira",
+    "dimensionSemantics": "vacante_actual_al_generar",
+    "cobertura": {
+      "desdeEvidencia": "2026-05-11",
+      "hastaEvidencia": "2026-10-01"
+    },
+    "metricas": [
+      "nuevos",
+      "rechazados",
+      "contactados",
+      "entrevistados_ch",
+      "enviados_hm",
+      "entrevistados_hm",
+      "aprobados_hm",
+      "contrataciones"
+    ],
+    "metricasObsoletas": [
+      "entrevistados",
+      "ofertas"
+    ],
+    "coberturaPorMetrica": {
+      "nuevos": {
+        "desdeEvidencia": "2026-05-11",
+        "hastaEvidencia": "2026-09-29"
+      },
+      "rechazados": {
+        "desdeEvidencia": "2026-05-28",
+        "hastaEvidencia": "2026-09-30"
+      },
+      "contactados": {
+        "desdeEvidencia": "2026-05-27",
+        "hastaEvidencia": "2026-09-21"
+      },
+      "entrevistados_ch": {
+        "desdeEvidencia": "2026-05-15",
+        "hastaEvidencia": "2026-09-29"
+      },
+      "enviados_hm": {
+        "desdeEvidencia": "2026-05-27",
+        "hastaEvidencia": "2026-09-29"
+      },
+      "entrevistados_hm": {
+        "desdeEvidencia": "2026-06-29",
+        "hastaEvidencia": "2026-10-01"
+      },
+      "aprobados_hm": {
+        "desdeEvidencia": "2026-05-16",
+        "hastaEvidencia": "2026-09-25"
+      },
+      "contrataciones": {
+        "desdeEvidencia": "2026-05-28",
+        "hastaEvidencia": "2026-09-08"
+      }
+    },
+    "etapasAlCorte": {
+      "nuevo": [
+        "nuevo"
+      ],
+      "contactado": [
+        "contactado"
+      ],
+      "entrevistaCh": [
+        "entrevista_ch_agendada",
+        "entrevista_ch_realizada"
+      ],
+      "enviadoHm": [
+        "enviado_a_hm"
+      ],
+      "entrevistaHm": [
+        "entrevista_hm_agendada",
+        "feedback_hm_pendiente"
+      ],
+      "contratado": [
+        "contratado"
+      ],
+      "rechazado": [
+        "descartado",
+        "no_interesado",
+        "custom_stage_33c3ea80-c36e-41ba-8a0a-91bfde05c45c"
+      ],
+      "otros": [
+        "screening",
+        "enviar_a_hm",
+        "custom_stage_1dee0328-709a-4701-b0b5-5f60f2be237b",
+        "custom_stage_88da4652-6ea0-4084-9fbf-b3a3cdea871f",
+        "oferta",
+        "custom_stage_54561ca7-6169-45cf-b449-3d26517a635b",
+        "custom_stage_8d3c9111-3b56-46be-a17c-59aae6e000d3",
+        "custom_stage_14fe1c33-3b48-457b-bb10-85785c44a38b",
+        "custom_stage_cd717a27-140b-4cd1-aac0-6eb409af0c50",
+        "custom_stage_18bc7b7b-6e68-48f3-b387-f4bad13710ee",
+        "custom_stage_c3023a57-4e26-4cf3-8d45-d8ac449b895d",
+        "por_contactar",
+        "validado_ch",
+        "registro_pendiente",
+        "registro_enviado"
+      ]
+    }
+  },
+  "estadoActual": {
+    "vacantes": [
+      {
+        "vacanteId": "v-8lyzyt",
+        "reqId": "REQ-2026-0001",
+        "nombre": "Asesor de Servicios Financieros",
+        "area": "Fuerza Comercial",
+        "hiringManager": "Giovani Montes",
+        "estatus": "Activa",
+        "posiciones": 2000,
+        "fechaApertura": "2026-05-06",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 201,
+          "activas": 53,
+          "contactados": 144,
+          "entrevistados": 44,
+          "ofertas": 6,
+          "contrataciones": 9,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "alCorte": {
+          "nuevo": 10,
+          "contactado": 33,
+          "entrevistaCh": 3,
+          "enviadoHm": 1,
+          "entrevistaHm": 2,
+          "contratado": 9,
+          "rechazado": 139,
+          "otros": 4,
+          "fueraDeNuevo": 191
+        },
+        "etapas": [
+          {
+            "id": "nuevo",
+            "label": "Nuevo",
+            "orden": 1,
+            "cantidad": 10
+          },
+          {
+            "id": "contactado",
+            "label": "Contactado",
+            "orden": 2,
+            "cantidad": 33
+          },
+          {
+            "id": "screening",
+            "label": "Screening",
+            "orden": 3,
+            "cantidad": 1
+          },
+          {
+            "id": "entrevista_ch_agendada",
+            "label": "Entrevista CH agendada",
+            "orden": 4,
+            "cantidad": 2
+          },
+          {
+            "id": "entrevista_ch_realizada",
+            "label": "Entrevista CH realizada",
+            "orden": 5,
+            "cantidad": 1
+          },
+          {
+            "id": "enviar_a_hm",
+            "label": "Enviar a Hiring Manager",
+            "orden": 6,
+            "cantidad": 1
+          },
+          {
+            "id": "enviado_a_hm",
+            "label": "Enviado a Hiring Manager",
+            "orden": 7,
+            "cantidad": 1
+          },
+          {
+            "id": "entrevista_hm_agendada",
+            "label": "Entrevista con HM agendada",
+            "orden": 8,
+            "cantidad": 2
+          },
+          {
+            "id": "custom_stage_14fe1c33-3b48-457b-bb10-85785c44a38b",
+            "label": "Documentación solicitada",
+            "orden": 9,
+            "cantidad": 1
+          },
+          {
+            "id": "custom_stage_c3023a57-4e26-4cf3-8d45-d8ac449b895d",
+            "label": "Contrato enviado",
+            "orden": 10,
+            "cantidad": 1
+          }
+        ]
+      },
+      {
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "reqId": "REQ-2026-0002",
+        "nombre": "Líder de Sistemas",
+        "area": "Sistemas",
+        "hiringManager": "Juan Carlos Pelayo",
+        "estatus": "Pausada",
+        "posiciones": 1,
+        "fechaApertura": "2026-07-07",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 11,
+          "activas": 2,
+          "contactados": 8,
+          "entrevistados": 4,
+          "ofertas": 0,
+          "contrataciones": 0,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "alCorte": {
+          "nuevo": 0,
+          "contactado": 0,
+          "entrevistaCh": 0,
+          "enviadoHm": 2,
+          "entrevistaHm": 0,
+          "contratado": 0,
+          "rechazado": 9,
+          "otros": 0,
+          "fueraDeNuevo": 11
+        },
+        "etapas": [
+          {
+            "id": "enviado_a_hm",
+            "label": "Enviado a Hiring Manager",
+            "orden": 1,
+            "cantidad": 2
+          }
+        ]
+      },
+      {
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "reqId": "REQ-2026-0003",
+        "nombre": "Arquitecto de Software",
+        "area": "Sistemas",
+        "hiringManager": "Luis Castro",
+        "estatus": "Cubierta",
+        "posiciones": 1,
+        "fechaApertura": "2026-07-28",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 4,
+          "activas": 3,
+          "contactados": 1,
+          "entrevistados": 4,
+          "ofertas": 1,
+          "contrataciones": 1,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "alCorte": {
+          "nuevo": 0,
+          "contactado": 0,
+          "entrevistaCh": 0,
+          "enviadoHm": 0,
+          "entrevistaHm": 3,
+          "contratado": 1,
+          "rechazado": 0,
+          "otros": 0,
+          "fueraDeNuevo": 4
+        },
+        "etapas": [
+          {
+            "id": "feedback_hm_pendiente",
+            "label": "Feedback de HM pendiente",
+            "orden": 1,
+            "cantidad": 3
+          }
+        ]
+      },
+      {
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "reqId": "REQ-2026-0004",
+        "nombre": "Asesor CAP",
+        "area": "Comercial",
+        "hiringManager": "Maricela Curiel",
+        "estatus": "Activa",
+        "posiciones": 1,
+        "fechaApertura": "2026-08-17",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 18,
+          "activas": 10,
+          "contactados": 12,
+          "entrevistados": 5,
+          "ofertas": 0,
+          "contrataciones": 0,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "alCorte": {
+          "nuevo": 3,
+          "contactado": 4,
+          "entrevistaCh": 1,
+          "enviadoHm": 0,
+          "entrevistaHm": 1,
+          "contratado": 0,
+          "rechazado": 8,
+          "otros": 1,
+          "fueraDeNuevo": 15
+        },
+        "etapas": [
+          {
+            "id": "nuevo",
+            "label": "Nuevo",
+            "orden": 1,
+            "cantidad": 3
+          },
+          {
+            "id": "contactado",
+            "label": "Contactado",
+            "orden": 2,
+            "cantidad": 4
+          },
+          {
+            "id": "screening",
+            "label": "Screening",
+            "orden": 3,
+            "cantidad": 1
+          },
+          {
+            "id": "entrevista_ch_agendada",
+            "label": "Entrevista CH agendada",
+            "orden": 4,
+            "cantidad": 1
+          },
+          {
+            "id": "entrevista_hm_agendada",
+            "label": "Entrevista con HM agendada",
+            "orden": 5,
+            "cantidad": 1
+          }
+        ]
+      },
+      {
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "reqId": "REQ-2026-0005",
+        "nombre": "Director Comercial",
+        "area": "Comercial",
+        "hiringManager": "Juan Carlos Pelayo",
+        "estatus": "Activa",
+        "posiciones": 1,
+        "fechaApertura": "2026-08-27",
+        "fechaCierre": null,
+        "metricas": {
+          "postulaciones": 22,
+          "activas": 21,
+          "contactados": 16,
+          "entrevistados": 3,
+          "ofertas": 0,
+          "contrataciones": 0,
+          "feedbackPendiente": null,
+          "sinMovimiento7d": null
+        },
+        "alCorte": {
+          "nuevo": 6,
+          "contactado": 10,
+          "entrevistaCh": 2,
+          "enviadoHm": 2,
+          "entrevistaHm": 1,
+          "contratado": 0,
+          "rechazado": 1,
+          "otros": 0,
+          "fueraDeNuevo": 16
+        },
+        "etapas": [
+          {
+            "id": "nuevo",
+            "label": "Nuevo",
+            "orden": 1,
+            "cantidad": 6
+          },
+          {
+            "id": "contactado",
+            "label": "Contactado",
+            "orden": 2,
+            "cantidad": 10
+          },
+          {
+            "id": "entrevista_ch_agendada",
+            "label": "Entrevista CH agendada",
+            "orden": 3,
+            "cantidad": 2
+          },
+          {
+            "id": "enviado_a_hm",
+            "label": "Enviado a Hiring Manager",
+            "orden": 4,
+            "cantidad": 2
+          },
+          {
+            "id": "entrevista_hm_agendada",
+            "label": "Entrevista con HM agendada",
+            "orden": 5,
+            "cantidad": 1
+          }
+        ]
+      }
+    ]
+  },
+  "historico": {
+    "actividad": [
+      {
+        "fecha": "2026-05-11",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 16
+      },
+      {
+        "fecha": "2026-05-12",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 6
+      },
+      {
+        "fecha": "2026-05-13",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-05-15",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 11
+      },
+      {
+        "fecha": "2026-05-16",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-05-18",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-05-21",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 10
+      },
+      {
+        "fecha": "2026-05-21",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-05-22",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-05-25",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-05-27",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-05-27",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 5
+      },
+      {
+        "fecha": "2026-05-27",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-05-28",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-05-28",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-05-28",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-05-28",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-05-28",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-05-29",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 8
+      },
+      {
+        "fecha": "2026-05-29",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-05-29",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 10
+      },
+      {
+        "fecha": "2026-05-29",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-05-29",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-01",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-01",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-01",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-02",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-02",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-03",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-05",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-06-05",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-06-05",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-06-06",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-09",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-09",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-16",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-06-23",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-06-23",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-06-23",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-24",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 26
+      },
+      {
+        "fecha": "2026-06-24",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-06-24",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 25
+      },
+      {
+        "fecha": "2026-06-24",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 8
+      },
+      {
+        "fecha": "2026-06-25",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-06-25",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-06-25",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-25",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-06-26",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 12
+      },
+      {
+        "fecha": "2026-06-26",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 11
+      },
+      {
+        "fecha": "2026-06-26",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-06-26",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-27",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-06-27",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-06-29",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-06-29",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-06-29",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-29",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-06-29",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-06-30",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 13
+      },
+      {
+        "fecha": "2026-06-30",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-06-30",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 13
+      },
+      {
+        "fecha": "2026-06-30",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-06-30",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-01",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-07-01",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-02",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-07-02",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-02",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-07-02",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-07-02",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-02",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-07-03",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-03",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-06",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-06",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-06",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-06",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-06",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-06",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-07",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-07",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-07-08",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-08",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-08",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-09",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-07-09",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-09",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-13",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-13",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-13",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-13",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-13",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-14",
+        "metrica": "nuevos",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-07-14",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-07-14",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-15",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-16",
+        "metrica": "contactados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-07-16",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-16",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-16",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-16",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-17",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-07-17",
+        "metrica": "rechazados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-17",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-17",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-17",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-20",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-22",
+        "metrica": "nuevos",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-07-22",
+        "metrica": "rechazados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-22",
+        "metrica": "contactados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-23",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-23",
+        "metrica": "nuevos",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-23",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-23",
+        "metrica": "contactados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-23",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-07-24",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-07-24",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-24",
+        "metrica": "rechazados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-24",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-07-24",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-27",
+        "metrica": "nuevos",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-27",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-27",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-27",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-27",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-27",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-28",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-28",
+        "metrica": "nuevos",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-07-28",
+        "metrica": "contactados",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-28",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-28",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-29",
+        "metrica": "nuevos",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-29",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-29",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-29",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-07-30",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-31",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-07-31",
+        "metrica": "aprobados_hm",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-04",
+        "metrica": "rechazados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-04",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-04",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-08-04",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-08-05",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 11
+      },
+      {
+        "fecha": "2026-08-05",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-06",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 13
+      },
+      {
+        "fecha": "2026-08-06",
+        "metrica": "rechazados",
+        "vacanteId": "vac_21556a76b1cbcca6d9ac7f32",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-08-06",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-08-06",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 5
+      },
+      {
+        "fecha": "2026-08-07",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 46
+      },
+      {
+        "fecha": "2026-08-07",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-08-07",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-08",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-08",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-08",
+        "metrica": "aprobados_hm",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-10",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-10",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-11",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-08-11",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-13",
+        "metrica": "contrataciones",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-18",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 8
+      },
+      {
+        "fecha": "2026-08-18",
+        "metrica": "contactados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 8
+      },
+      {
+        "fecha": "2026-08-18",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 5
+      },
+      {
+        "fecha": "2026-08-19",
+        "metrica": "rechazados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-19",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-08-20",
+        "metrica": "rechazados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-24",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-24",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-24",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-25",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-08-25",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-25",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-08-25",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-25",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-08-26",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-08-27",
+        "metrica": "nuevos",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 14
+      },
+      {
+        "fecha": "2026-09-01",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-03",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 8
+      },
+      {
+        "fecha": "2026-09-03",
+        "metrica": "rechazados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-04",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-07",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-09-07",
+        "metrica": "rechazados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-09-07",
+        "metrica": "contactados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 9
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "nuevos",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "contactados",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-08",
+        "metrica": "contrataciones",
+        "vacanteId": "vac_68421d53abd438a4f0ce0fe8",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-09",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-09",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-09",
+        "metrica": "nuevos",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-09",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-09",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-09",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-10",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-11",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 15
+      },
+      {
+        "fecha": "2026-09-11",
+        "metrica": "nuevos",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-09-11",
+        "metrica": "rechazados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-11",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 12
+      },
+      {
+        "fecha": "2026-09-11",
+        "metrica": "contactados",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 12
+      },
+      {
+        "fecha": "2026-09-12",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-09-14",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-09-14",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-14",
+        "metrica": "rechazados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-14",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-14",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-09-15",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-17",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-17",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-18",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-09-18",
+        "metrica": "nuevos",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-18",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-18",
+        "metrica": "contactados",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-18",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-21",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 18
+      },
+      {
+        "fecha": "2026-09-21",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 23
+      },
+      {
+        "fecha": "2026-09-21",
+        "metrica": "contactados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-21",
+        "metrica": "contactados",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-22",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-22",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 5
+      },
+      {
+        "fecha": "2026-09-22",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-09-22",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-23",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-23",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-23",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-09-23",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-25",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-25",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-25",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-25",
+        "metrica": "aprobados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-28",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-29",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-29",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-29",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-29",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-29",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-09-30",
+        "metrica": "rechazados",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-10-01",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      }
+    ]
+  }
+}
