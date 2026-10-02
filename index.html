@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FÓNDIKA | Dashboard de Reclutamiento</title>
 <style>
+@font-face{font-family:'Inter';src:url('assets/fonts/inter/InterVariable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Outfit';src:url('assets/fonts/outfit/Outfit-Variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
 :root {
   --orange:#ff9f19;
   --orange-soft:#fff4e3;
@@ -72,24 +74,12 @@ select{border:1px solid var(--line);border-radius:10px;padding:8px 30px 8px 10px
 .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
 .card-title{font:700 17px Outfit,Inter,sans-serif;color:var(--ink)}
 .card-sub{font-size:12px;color:var(--muted);margin-top:4px}
-.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;font-weight:700;color:var(--muted)}
-.legend span:before{content:"";width:8px;height:8px;border-radius:3px;display:inline-block;margin-right:5px}
-.legend .l1:before{background:var(--turq)}
-.legend .l2:before{background:#52bcc8}
-.legend .l3:before{background:var(--orange)}
-.legend .l4:before{background:#535659}
 .chart{height:260px;position:relative;padding:10px 6px 30px 40px}
 .gridlines{position:absolute;left:40px;right:8px;top:10px;bottom:30px;display:flex;flex-direction:column;justify-content:space-between}
 .gridline{height:1px;background:#edf0f1;position:relative}
 .gridline span{position:absolute;left:-38px;top:-7px;width:30px;text-align:right;font-size:10px;color:#9a9da0}
 .bars{position:absolute;left:46px;right:8px;top:10px;bottom:30px;display:grid;grid-template-columns:repeat(6,1fr);align-items:end;gap:17px}
 .group{height:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;position:relative}
-.bar{width:17%;min-width:7px;max-width:14px;border-radius:4px 4px 1px 1px;transition:.2s;position:relative}
-.bar:hover{filter:brightness(.95);transform:translateY(-2px)}
-.bar.b1{background:var(--turq)}
-.bar.b2{background:#52bcc8}
-.bar.b3{background:var(--orange)}
-.bar.b4{background:#535659}
 .xlabel{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;color:#85888b}
 .side-stats{display:grid;gap:12px}
 .mini{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;justify-content:space-between;align-items:center}
@@ -149,9 +139,61 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
 .data-state[hidden]{display:none}
 .shell.no-data .page{display:none!important}
 .stages-title{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#777b7f;margin-top:18px}
-.kpi-scope{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#777b7f;margin:0 0 8px}
-.kpi-scope span{font-weight:600;text-transform:none;letter-spacing:0;color:#929699}
 .funnel-note{font-size:10px;color:#929699;margin-top:10px;line-height:1.4}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:6px 0 10px;flex-wrap:wrap}
+.section-title{font:700 18px Outfit,Inter,sans-serif;color:var(--ink)}
+.section-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.section-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.kpi.selectable{cursor:pointer;transition:border-color .15s, box-shadow .15s}
+.kpi.selectable:hover{border-color:#cfe6ea}
+.kpi.selectable:focus-visible{outline:2px solid var(--turq);outline-offset:2px}
+.kpi.active{border-color:var(--turq);box-shadow:0 0 0 1px var(--turq),var(--shadow)}
+.kpis .kpi{min-height:128px}
+.corte-summary{display:grid;grid-template-columns:1fr 1fr 2fr;gap:14px;margin-bottom:12px}
+.kpi.fuera .fuera-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;position:relative;z-index:1}
+.kpi.fuera .of{font-size:22px;color:var(--muted);font-weight:600}
+.kpi.fuera .fuera-pct{font:700 30px/1 Outfit,Inter,sans-serif;color:#8c5300}
+.kpi.fuera .progress{position:relative;z-index:1;margin:2px 0 10px;height:9px}
+.kpi.fuera .progress > span{background:var(--orange)}
+.corte-stages{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.cstage{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 13px;box-shadow:0 4px 16px rgba(83,86,89,.035)}
+.cstage .cnum{font:700 24px Outfit,Inter,sans-serif}
+.cstage .clabel{font-size:11px;font-weight:800;color:var(--muted);margin-top:3px}
+.cstage .cpct{font-size:10px;color:#85888b;margin-top:2px}
+.chart{padding-bottom:40px}
+.chart .gridlines,.chart .bars{bottom:40px}
+.group{outline:none}
+.group:focus-visible{background:var(--turq-soft);border-radius:6px}
+.sbar{width:52%;max-width:38px;min-width:8px;border-radius:4px 4px 1px 1px;background:var(--turq);position:relative;transition:filter .15s}
+.group:hover .sbar{filter:brightness(.93)}
+.sbar.sel{background:var(--orange)}
+.sbar.partial{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 3px,transparent 3px 7px)}
+.bar-val{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--ink);white-space:nowrap}
+.bar-null{align-self:flex-end;font-size:12px;color:#9a9da0;margin-bottom:2px}
+.xlabel em{display:block;font-style:normal;font-size:9px;font-weight:700;color:#8c5300;text-align:center}
+.group.is-sel .xlabel{color:var(--ink);font-weight:800}
+.tip{position:fixed;z-index:50;pointer-events:none;background:#2f3133;color:#fff;font-size:11px;line-height:1.45;padding:7px 9px;border-radius:8px;white-space:pre-line;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.tip[hidden]{display:none}
+.table-wrap{overflow-x:auto}
+th.n,td.n{text-align:right}
+#activeRows .req{white-space:nowrap}
+@media(max-width:1399px){
+  #overview th:not(:first-child),#overview td:not(:first-child){padding-left:10px;padding-right:10px}
+  #activeRows td:first-child{min-width:170px}
+}
+#detailFunnel .stage{min-height:0;padding:8px 12px}
+#detailFunnel .snum{font-size:20px}
+#detail .chart{height:360px}
+#detailFunnel .stage:not(:last-child):after{display:none}
+#periodPick{min-width:230px}
+@media(max-width:1050px){
+  .corte-summary{grid-template-columns:1fr 1fr} .corte-summary .fuera{grid-column:1/-1}
+  .corte-stages{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:650px){
+  .corte-summary{grid-template-columns:1fr} .corte-stages{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #periodPick{min-width:0;width:100%}
+}
 </style>
 </head>
 <body>
@@ -198,41 +240,54 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
     <section id="overview" class="page active">
       <div class="toolbar">
         <div class="control">
-          <label>Vista</label>
-          <div class="segment">
-            <button class="periodBtn" data-period="weekly" onclick="setPeriod('weekly')">Semanal</button>
-            <button class="periodBtn" data-period="monthly" onclick="setPeriod('monthly')">Mensual</button>
-            <button class="periodBtn" data-period="annual" onclick="setPeriod('annual')">Anual</button>
-          </div>
+          <label for="statusFilter">Estatus</label>
+          <select id="statusFilter" onchange="applyFilters()">
+            <option value="Activa" selected>Activas</option>
+            <option value="all">Todas</option>
+            <option value="Pausada">Pausadas</option>
+            <option value="Cubierta">Cubiertas</option>
+            <option value="Cancelada">Canceladas</option>
+          </select>
         </div>
         <div class="control">
-          <label>Área</label>
+          <label for="areaFilter">Área</label>
           <select id="areaFilter" onchange="applyFilters()"></select>
         </div>
         <div class="control">
-          <label>Vacante</label>
+          <label for="vacancyFilter">Vacante</label>
           <select id="vacancyFilter" onchange="applyFilters()"></select>
         </div>
         <div class="control">
-          <label>Hiring Manager</label>
+          <label for="hmFilter">Hiring Manager</label>
           <select id="hmFilter" onchange="applyFilters()"></select>
         </div>
         <div class="spacer"></div>
         <div class="snapshot"><span class="pulse"></span><span id="overviewSnapshot">—</span></div>
       </div>
 
-      <div class="kpi-scope">Procesos activos · acumulado al corte <span>· Cubiertos, pausados y cancelados en Histórico</span></div>
-      <div class="kpis" id="kpiGrid"></div>
+      <!-- Bloque 1: actividad ocurrida durante el periodo (historico.actividad) -->
+      <div class="section-head">
+        <div>
+          <div class="section-title">Actividad del periodo</div>
+          <div class="section-sub" id="activityCaption">—</div>
+        </div>
+        <div class="section-controls">
+          <div class="segment" role="group" aria-label="Periodo">
+            <button class="periodBtn" data-period="weekly" onclick="setPeriod('weekly')">Semanal</button>
+            <button class="periodBtn" data-period="monthly" onclick="setPeriod('monthly')">Mensual</button>
+            <button class="periodBtn" data-period="annual" onclick="setPeriod('annual')">Anual</button>
+          </div>
+          <select id="periodPick" aria-label="Periodo seleccionado" onchange="setPeriodStart(this.value)"></select>
+        </div>
+      </div>
+      <div class="kpis" id="activityGrid"></div>
 
       <div class="grid-main">
         <div class="card">
           <div class="card-head">
             <div>
-              <div class="card-title" id="chartTitle">Actividad mensual</div>
+              <div class="card-title" id="chartTitle">Actividad</div>
               <div class="card-sub" id="chartSub">—</div>
-            </div>
-            <div class="legend">
-              <span class="l1">Contactados</span><span class="l2">Entrevistados</span><span class="l3">Ofertas</span><span class="l4">Contrataciones</span>
             </div>
           </div>
           <div class="chart">
@@ -241,9 +296,9 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
           </div>
         </div>
         <div class="card">
-          <div class="card-head"><div><div class="card-title">Pulso de procesos activos</div><div class="card-sub">Lectura rápida del portafolio actual</div></div></div>
+          <div class="card-head"><div><div class="card-title">Pulso de procesos</div><div class="card-sub">Lectura rápida de las vacantes del filtro</div></div></div>
           <div class="side-stats">
-            <div class="mini"><div><div class="name">Vacantes activas</div><div class="note">Excluye cerradas, pausadas y canceladas</div></div><div class="num" id="activeCount">—</div></div>
+            <div class="mini"><div><div class="name">Vacantes en el filtro</div><div class="note" id="scopeNote">—</div></div><div class="num" id="activeCount">—</div></div>
             <div class="mini"><div style="width:70%"><div class="name">Procesos con actividad esta semana</div><div class="progress"><span style="width:0%"></span></div></div><div class="num" id="activityCount">—</div></div>
             <div class="mini"><div><div class="name">Feedback HM pendiente</div><div class="note">Candidatos enviados sin definición</div></div><div class="num" id="feedbackPending">—</div></div>
             <div class="mini"><div><div class="name">Sin movimiento +7 días</div><div class="note">Sólo candidatos activos</div></div><div class="num" id="stale7">—</div></div>
@@ -251,26 +306,37 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
         </div>
       </div>
 
+      <!-- Bloque 2: estado al corte (estadoActual.vacantes[].alCorte). No depende del periodo. -->
+      <div class="section-head">
+        <div>
+          <div class="section-title">Estado al corte</div>
+          <div class="section-sub" id="corteCaption">—</div>
+        </div>
+      </div>
+      <div id="overviewCorte"></div>
+
       <div class="card table-card">
         <div class="table-head">
-          <div><div class="card-title">Vacantes activas</div><div class="card-sub">Haz clic en una requisición para abrir su detalle</div></div>
+          <div><div class="card-title" id="tableTitle">Vacantes activas</div><div class="card-sub">Estado al corte por vacante · haz clic en una requisición para abrir su detalle</div></div>
           <span class="badge" id="activeCountBadge">—</span>
         </div>
+        <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>Requisición / Vacante</th><th>Área</th><th>Hiring Manager</th><th>Días abierta</th><th>Nuevo</th><th>Contactados</th><th>Entrevistados</th><th>Ofertas</th><th>Contrataciones</th><th></th>
+            <th>Requisición / Vacante</th><th>Días abierta</th><th class="n">Postulaciones</th><th class="n">Nuevo</th><th class="n">Fuera de Nuevo</th><th class="n">Contactado</th><th class="n">Entrevista CH</th><th class="n">Enviado HM</th><th class="n">Entrevista HM</th><th class="n">Contratado</th><th class="n">Rechazado</th><th class="n">Otros</th><th></th>
           </tr></thead>
           <tbody id="activeRows"></tbody>
         </table>
+        </div>
       </div>
 
-      <div class="note-banner">La vista ejecutiva excluye de forma predeterminada vacantes cerradas, pausadas y canceladas. El histórico se conserva en una vista separada para no mezclar actividad actual con procesos concluidos.</div>
+      <div class="note-banner">La vista ejecutiva muestra de forma predeterminada las vacantes activas; usa el filtro Estatus para incluir pausadas, cubiertas o canceladas. La actividad del periodo cuenta postulaciones únicas por métrica según su primera evidencia con fecha; el estado al corte muestra dónde están hoy las postulaciones y no cambia con Semanal, Mensual o Anual.</div>
     </section>
 
     <section id="history" class="page">
       <div class="toolbar">
-        <div class="control"><label>Periodo</label><select id="historyYearFilter" onchange="renderHistory()"></select></div>
-        <div class="control"><label>Área</label><select id="historyAreaFilter" onchange="renderHistory()"></select></div>
+        <div class="control"><label for="historyYearFilter">Periodo</label><select id="historyYearFilter" onchange="renderHistory()"></select></div>
+        <div class="control"><label for="historyAreaFilter">Área</label><select id="historyAreaFilter" onchange="renderHistory()"></select></div>
         <div class="history-filters" id="historyStatusChips">
           <button class="chip active" data-status="all" onclick="setHistoryStatus('all')">Todas históricas</button>
           <button class="chip" data-status="Cubierta" onclick="setHistoryStatus('Cubierta')">Cerradas</button>
@@ -284,11 +350,13 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
       <div class="kpis" id="historyKpis"></div>
 
       <div class="card table-card">
-        <div class="table-head"><div><div class="card-title">Histórico de requisiciones</div><div class="card-sub">Los KPIs se mantienen consultables después del cierre del proceso</div></div></div>
+        <div class="table-head"><div><div class="card-title">Histórico de requisiciones</div><div class="card-sub">Estado al corte de los procesos no activos</div></div></div>
+        <div class="table-wrap">
         <table>
-          <thead><tr><th>Requisición / Vacante</th><th>Estatus</th><th>Apertura</th><th>Cierre / pausa</th><th>Contactados</th><th>Entrevistados</th><th>Ofertas</th><th>Contrataciones</th><th></th></tr></thead>
+          <thead><tr><th>Requisición / Vacante</th><th>Estatus</th><th>Apertura</th><th>Cierre / pausa</th><th class="n">Postulaciones</th><th class="n">Nuevo</th><th class="n">Fuera de Nuevo</th><th class="n">Contratado</th><th class="n">Rechazado</th><th class="n">Otros</th><th></th></tr></thead>
           <tbody id="historyRows"></tbody>
         </table>
+        </div>
       </div>
     </section>
 
@@ -303,30 +371,43 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
         <div class="detail-actions"><span class="badge dot" id="detailCut"></span></div>
       </div>
 
+      <div class="section-head">
+        <div>
+          <div class="section-title">Actividad registrada</div>
+          <div class="section-sub" id="detailActivityCaption">—</div>
+        </div>
+      </div>
       <div class="kpis" id="detailKpis"></div>
 
       <div class="grid-main">
         <div class="card">
-          <div class="card-head"><div><div class="card-title">Evolución semanal de la requisición</div><div class="card-sub" id="detailChartSub">Comparativo de hitos por semana</div></div></div>
+          <div class="card-head"><div><div class="card-title" id="detailChartTitle">Evolución semanal</div><div class="card-sub" id="detailChartSub">—</div></div></div>
           <div class="chart">
             <div class="gridlines"></div>
             <div class="bars" id="detailBars"></div>
           </div>
         </div>
         <div class="card">
-          <div class="card-head"><div><div class="card-title">Conversión del proceso</div><div class="card-sub">Hitos acumulados de la requisición</div></div></div>
+          <div class="card-head"><div><div class="card-title">Conversión del proceso</div><div class="card-sub">Postulaciones únicas con evidencia por hito</div></div></div>
           <div class="funnel" id="detailFunnel" style="grid-template-columns:1fr;gap:9px"></div>
-          <div class="funnel-note">Las métricas reflejan evidencia registrada y no necesariamente una secuencia completa de etapas.</div>
+          <div class="funnel-note" id="detailFunnelNote">Las métricas reflejan evidencia registrada y no necesariamente una secuencia completa de etapas.</div>
         </div>
       </div>
 
+      <div class="section-head">
+        <div>
+          <div class="section-title">Estado al corte</div>
+          <div class="section-sub" id="detailCurrentSub"></div>
+        </div>
+      </div>
+      <div id="detailCorte"></div>
       <div class="card">
-        <div class="card-head"><div><div class="card-title">Estado actual de la requisición</div><div class="card-sub" id="detailCurrentSub"></div></div></div>
-        <div class="funnel" id="detailCurrent"></div>
-        <div class="stages-title">Etapas actuales</div>
+        <div class="stages-title" style="margin-top:0">Etapas actuales (procesos abiertos)</div>
         <div class="funnel" id="detailStages"></div>
       </div>
     </section>
+
+    <div class="tip" id="chartTip" role="tooltip" hidden></div>
 
     <div class="footer">
       <span>FÓNDIKA Capital Humano</span>
@@ -339,35 +420,65 @@ tbody tr.clickable:hover{background:var(--turq-soft);cursor:pointer}
 /* ===== Configuración ===== */
 const DATA_URL = 'data/dashboard.json';
 const SUPPORTED_SCHEMA_MAJOR = 1;
-const MIN_SCHEMA_MINOR = 1;   // 1.1.0 añade contactados/entrevistados/ofertas a la foto de cada vacante
+const MIN_SCHEMA_MINOR = 2;   // 1.2.0 añade las 8 métricas de actividad, coberturaPorMetrica y el estado al corte (alCorte)
 
-const METRICS = [
-  {key:'contactados',    label:'Candidatos contactados',   short:'Contactados',    icon:'contacted',   cls:''},
-  {key:'entrevistados',  label:'Candidatos entrevistados', short:'Entrevistados',  icon:'interviewed', cls:''},
-  {key:'ofertas',        label:'Ofertas realizadas',       short:'Ofertas',        icon:'offers',      cls:'orange'},
-  {key:'contrataciones', label:'Contrataciones',           short:'Contrataciones', icon:'linked',      cls:''}
+// Actividad del periodo (historico.actividad): postulaciones únicas por métrica, en su primera evidencia con fecha.
+// entrevistados/ofertas (1.1.0) quedan obsoletos (metadata.metricasObsoletas) y no se muestran.
+const ACTIVITY = [
+  {key:'nuevos',           label:'Nuevos',           icon:'inbox',       cls:'',       note:'Postulaciones capturadas'},
+  {key:'rechazados',       label:'Rechazados',       icon:'rejected',    cls:'',       note:'Primera salida o rechazo'},
+  {key:'contactados',      label:'Contactados',      icon:'contacted',   cls:'',       note:'Primera entrada a Contactado'},
+  {key:'entrevistados_ch', label:'Entrevistados CH', icon:'interviewed', cls:'',       note:'Primera entrevista CH agendada'},
+  {key:'enviados_hm',      label:'Enviados HM',      icon:'send',        cls:'',       note:'Primera entrada a Enviado a HM'},
+  {key:'entrevistados_hm', label:'Entrevistados HM', icon:'interviewed', cls:'',       note:'Primera entrevista HM agendada'},
+  {key:'aprobados_hm',     label:'Aprobados HM',     icon:'approved',    cls:'orange', note:'Primer resultado positivo de HM'},
+  {key:'contrataciones',   label:'Contrataciones',   icon:'linked',      cls:'orange', note:'Primera entrada a Contratado'}
 ];
-const METRIC_KEYS = METRICS.map(m=>m.key);
-// Campos de estadoActual.vacantes[].metricas. Los "nullable" usan null cuando el dato no es calculable con evidencia confiable.
+const ACTIVITY_KEYS = ACTIVITY.map(m => m.key);
+const ACT_BY_KEY = Object.fromEntries(ACTIVITY.map(m => [m.key, m]));
+// Orden visual de las tarjetas de "Actividad del periodo" en Overview (solo presentación).
+const OVERVIEW_ACTIVITY_ORDER = ['nuevos','contactados','rechazados','entrevistados_ch','enviados_hm','entrevistados_hm','aprobados_hm','contrataciones'];
+// Funnel del detalle: hitos en orden de proceso (rechazados se informa aparte).
+const FUNNEL_KEYS = ['nuevos','contactados','entrevistados_ch','enviados_hm','entrevistados_hm','aprobados_hm','contrataciones'];
+
+// Estado al corte (estadoActual.vacantes[].alCorte): dónde están HOY las postulaciones. No depende del periodo.
+const AL_CORTE_STAGES = [
+  {key:'contactado',   label:'Contactado'},
+  {key:'entrevistaCh', label:'Entrevista CH'},
+  {key:'enviadoHm',    label:'Enviado HM'},
+  {key:'entrevistaHm', label:'Entrevista HM'},
+  {key:'contratado',   label:'Contratado'},
+  {key:'rechazado',    label:'Rechazado'},
+  {key:'otros',        label:'Otros'}
+];
+const AL_CORTE_GROUPS = ['nuevo', ...AL_CORTE_STAGES.map(g => g.key)];
+
+// Campos 1.1.0 de estadoActual.vacantes[].metricas (se validan por compatibilidad; la UI ya no muestra entrevistados/ofertas).
 const SNAPSHOT_REQUIRED = ['postulaciones','activas','contrataciones'];
 const SNAPSHOT_NULLABLE = ['contactados','entrevistados','ofertas','feedbackPendiente','sinMovimiento7d'];
 const STATUSES = ['Activa','Pausada','Cubierta','Cancelada'];
 const STATUS_CLASS = {Activa:'active', Pausada:'paused', Cubierta:'closed', Cancelada:'cancelled'};
+const STATUS_FILTER_LABEL = {Activa:'Vacantes activas', all:'Todas las vacantes', Pausada:'Vacantes pausadas', Cubierta:'Vacantes cubiertas', Cancelada:'Vacantes canceladas'};
 
 /*
-  Ventanas de actividad. Sólo se agrupan registros existentes de historico.actividad:
-  nunca se crean buckets sin evidencia.
-  - limit: últimos N buckets con actividad.
-  - windowMonths: buckets con actividad dentro de los últimos N meses de evidencia.
-  Ampliación futura (hasta 4 años con actividad): {granularity:'year', limit:4}.
+  Periodos = actividad ocurrida durante el periodo (no cohortes).
+  - Las tarjetas suman historico.actividad dentro del periodo seleccionado (por defecto, el que contiene el corte).
+  - Un periodo es parcial si termina después del corte o empieza antes de la primera evidencia.
+  - Una métrica sin evidencia (coberturaPorMetrica = null) o un periodo anterior a su primera evidencia se muestra como —, nunca 0.
+  - Gráfica: semanal = 8 semanas hasta la seleccionada; mensual = 6 meses; anual = meses del año seleccionado.
 */
 const PERIODS = {
-  weekly:  {granularity:'week',  limit:5,         title:'Actividad semanal', unit:['semana','semanas'], last:'Últimas'},
-  monthly: {granularity:'month', limit:3,         title:'Actividad mensual', unit:['mes','meses'], last:'Últimos'},
-  annual:  {granularity:'month', windowMonths:12, title:'Actividad anual',   unit:['mes','meses']}
+  weekly:  {granularity:'week',  chartBuckets:8, title:'Actividad semanal', noun:'Semana'},
+  monthly: {granularity:'month', chartBuckets:6, title:'Actividad mensual', noun:'Mes'},
+  annual:  {granularity:'year',  title:'Actividad anual', noun:'Año'}
 };
 
 const iconMap = {
+  inbox: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="bandeja"><path d="M3.6 13.2l2.6-7.4a1.8 1.8 0 0 1 1.7-1.2h8.2a1.8 1.8 0 0 1 1.7 1.2l2.6 7.4"/><path d="M3.6 13.2v4.6a1.8 1.8 0 0 0 1.8 1.8h13.2a1.8 1.8 0 0 0 1.8-1.8v-4.6h-4.8l-1.6 2.4h-4l-1.6-2.4z"/></svg>`,
+  rejected: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuario-x"><circle cx="9.6" cy="8.2" r="4"/><path d="M2.6 20.4a7 7 0 0 1 12.4-4.4"/><path d="M16.2 15.2l4.4 4.4M20.6 15.2l-4.4 4.4"/></svg>`,
+  send: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="enviar"><path d="M20.6 3.4L10.4 13.6"/><path d="M20.6 3.4l-6.4 17.2-3.8-7-7-3.8z"/></svg>`,
+  approved: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="aprobado"><circle cx="12" cy="12" r="8.6"/><path d="M8.2 12.2l2.6 2.6 5-5.4"/></svg>`,
+  exit: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="salida"><path d="M13.6 4H6.2a1.8 1.8 0 0 0-1.8 1.8v12.4A1.8 1.8 0 0 0 6.2 20h7.4"/><path d="M10.4 12h10"/><path d="M17 8.4l3.6 3.6-3.6 3.6"/></svg>`,
   contacted: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuario-check" data-fondika="usuario-check"><circle cx="9.6" cy="8.2" r="4"/><path d="M2.6 20.4a7 7 0 0 1 12.4-4.4"/><path d="M15.4 17.9l2 2 4-4.4"/></svg>`,
   interviewed: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="usuarios" data-fondika="usuarios"><circle cx="9.4" cy="8.4" r="3.6"/><path d="M3.2 20.4a6.2 6.2 0 0 1 12.4 0"/><path d="M16 5.2a3.6 3.6 0 0 1 0 6.9"/><path d="M17.4 14.9a6.2 6.2 0 0 1 3.4 5.5"/></svg>`,
   offers: `<svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="contrato" data-fondika="contrato"><path d="M13.4 3.2H6.8a1.8 1.8 0 0 0-1.8 1.8v14a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8V8.6z"/><path d="M13.4 3.2v5.4h5.6"/><path d="M8.2 12h7.6"/><path d="M8.2 16.6c1.2-.1 1.7-2 2.6-2s.9 1.5 1.8 1.5 1.5-1.5 2.4-1.5"/><path d="M8.2 19.4h7.6"/></svg>`,
@@ -376,16 +487,22 @@ const iconMap = {
 };
 
 /* ===== Estado ===== */
-let store = null;          // {metadata, vacantes, vacById, actividad, generatedDate}
+let store = null;          // {metadata, vacantes, vacById, actividad, generatedDate, metricOrder}
 let currentPeriod = 'monthly';
+const selectedStart = {weekly:null, monthly:null, annual:null};   // null = periodo que contiene el corte
+let chartMetric = 'nuevos';
+let detailMetric = 'nuevos';
+let detailVacancy = null;
 let previousPage = 'overview';
 let historyStatus = 'all';
 
 /* ===== Utilidades ===== */
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmtNum = v => (v === null || v === undefined) ? '—' : String(v);
+const fmtNum = v => (v === null || v === undefined) ? '—' : v.toLocaleString('es-MX');
+const fmtPct = (n, d) => d ? `${(n / d * 100).toLocaleString('es-MX', {minimumFractionDigits:1, maximumFractionDigits:1})}%` : '—';
 const plural = (n, one, many) => `${n} ${n===1?one:many}`;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const isCount = x => Number.isInteger(x) && x >= 0;
 
 // Fechas de calendario (YYYY-MM-DD) se manejan en UTC para evitar corrimientos de zona horaria.
 const parseDate = s => new Date(s + 'T00:00:00Z');
@@ -393,6 +510,8 @@ const toISO = d => d.toISOString().slice(0,10);
 const addDays = (s, n) => { const d=parseDate(s); d.setUTCDate(d.getUTCDate()+n); return toISO(d); };
 const addMonths = (s, n) => { const d=parseDate(s); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth()+n); return toISO(d); };
 const daysBetween = (a, b) => Math.round((parseDate(b) - parseDate(a)) / 86400000);
+const minDate = (a, b) => a < b ? a : b;
+const maxDate = (a, b) => a > b ? a : b;
 
 function bucketStart(s, g){
   if(g==='week'){ const d=parseDate(s); return addDays(s, -((d.getUTCDay()+6)%7)); } // lunes
@@ -404,14 +523,16 @@ function bucketEnd(start, g){
   if(g==='month') return addDays(addMonths(start, 1), -1);
   if(g==='year')  return start.slice(0,4) + '-12-31';
 }
+function stepBucket(start, g, n){
+  if(g==='week')  return addDays(start, 7*n);
+  if(g==='month') return addMonths(start, n);
+  return `${Number(start.slice(0,4)) + n}-01-01`;
+}
 
 const fmtDay      = s => parseDate(s).toLocaleDateString('es-MX', {day:'numeric', month:'short', timeZone:'UTC'}).replace('.', '');
 const fmtDate     = s => s ? parseDate(s).toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric', timeZone:'UTC'}).replace('.', '') : '—';
 const fmtMonth    = s => parseDate(s).toLocaleDateString('es-MX', {month:'short', year:'2-digit', timeZone:'UTC'}).replace('.', '');
-function bucketLabel(b, g){
-  const base = g==='week' ? fmtDay(b.start) : g==='month' ? fmtMonth(b.start) : b.start.slice(0,4);
-  return b.partial ? `${base} · parcial` : base;
-}
+const fmtMonthLong = s => { const t = parseDate(s).toLocaleDateString('es-MX', {month:'long', year:'numeric', timeZone:'UTC'}); return t.charAt(0).toUpperCase() + t.slice(1); };
 
 function localDateIn(iso, tz){
   return new Intl.DateTimeFormat('en-CA', {timeZone:tz, year:'numeric', month:'2-digit', day:'2-digit'}).format(new Date(iso));
@@ -433,9 +554,15 @@ function validate(d){
   const m = d.metadata || fail('Falta metadata.');
   if(isNaN(Date.parse(m.generatedAt))) fail('metadata.generatedAt no es una fecha válida.');
   if(!m.timezone) fail('Falta metadata.timezone.');
-  const cob = m.cobertura || {};
-  if(!ISO_DATE.test(cob.desdeEvidencia||'') || !ISO_DATE.test(cob.hastaEvidencia||'')) fail('metadata.cobertura incompleta.');
+  const isCov = c => c && ISO_DATE.test(c.desdeEvidencia||'') && ISO_DATE.test(c.hastaEvidencia||'') && c.desdeEvidencia <= c.hastaEvidencia;
+  if(!isCov(m.cobertura)) fail('metadata.cobertura incompleta.');
   if(!Array.isArray(m.metricas)) fail('Falta metadata.metricas.');
+  ACTIVITY_KEYS.forEach(k => { if(!m.metricas.includes(k)) fail(`metadata.metricas no incluye ${k}.`); });
+  const cpm = m.coberturaPorMetrica || fail('Falta metadata.coberturaPorMetrica.');
+  ACTIVITY_KEYS.forEach(k => {
+    if(!(k in cpm)) fail(`Falta coberturaPorMetrica.${k}.`);
+    if(cpm[k] !== null && !isCov(cpm[k])) fail(`coberturaPorMetrica.${k} debe ser {desdeEvidencia, hastaEvidencia} o null.`);
+  });
   const vacantes = d.estadoActual && d.estadoActual.vacantes;
   if(!Array.isArray(vacantes)) fail('Falta estadoActual.vacantes.');
   const actividad = d.historico && d.historico.actividad;
@@ -448,12 +575,15 @@ function validate(d){
     if(!STATUSES.includes(v.estatus)) fail(`Estatus no válido en ${v.vacanteId}: ${v.estatus}`);
     if(!ISO_DATE.test(v.fechaApertura||'')) fail(`fechaApertura no válida en ${v.vacanteId}`);
     const vm = v.metricas || fail(`Faltan metricas en ${v.vacanteId}`);
-    const isCount = x => Number.isInteger(x) && x >= 0;
     SNAPSHOT_REQUIRED.forEach(f => { if(!isCount(vm[f])) fail(`metricas.${f} debe ser entero ≥ 0 en ${v.vacanteId}.`); });
     SNAPSHOT_NULLABLE.forEach(f => {
       if(!(f in vm)) fail(`Falta metricas.${f} en ${v.vacanteId}.`);
       if(vm[f] !== null && !isCount(vm[f])) fail(`metricas.${f} debe ser entero ≥ 0 o null en ${v.vacanteId}.`);
     });
+    const ac = v.alCorte || fail(`Falta alCorte en ${v.vacanteId}.`);
+    [...AL_CORTE_GROUPS, 'fueraDeNuevo'].forEach(f => { if(!isCount(ac[f])) fail(`alCorte.${f} debe ser entero ≥ 0 en ${v.vacanteId}.`); });
+    if(AL_CORTE_GROUPS.reduce((s, g) => s + ac[g], 0) !== vm.postulaciones) fail(`alCorte no suma las postulaciones de ${v.vacanteId}.`);
+    if(ac.fueraDeNuevo !== vm.postulaciones - ac.nuevo) fail(`alCorte.fueraDeNuevo no es postulaciones − nuevo en ${v.vacanteId}.`);
   });
   const keys = new Set();
   actividad.forEach(r => {
@@ -486,7 +616,9 @@ function buildStore(d){
     vacantes,
     vacById: Object.fromEntries(vacantes.map(v => [v.vacanteId, v])),
     actividad: d.historico.actividad,
-    generatedDate: localDateIn(d.metadata.generatedAt, d.metadata.timezone)
+    generatedDate: localDateIn(d.metadata.generatedAt, d.metadata.timezone),
+    // Orden de la UI = metadata.metricas (solo las métricas de actividad conocidas).
+    metricOrder: d.metadata.metricas.filter(k => ACT_BY_KEY[k]).map(k => ACT_BY_KEY[k])
   };
 }
 
@@ -498,7 +630,6 @@ function setDataState(message, isError){
 }
 
 /* ===== Derivaciones ===== */
-const emptyTotals = () => Object.fromEntries(METRIC_KEYS.map(k => [k, 0]));
 const activeVacantes = () => store.vacantes.filter(v => v.estatus === 'Activa');
 const inactiveVacantes = () => store.vacantes.filter(v => v.estatus !== 'Activa');
 // Activa/Pausada: hasta el corte. Cubierta/Cancelada: hasta fechaCierre; sin cierre registrado no se calcula (null).
@@ -508,51 +639,99 @@ const daysOpen = v => v.fechaCierre ? daysBetween(v.fechaApertura, v.fechaCierre
 const closeLabel = v => v.fechaCierre ? fmtDate(v.fechaCierre) : isOpenStatus(v) ? '—' : 'No registrado';
 
 /*
-  Separación estructural de fuentes:
-  - Foto al corte (KPIs de Overview/Histórico/detalle, tablas, funnel, estado actual, etapas y los
-    datos de snapshot del pulso): exclusivamente estadoActual.vacantes[].metricas.
-  - Evidencia de actividad histórica: exclusivamente historico.actividad. Incluye las gráficas
-    Semanal/Mensual/Anual, la gráfica del detalle y los indicadores que miden actividad
-    explícitamente (p. ej. "Procesos con actividad esta semana" del pulso).
-  Nunca se reconstruye la foto sumando historico.actividad: la actividad recuperable puede ser menor que el acumulado.
+  Separación estructural de fuentes (no se mezclan):
+  - Actividad del periodo (tarjetas de actividad, gráficas, funnel del detalle, "procesos con actividad esta semana"):
+    exclusivamente historico.actividad + metadata.coberturaPorMetrica.
+  - Estado al corte (bloque "Estado al corte", columnas Nuevo/Fuera de Nuevo de las tablas):
+    exclusivamente estadoActual.vacantes[].alCorte. Nuevo = alCorte.nuevo; Fuera de Nuevo = postulaciones − alCorte.nuevo.
+    etapas[] solo alimenta "Etapas actuales" del detalle; nunca el KPI ni la columna Nuevo. No cambia con Semanal/Mensual/Anual.
 */
 
-// Suma una métrica de la foto: si alguna vacante del scope no tiene el dato, el agregado es desconocido (null), nunca 0 ni suma parcial.
+// Postulaciones únicas de una métrica en [start, end] para las vacantes dadas.
+// null = sin evidencia: la métrica no tiene cobertura o el periodo termina antes de su primera evidencia.
+function metricValue(key, start, end, ids){
+  const cov = store.metadata.coberturaPorMetrica[key];
+  if(!cov || end < cov.desdeEvidencia) return null;
+  let n = 0;
+  for(const r of store.actividad)
+    if(r.metrica === key && ids.has(r.vacanteId) && r.fecha >= start && r.fecha <= end) n += r.cantidad;
+  return n;
+}
+const metricTotal = (key, ids) => metricValue(key, '0000-01-01', '9999-12-31', ids);
+
+const isPartial = (start, end) => end > store.generatedDate || start < store.metadata.cobertura.desdeEvidencia;
+
+// Periodos seleccionables: del que contiene el corte hacia atrás, hasta el que contiene la primera evidencia.
+function periodOptions(periodKey){
+  const g = PERIODS[periodKey].granularity;
+  const first = bucketStart(store.metadata.cobertura.desdeEvidencia, g);
+  const out = [];
+  for(let s = bucketStart(store.generatedDate, g); s >= first; s = stepBucket(s, g, -1)) out.push(s);
+  return out;
+}
+
+function periodLabel(start, g){
+  const end = bucketEnd(start, g);
+  const base = g === 'week' ? `Semana ${fmtDay(start)} – ${fmtDate(end)}` : g === 'month' ? fmtMonthLong(start) : start.slice(0,4);
+  const current = start === bucketStart(store.generatedDate, g);
+  return `${base}${current ? ' (actual)' : ''}${isPartial(start, end) ? ' · parcial' : ''}`;
+}
+
+function periodCaption(start, g){
+  const end = bucketEnd(start, g);
+  const range = `${fmtDate(start)} al ${fmtDate(end)}`;
+  const notes = [];
+  if(end > store.generatedDate) notes.push(`parcial: datos al corte del ${fmtDate(store.generatedDate)}`);
+  if(start < store.metadata.cobertura.desdeEvidencia) notes.push(`parcial: evidencia desde el ${fmtDate(store.metadata.cobertura.desdeEvidencia)}`);
+  return `Del ${range}${notes.length ? ' · ' + notes.join(' · ') : ''} · postulaciones únicas por métrica`;
+}
+
+// Nota de una tarjeta de actividad según la cobertura de su métrica.
+function coverageNote(key, start, end, fallback){
+  const cov = store.metadata.coberturaPorMetrica[key];
+  if(!cov) return 'Sin evidencia registrada';
+  if(end < cov.desdeEvidencia) return `Sin evidencia antes del ${fmtDate(cov.desdeEvidencia)}`;
+  if(start < cov.desdeEvidencia) return `Evidencia desde el ${fmtDate(cov.desdeEvidencia)}`;
+  return fallback;
+}
+
+// Buckets de la gráfica para una métrica (una sola serie). Nunca antes de la primera evidencia global.
+function chartSeries(key, ids, periodKey, selStart){
+  const g = PERIODS[periodKey].granularity;
+  const firstMonth = bucketStart(store.metadata.cobertura.desdeEvidencia, 'month');
+  let starts = [], bg = g;
+  if(g === 'year'){
+    bg = 'month';
+    const last = minDate(addMonths(selStart, 11), bucketStart(store.generatedDate, 'month'));
+    for(let s = maxDate(selStart, firstMonth); s <= last; s = addMonths(s, 1)) starts.push(s);
+  } else {
+    const first = bucketStart(store.metadata.cobertura.desdeEvidencia, g);
+    for(let i = 0, s = selStart; i < PERIODS[periodKey].chartBuckets && s >= first; i++, s = stepBucket(s, g, -1)) starts.unshift(s);
+  }
+  return starts.map(start => {
+    const end = bucketEnd(start, bg);
+    return {start, end, g:bg, value: metricValue(key, start, end, ids), partial: isPartial(start, end),
+            selected: g !== 'year' && start === selStart};
+  });
+}
+
+const sumCorte = vacs => {
+  const t = Object.fromEntries([...AL_CORTE_GROUPS, 'fueraDeNuevo'].map(k => [k, 0]));
+  t.postulaciones = 0;
+  vacs.forEach(v => { AL_CORTE_GROUPS.concat('fueraDeNuevo').forEach(k => t[k] += v.alCorte[k]); t.postulaciones += v.metricas.postulaciones; });
+  return t;
+};
+
+// Suma una métrica de la foto: si alguna vacante del scope no tiene el dato, el agregado es desconocido (null).
 function sumNullable(vacs, field){
   if(vacs.some(v => v.metricas[field] === null || v.metricas[field] === undefined)) return null;
   return vacs.reduce((s, v) => s + v.metricas[field], 0);
 }
 
-// Acumulado al corte de las métricas del funnel para un conjunto de vacantes.
-const snapshotTotals = vacs => Object.fromEntries(METRIC_KEYS.map(k => [k, sumNullable(vacs, k)]));
-
-// Agrupa historico.actividad en buckets con evidencia para el scope dado.
-function buildSeries(vacIds, periodKey){
-  const cfg = PERIODS[periodKey];
-  const g = cfg.granularity;
-  const {desdeEvidencia, hastaEvidencia} = store.metadata.cobertura;
-  const ids = new Set(vacIds);
-  const windowStart = cfg.windowMonths ? addMonths(bucketStart(hastaEvidencia, 'month'), -(cfg.windowMonths - 1)) : null;
-  const buckets = new Map();
-  store.actividad.forEach(r => {
-    if(!ids.has(r.vacanteId) || !METRIC_KEYS.includes(r.metrica)) return;
-    const start = bucketStart(r.fecha, g);
-    if(windowStart && start < windowStart) return;
-    if(!buckets.has(start)) buckets.set(start, emptyTotals());
-    buckets.get(start)[r.metrica] += r.cantidad;
-  });
-  let starts = [...buckets.keys()].sort();
-  if(cfg.limit) starts = starts.slice(-cfg.limit);
-  return starts.map(start => {
-    const end = bucketEnd(start, g);
-    return {start, end, partial: start < desdeEvidencia || end > hastaEvidencia, values: buckets.get(start)};
-  });
-}
-
 /* ===== Render: componentes ===== */
 function renderKpis(target, kpis){
   target.innerHTML = kpis.map(k => `
-    <div class="kpi ${k.cls||''}">
+    <div class="kpi ${k.cls||''}${k.metric ? ' selectable' : ''}${k.active ? ' active' : ''}"${k.metric ? ` data-metric="${esc(k.metric)}" role="button" tabindex="0" aria-pressed="${k.active ? 'true' : 'false'}" title="Ver ${esc(k.label)} en la gráfica"` : ''}>
       <div class="kpi-top"><div class="kpi-icon">${iconMap[k.icon]}</div><div class="kpi-label">${esc(k.label)}</div></div>
       <div class="kpi-value">${fmtNum(k.value)}</div>
       <div class="delta"><span class="muted">${esc(k.note||'')}</span></div>
@@ -567,30 +746,58 @@ function niceTop(max){
   return step * 4;
 }
 
-function renderBars(target, series, granularity){
-  const chart = target.parentElement;
-  const grid = chart.querySelector('.gridlines');
-  const max = Math.max(0, ...series.flatMap(b => METRIC_KEYS.map(k => b.values[k])));
-  const top = niceTop(max);
-  grid.innerHTML = [4,3,2,1,0].map(i => `<div class="gridline"><span>${top*i/4}</span></div>`).join('');
+const bucketShort = b => b.g === 'week' ? fmtDay(b.start) : b.g === 'month' ? fmtMonth(b.start) : b.start.slice(0,4);
+const bucketRange = b => b.g === 'week' ? `Semana ${fmtDate(b.start)} – ${fmtDate(b.end)}` : b.g === 'month' ? fmtMonthLong(b.start) : b.start.slice(0,4);
+
+// Barras de una sola serie. Periodo seleccionado resaltado; parciales marcados con texto y trama.
+function renderBars(target, series, metricLabel){
+  const grid = target.parentElement.querySelector('.gridlines');
+  const top = niceTop(Math.max(0, ...series.map(b => b.value ?? 0)));
+  grid.innerHTML = [4,3,2,1,0].map(i => `<div class="gridline"><span>${(top*i/4).toLocaleString('es-MX')}</span></div>`).join('');
   target.style.gridTemplateColumns = `repeat(${Math.max(series.length,1)},1fr)`;
-  target.style.gap = series.length > 6 ? '8px' : '';
+  target.style.gap = series.length > 8 ? '6px' : '';
   if(!series.length){
-    target.innerHTML = `<div class="chart-empty">Sin actividad registrada para el filtro seleccionado.</div>`;
+    target.innerHTML = `<div class="chart-empty">Sin periodos con evidencia para el filtro seleccionado.</div>`;
     return;
   }
   target.innerHTML = series.map(b => {
-    const bars = METRICS.map((m, j) => {
-      const v = b.values[m.key];
-      return `<div class="bar b${j+1}" style="height:${v ? Math.max(2, v/top*100) : 0}%" title="${m.short}: ${v}"></div>`;
-    }).join('');
-    const range = b.start === b.end ? fmtDate(b.start) : `${fmtDate(b.start)} – ${fmtDate(b.end)}`;
-    return `<div class="group" title="${esc(range)}${b.partial ? ' · periodo parcial de evidencia' : ''}">${bars}<span class="xlabel">${esc(bucketLabel(b, granularity))}</span></div>`;
+    const v = b.value;
+    const tip = `${bucketRange(b)}${b.partial ? ' · parcial' : ''}\n${metricLabel}: ${v === null ? 'sin evidencia' : fmtNum(v)}`;
+    const bar = v === null
+      ? `<span class="bar-null">—</span>`
+      : `<div class="sbar${b.selected ? ' sel' : ''}${b.partial ? ' partial' : ''}" style="height:${v ? Math.max(1.5, v/top*100) : 0}%">${b.selected || series.length <= 6 ? `<span class="bar-val">${fmtNum(v)}</span>` : ''}</div>`;
+    return `<div class="group${b.selected ? ' is-sel' : ''}" data-tip="${esc(tip)}" tabindex="0" aria-label="${esc(tip.replace('\n', ' · '))}">${bar}<span class="xlabel">${esc(bucketShort(b))}${b.partial ? '<em>parcial</em>' : ''}</span></div>`;
   }).join('');
 }
 
 function stageHtml(num, label, highlight){
   return `<div class="stage${highlight?' highlight':''}"><div class="snum">${fmtNum(num)}</div><div class="slabel">${esc(label)}</div></div>`;
+}
+
+// Bloque "Estado al corte": Postulaciones, Nuevo, Fuera de Nuevo y la distribución por grupo.
+function renderCorte(target, vacs, totalNote = 'Total al corte en el filtro'){
+  const t = sumCorte(vacs);
+  const pct = fmtPct(t.fueraDeNuevo, t.postulaciones);
+  const width = t.postulaciones ? Math.round(t.fueraDeNuevo / t.postulaciones * 1000) / 10 : 0;
+  target.innerHTML = `
+    <div class="corte-summary">
+      <div class="kpi"><div class="kpi-top"><div class="kpi-icon">${iconMap.interviewed}</div><div class="kpi-label">Postulaciones</div></div>
+        <div class="kpi-value">${fmtNum(t.postulaciones)}</div><div class="delta"><span class="muted">${esc(totalNote)}</span></div></div>
+      <div class="kpi"><div class="kpi-top"><div class="kpi-icon">${iconMap.inbox}</div><div class="kpi-label">Nuevo</div></div>
+        <div class="kpi-value">${fmtNum(t.nuevo)}</div><div class="delta"><span class="muted">Siguen en la bandeja inicial</span></div></div>
+      <div class="kpi orange fuera">
+        <div class="kpi-top"><div class="kpi-icon">${iconMap.exit}</div><div class="kpi-label">Fuera de Nuevo</div></div>
+        <div class="fuera-row">
+          <div class="kpi-value">${fmtNum(t.fueraDeNuevo)} <span class="of">/ ${fmtNum(t.postulaciones)}</span></div>
+          <div class="fuera-pct">${pct}</div>
+        </div>
+        <div class="progress" role="img" aria-label="${pct} fuera de Nuevo"><span style="width:${width}%"></span></div>
+        <div class="delta"><span class="muted"><b>${fmtNum(t.nuevo)}</b> ${t.nuevo === 1 ? 'permanece' : 'permanecen'} en Nuevo · postulaciones cuya etapa actual no es Nuevo (no equivale a contactadas, procesadas ni activas)</span></div>
+      </div>
+    </div>
+    <div class="corte-stages">${AL_CORTE_STAGES.map(g => `
+      <div class="cstage"><div class="cnum">${fmtNum(t[g.key])}</div><div class="clabel">${esc(g.label)}</div><div class="cpct">${fmtPct(t[g.key], t.postulaciones)} del total</div></div>`).join('')}
+    </div>`;
 }
 
 const statusBadge = s => `<span class="status ${STATUS_CLASS[s]||''}">${esc(s)}</span>`;
@@ -604,18 +811,23 @@ function fillSelect(sel, options, allLabel){
 const uniqueSorted = arr => [...new Set(arr)].sort((a,b) => a.localeCompare(b, 'es'));
 
 /* ===== Overview ===== */
-// Cascada Área → Vacante → Hiring Manager sobre las vacantes activas.
+const statusScope = () => {
+  const s = document.getElementById('statusFilter').value;
+  return store.vacantes.filter(v => s === 'all' || v.estatus === s);
+};
+
+// Cascada Estatus → Área → Vacante → Hiring Manager.
 function refreshFilterOptions(){
   const areaSel = document.getElementById('areaFilter');
   const vacSel  = document.getElementById('vacancyFilter');
   const hmSel   = document.getElementById('hmFilter');
-  const base = activeVacantes();
+  const base = statusScope();
 
   fillSelect(areaSel, uniqueSorted(base.map(v => v.area)).map(a => ({value:a, label:a})), 'Todas');
   const byArea = base.filter(v => areaSel.value === 'all' || v.area === areaSel.value);
 
   fillSelect(vacSel, byArea.slice().sort((a,b) => a.reqId.localeCompare(b.reqId))
-    .map(v => ({value:v.vacanteId, label:`${v.reqId} · ${v.nombre}`})), 'Todas las activas');
+    .map(v => ({value:v.vacanteId, label:`${v.reqId} · ${v.nombre}`})), 'Todas');
   const byVac = byArea.filter(v => vacSel.value === 'all' || v.vacanteId === vacSel.value);
 
   fillSelect(hmSel, uniqueSorted(byVac.map(v => v.hiringManager)).map(h => ({value:h, label:h})), 'Todos');
@@ -625,52 +837,56 @@ function getScope(){
   const area = document.getElementById('areaFilter').value;
   const vac  = document.getElementById('vacancyFilter').value;
   const hm   = document.getElementById('hmFilter').value;
-  return activeVacantes().filter(v =>
+  return statusScope().filter(v =>
     (area === 'all' || v.area === area) &&
     (vac  === 'all' || v.vacanteId === vac) &&
-    (hm   === 'all' || v.hiringManager === hm));
+    (hm   === 'all' || v.hiringManager === hm))
+    .sort((a,b) => a.reqId.localeCompare(b.reqId));
 }
 
-function scopeSuffix(rows){
-  return rows.length ? plural(rows.length, 'proceso activo', 'procesos activos') : 'Sin procesos activos en el filtro';
-}
-
-function windowDescription(periodKey, series){
-  const cfg = PERIODS[periodKey], [one, many] = cfg.unit;
-  if(!series.length) return 'Sin actividad registrada';
-  if(cfg.windowMonths) return `${plural(series.length, `${one} con actividad`, `${many} con actividad`)} · últimos ${cfg.windowMonths} meses de evidencia`;
-  return series.length < cfg.limit
-    ? plural(series.length, `${one} con actividad`, `${many} con actividad`)
-    : `${cfg.last} ${cfg.limit} ${many} con actividad`;
-}
+const scopeSuffix = rows => rows.length ? plural(rows.length, 'vacante', 'vacantes') : 'Sin vacantes en el filtro';
 
 function renderOverview(){
   const rows = getScope();
-  const series = buildSeries(rows.map(v => v.vacanteId), currentPeriod);
-  const cfg = PERIODS[currentPeriod];
-  const desc = windowDescription(currentPeriod, series);
+  renderActivity(rows);
+  renderPulse(rows);
+  document.getElementById('corteCaption').textContent =
+    `Dónde están hoy las postulaciones · corte ${fmtDate(store.generatedDate)} · ${scopeSuffix(rows)} · no cambia con Semanal, Mensual o Anual`;
+  renderCorte(document.getElementById('overviewCorte'), rows);
+  renderActiveRows(rows);
+}
 
-  document.getElementById('chartTitle').textContent = cfg.title;
-  document.getElementById('chartSub').textContent = `${desc} · sólo vacantes activas`;
-  renderBars(document.getElementById('bars'), series, cfg.granularity);
+function renderActivity(rows){
+  const cfg = PERIODS[currentPeriod], g = cfg.granularity;
+  const options = periodOptions(currentPeriod);
+  const pick = document.getElementById('periodPick');
+  const start = options.includes(selectedStart[currentPeriod]) ? selectedStart[currentPeriod] : options[0];
+  pick.innerHTML = options.map(s => `<option value="${s}">${esc(periodLabel(s, g))}</option>`).join('');
+  pick.value = start;
+  const end = bucketEnd(start, g);
+  const ids = new Set(rows.map(v => v.vacanteId));
 
-  // KPIs = foto acumulada al corte; no dependen de la ventana de la gráfica.
-  const totals = snapshotTotals(rows);
-  renderKpis(document.getElementById('kpiGrid'), METRICS.map(m => ({
-    label:m.label, value:totals[m.key], icon:m.icon, cls:m.cls, note:`Acumulado al corte · ${scopeSuffix(rows)}`
+  document.getElementById('activityCaption').textContent = `${periodCaption(start, g)} · ${scopeSuffix(rows)}`;
+  renderKpis(document.getElementById('activityGrid'), OVERVIEW_ACTIVITY_ORDER.map(k => ACT_BY_KEY[k]).map(m => ({
+    label:m.label, value:metricValue(m.key, start, end, ids), icon:m.icon, cls:m.cls,
+    note:coverageNote(m.key, start, end, m.note), metric:m.key, active:m.key === chartMetric
   })));
 
-  renderPulse(rows);
-  renderActiveRows(rows);
+  const metric = ACT_BY_KEY[chartMetric];
+  const series = chartSeries(chartMetric, ids, currentPeriod, start);
+  document.getElementById('chartTitle').textContent = `${cfg.title} · ${metric.label}`;
+  const cov = store.metadata.coberturaPorMetrica[chartMetric];
+  document.getElementById('chartSub').textContent = (g === 'year' ? `Meses de ${start.slice(0,4)}` : `${series.length} ${g === 'week' ? 'semanas' : 'meses'} hasta el periodo seleccionado (resaltado)`)
+    + (cov ? '' : ' · métrica sin evidencia registrada') + ' · elige otra métrica en las tarjetas';
+  renderBars(document.getElementById('bars'), series, metric.label);
 }
 
 function renderPulse(rows){
   const count = rows.length;
   document.getElementById('activeCount').textContent = count;
+  document.getElementById('scopeNote').textContent = STATUS_FILTER_LABEL[document.getElementById('statusFilter').value] || '';
 
-  // Indicador de actividad histórica (historico.actividad), no un acumulado al corte.
-  // "Esta semana" = semana (lun–dom) que contiene la fecha de generación.
-  // Si la evidencia no llega a esa semana, el dato es desconocido y no se muestra como 0.
+  // Indicador de actividad (historico.actividad): vacantes con al menos un registro en la semana del corte (lun–dom).
   const weekStart = bucketStart(store.generatedDate, 'week');
   const weekEnd = bucketEnd(weekStart, 'week');
   const progress = document.querySelector('#activityCount').parentElement.querySelector('.progress span');
@@ -688,19 +904,19 @@ function renderPulse(rows){
   document.getElementById('stale7').textContent = fmtNum(sumNullable(rows, 'sinMovimiento7d'));
 }
 
-// Cantidad actual en una etapa (estadoActual.vacantes[].etapas[]); 0 si la etapa no existe.
-const getStageCount = (v, id) => (v.etapas || []).find(e => e.id === id)?.cantidad ?? 0;
-
 function renderActiveRows(rows){
+  const status = document.getElementById('statusFilter').value;
+  document.getElementById('tableTitle').textContent = STATUS_FILTER_LABEL[status] || 'Vacantes';
   document.getElementById('activeRows').innerHTML = rows.map(v => {
-    const t = v.metricas;   // foto al corte
+    const c = v.alCorte;   // estado al corte
     return `<tr class="clickable" data-vacante-id="${esc(v.vacanteId)}">
-      <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div><div class="subtext">${statusBadge(v.estatus)}</div></td>
-      <td>${esc(v.area)}</td><td>${esc(v.hiringManager)}</td><td>${fmtNum(daysOpen(v))}</td>
-      <td>${fmtNum(getStageCount(v, 'nuevo'))}</td><td><b>${fmtNum(t.contactados)}</b></td><td>${fmtNum(t.entrevistados)}</td><td>${fmtNum(t.ofertas)}</td><td>${fmtNum(t.contrataciones)}</td><td><span class="arrow">›</span></td>
+      <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div><div class="subtext">${esc(v.area)} · ${esc(v.hiringManager)}</div><div class="subtext">${statusBadge(v.estatus)}</div></td>
+      <td>${fmtNum(daysOpen(v))}</td><td class="n"><b>${fmtNum(v.metricas.postulaciones)}</b></td><td class="n">${fmtNum(c.nuevo)}</td>
+      <td class="n"><b>${fmtNum(c.fueraDeNuevo)}</b><div class="subtext">${fmtPct(c.fueraDeNuevo, v.metricas.postulaciones)}</div></td>
+      ${AL_CORTE_STAGES.map(g => `<td class="n">${fmtNum(c[g.key])}</td>`).join('')}<td><span class="arrow">›</span></td>
     </tr>`;
-  }).join('') || `<tr><td colspan="10" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
-  document.getElementById('activeCountBadge').textContent = plural(rows.length, 'proceso activo', 'procesos activos');
+  }).join('') || `<tr><td colspan="13" class="empty-row">No hay procesos que coincidan con los filtros seleccionados.</td></tr>`;
+  document.getElementById('activeCountBadge').textContent = plural(rows.length, 'proceso', 'procesos');
 }
 
 function applyFilters(){
@@ -710,7 +926,15 @@ function applyFilters(){
 
 function setPeriod(period){
   currentPeriod = period;
-  document.querySelectorAll('.periodBtn').forEach(b => b.classList.toggle('active', b.dataset.period === period));
+  document.querySelectorAll('.periodBtn').forEach(b => {
+    b.classList.toggle('active', b.dataset.period === period);
+    b.setAttribute('aria-pressed', b.dataset.period === period ? 'true' : 'false');
+  });
+  renderOverview();
+}
+
+function setPeriodStart(start){
+  selectedStart[currentPeriod] = start;
   renderOverview();
 }
 
@@ -739,24 +963,24 @@ function renderHistory(){
     (area === 'all' || v.area === area) &&
     (historyStatus === 'all' || v.estatus === historyStatus))
     .sort((a,b) => (b.fechaCierre || b.fechaApertura).localeCompare(a.fechaCierre || a.fechaApertura));
-  const t = snapshotTotals(rows);   // foto al corte de los procesos filtrados
+  const t = sumCorte(rows);   // estado al corte de los procesos filtrados
 
   renderKpis(document.getElementById('historyKpis'), [
-    {label:'Procesos históricos',        value:rows.length,      icon:'calendar', note:'Procesos no activos'},
-    {label:'Contactados históricos',    value:t.contactados,    icon:'contacted', note:'Procesos no activos'},
-    {label:'Ofertas históricas',        value:t.ofertas,        icon:'offers', cls:'orange', note:'Ofertas registradas'},
-    {label:'Contrataciones históricas', value:t.contrataciones, icon:'linked', note:'Contrataciones'}
+    {label:'Procesos históricos', value:rows.length,       icon:'calendar', note:'Procesos no activos'},
+    {label:'Postulaciones',       value:t.postulaciones,   icon:'interviewed',    note:'Al corte'},
+    {label:'Contratado',          value:t.contratado,      icon:'linked',   cls:'orange', note:'Etapa actual al corte'},
+    {label:'Rechazado',           value:t.rechazado,       icon:'rejected', note:'Etapa actual al corte'}
   ]);
 
   document.getElementById('historyRows').innerHTML = rows.map(v => {
-    // Foto del proceso al corte (estadoActual); historico.actividad nunca reconstruye estos acumulados.
-    const s = v.metricas;
+    const c = v.alCorte;
     return `<tr class="clickable" data-vacante-id="${esc(v.vacanteId)}">
       <td><div class="req">${esc(v.reqId)}</div><div class="vacancy">${esc(v.nombre)}</div></td>
       <td>${statusBadge(v.estatus)}</td><td>${fmtDate(v.fechaApertura)}</td><td>${esc(closeLabel(v))}</td>
-      <td>${fmtNum(s.contactados)}</td><td>${fmtNum(s.entrevistados)}</td><td>${fmtNum(s.ofertas)}</td><td>${fmtNum(s.contrataciones)}</td><td><span class="arrow">›</span></td>
+      <td class="n"><b>${fmtNum(v.metricas.postulaciones)}</b></td><td class="n">${fmtNum(c.nuevo)}</td><td class="n">${fmtNum(c.fueraDeNuevo)}</td>
+      <td class="n">${fmtNum(c.contratado)}</td><td class="n">${fmtNum(c.rechazado)}</td><td class="n">${fmtNum(c.otros)}</td><td><span class="arrow">›</span></td>
     </tr>`;
-  }).join('') || `<tr><td colspan="9" class="empty-row">No hay procesos históricos que coincidan con los filtros seleccionados.</td></tr>`;
+  }).join('') || `<tr><td colspan="11" class="empty-row">No hay procesos históricos que coincidan con los filtros seleccionados.</td></tr>`;
 }
 
 /* ===== Navegación y detalle ===== */
@@ -770,19 +994,21 @@ function showPage(page){
     document.getElementById('mainSubtitle').textContent = 'Visibilidad ejecutiva de todos los procesos de reclutamiento';
   } else if(page === 'history'){
     document.getElementById('mainTitle').textContent = 'Histórico de reclutamiento';
-    document.getElementById('mainSubtitle').textContent = 'Procesos no activos · snapshots preservados';
+    document.getElementById('mainSubtitle').textContent = 'Procesos no activos · estado al corte preservado';
   }
 }
 
 // Conversión secuencial. Si el numerador supera a la etapa anterior, la evidencia no forma una
 // secuencia completa: se muestra — en lugar de un porcentaje > 100%. Los conteos no se alteran.
-const pctOf = (n, d, of) => (n === null || !d) ? '' : n > d ? ` · — DE ${of}` : ` · ${Math.round(n/d*100)}% DE ${of}`;
+const pctOf = (n, d, of) => (n === null || d === null || !d) ? '' : n > d ? ` · — DE ${of}` : ` · ${Math.round(n/d*100)}% DE ${of}`;
 
 function openDetail(vacanteId){
   const v = store.vacById[vacanteId];
   if(!v) return;
-  previousPage = v.estatus === 'Activa' ? 'overview' : 'history';
-  const m = v.metricas;   // foto al corte: KPIs y funnel; historico.actividad sólo alimenta la gráfica de actividad del detalle
+  if(detailVacancy === null) previousPage = document.getElementById('history').classList.contains('active') ? 'history' : 'overview';
+  detailVacancy = vacanteId;
+  const ids = new Set([v.vacanteId]);
+  const {desdeEvidencia, hastaEvidencia} = store.metadata.cobertura;
 
   document.getElementById('detailReq').textContent = v.reqId;
   document.getElementById('detailName').textContent = v.nombre;
@@ -790,53 +1016,97 @@ function openDetail(vacanteId){
     ['Estatus', v.estatus], ['Área', v.area], ['HM', v.hiringManager], ['Posiciones', v.posiciones],
     ['Apertura', fmtDate(v.fechaApertura)], ['Cierre', closeLabel(v)], ['Días abierta', daysOpen(v) ?? 'No disponible']
   ].map(([k, val]) => `<span><b>${k}:</b> ${esc(val)}</span>`).join('');
-  document.getElementById('detailCut').textContent = `Snapshot ${fmtDate(store.generatedDate)}`;
+  document.getElementById('detailCut').textContent = `Corte ${fmtDate(store.generatedDate)}`;
 
-  renderKpis(document.getElementById('detailKpis'), METRICS.map(mt => ({
-    label:mt.short, value:m[mt.key], icon:mt.icon, cls:mt.cls, note:'Acumulado al corte'
+  // Actividad registrada: toda la evidencia con fecha de la vacante (postulaciones únicas por métrica).
+  const totals = Object.fromEntries(ACTIVITY_KEYS.map(k => [k, metricTotal(k, ids)]));
+  document.getElementById('detailActivityCaption').textContent =
+    `Postulaciones únicas por métrica · evidencia del ${fmtDate(desdeEvidencia)} al ${fmtDate(hastaEvidencia)} · elige una métrica para la gráfica`;
+  renderKpis(document.getElementById('detailKpis'), store.metricOrder.map(m => ({
+    label:m.label, value:totals[m.key], icon:m.icon, cls:m.cls, metric:m.key, active:m.key === detailMetric,
+    note: store.metadata.coberturaPorMetrica[m.key] ? 'Toda la evidencia registrada' : 'Sin evidencia registrada'
   })));
 
-  const series = buildSeries([v.vacanteId], 'weekly');
-  document.getElementById('detailChartSub').textContent = windowDescription('weekly', series);
-  renderBars(document.getElementById('detailBars'), series, PERIODS.weekly.granularity);
+  // Gráfica: 12 semanas hasta la semana del corte, métrica seleccionada.
+  const metric = ACT_BY_KEY[detailMetric];
+  const g = 'week', last = bucketStart(store.generatedDate, g), first = bucketStart(desdeEvidencia, g);
+  const series = [];
+  for(let i = 0, s = last; i < 12 && s >= first; i++, s = stepBucket(s, g, -1)){
+    const end = bucketEnd(s, g);
+    series.unshift({start:s, end, g, value:metricValue(detailMetric, s, end, ids), partial:isPartial(s, end), selected:s === last});
+  }
+  document.getElementById('detailChartTitle').textContent = `Evolución semanal · ${metric.label}`;
+  document.getElementById('detailChartSub').textContent = `${series.length} semanas hasta la semana del corte (resaltada)`;
+  renderBars(document.getElementById('detailBars'), series, metric.label);
 
-  document.getElementById('detailFunnel').innerHTML = [
-    stageHtml(m.contactados, 'CONTACTADOS'),
-    stageHtml(m.entrevistados, `ENTREVISTADOS${pctOf(m.entrevistados, m.contactados, 'CONTACTADOS')}`),
-    stageHtml(m.ofertas, `OFERTAS${pctOf(m.ofertas, m.entrevistados, 'ENTREVISTADOS')}`, true),
-    stageHtml(m.contrataciones, `CONTRATACIONES${pctOf(m.contrataciones, m.ofertas, 'OFERTAS')}`)
-  ].join('');
+  document.getElementById('detailFunnel').innerHTML = FUNNEL_KEYS.map((k, i) => {
+    const prev = i ? FUNNEL_KEYS[i-1] : null;
+    const label = ACT_BY_KEY[k].label.toUpperCase();
+    return stageHtml(totals[k], prev ? `${label}${pctOf(totals[k], totals[prev], ACT_BY_KEY[prev].label.toUpperCase())}` : label, k === 'aprobados_hm');
+  }).join('');
+  document.getElementById('detailFunnelNote').textContent =
+    `Rechazados con evidencia: ${fmtNum(totals.rechazados)}. Las métricas reflejan evidencia registrada y no necesariamente una secuencia completa de etapas.`;
 
-  document.getElementById('detailCurrentSub').textContent = `Foto al corte · ${fmtDate(store.generatedDate)}`;
-  document.getElementById('detailCurrent').innerHTML = [
-    stageHtml(m.postulaciones, 'POSTULACIONES'),
-    stageHtml(m.activas, 'ACTIVAS HOY'),
-    stageHtml(m.contrataciones, 'CONTRATACIONES'),
-    stageHtml(m.feedbackPendiente, 'FEEDBACK HM PENDIENTE'),
-    stageHtml(m.sinMovimiento7d, 'SIN MOVIMIENTO +7D')
-  ].join('');
+  document.getElementById('detailCurrentSub').textContent = `Dónde están hoy las postulaciones de esta vacante · corte ${fmtDate(store.generatedDate)}`;
+  renderCorte(document.getElementById('detailCorte'), [v], 'Total al corte de la vacante');
 
   const etapas = (v.etapas || []).slice().sort((a,b) => a.orden - b.orden);
   const stagesEl = document.getElementById('detailStages');
-  stagesEl.style.gridTemplateColumns = `repeat(${Math.max(etapas.length,1)},1fr)`;
+  stagesEl.style.gridTemplateColumns = `repeat(${Math.min(Math.max(etapas.length,1), 6)},1fr)`;
   stagesEl.innerHTML = etapas.map(e => stageHtml(e.cantidad, e.label.toUpperCase())).join('')
-    || `<div class="chart-empty">Sin etapas registradas.</div>`;
+    || `<div class="chart-empty">Sin etapas abiertas registradas.</div>`;
 
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('detail').classList.add('active');
-  document.getElementById('mainTitle').textContent = 'Detalle de requisición';
-  document.getElementById('mainSubtitle').textContent = 'KPIs, evolución y conversión de una vacante';
-  window.scrollTo({top:0, behavior:'smooth'});
+  if(!document.getElementById('detail').classList.contains('active')){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('detail').classList.add('active');
+    document.getElementById('mainTitle').textContent = 'Detalle de requisición';
+    document.getElementById('mainSubtitle').textContent = 'Actividad, conversión y estado al corte de una vacante';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
 }
 
-function backFromDetail(){ showPage(previousPage); }
+function backFromDetail(){ detailVacancy = null; showPage(previousPage); }
 
 ['activeRows', 'historyRows'].forEach(id => {
   document.getElementById(id).addEventListener('click', e => {
     const row = e.target.closest('tr[data-vacante-id]');
-    if(row) openDetail(row.dataset.vacanteId);
+    if(row){ detailVacancy = null; openDetail(row.dataset.vacanteId); }
   });
 });
+
+// Tarjetas de actividad: seleccionan la métrica de la gráfica (clic o Enter/Espacio).
+function bindMetricTiles(containerId, onPick){
+  const el = document.getElementById(containerId);
+  const pick = e => {
+    const tile = e.target.closest('[data-metric]');
+    if(!tile) return;
+    if(e.type === 'keydown'){ if(e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault(); }
+    onPick(tile.dataset.metric);
+  };
+  el.addEventListener('click', pick);
+  el.addEventListener('keydown', pick);
+}
+bindMetricTiles('activityGrid', k => { chartMetric = k; renderOverview(); });
+bindMetricTiles('detailKpis', k => { detailMetric = k; openDetail(detailVacancy); });
+
+// Tooltip de la gráfica (hover y foco de teclado).
+(function(){
+  const tip = document.getElementById('chartTip');
+  const show = (group, x, y) => {
+    tip.textContent = group.dataset.tip;
+    tip.hidden = false;
+    const r = tip.getBoundingClientRect();
+    tip.style.left = `${Math.min(window.innerWidth - r.width - 8, Math.max(8, x - r.width / 2))}px`;
+    tip.style.top = `${Math.max(8, y - r.height - 12)}px`;
+  };
+  ['bars', 'detailBars'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('mousemove', e => { const g = e.target.closest('.group[data-tip]'); g ? show(g, e.clientX, e.clientY) : (tip.hidden = true); });
+    el.addEventListener('mouseleave', () => { tip.hidden = true; });
+    el.addEventListener('focusin', e => { const g = e.target.closest('.group[data-tip]'); if(g){ const r = g.getBoundingClientRect(); show(g, r.left + r.width / 2, r.top); } });
+    el.addEventListener('focusout', () => { tip.hidden = true; });
+  });
+})();
 
 /* ===== Inicio ===== */
 async function init(){
@@ -850,9 +1120,9 @@ async function init(){
   const {desdeEvidencia, hastaEvidencia} = store.metadata.cobertura;
   document.getElementById('headerCut').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('overviewSnapshot').textContent = `Generado ${fmtGenerated()}`;
-  document.getElementById('historySnapshot').textContent = `Evidencia ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
+  document.getElementById('historySnapshot').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('footerSource').textContent =
-    `Fuente: ${store.metadata.source} · Snapshot ${fmtDate(store.generatedDate)} · Evidencia histórica: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
+    `Fuente: ${store.metadata.source} · Corte ${fmtDate(store.generatedDate)} · Evidencia de actividad: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
 
   refreshFilterOptions();
   refreshHistoryOptions();
