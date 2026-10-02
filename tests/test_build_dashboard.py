@@ -140,7 +140,9 @@ def legacy_first(db):
     stats = bd.Counter()
     ids = {a["id"] for a in scope["applications"]}
     transitions = bd.collect_stage_transitions(scope["auditApplications"], scope["events"], ids, stats)
-    first, _ = bd.legacy_first_evidence(scope["applications"], scope["interviews"], transitions, resolver, stats)
+    candidates_by_id = {c["id"]: c for c in scope["candidates"]}
+    first, _ = bd.legacy_first_evidence(scope["applications"], scope["interviews"], transitions, resolver, stats,
+                                        candidates_by_id)
     return {k: d.isoformat() for k, d in first.items()}
 
 
@@ -990,6 +992,211 @@ class Contract120(unittest.TestCase):
     def test_sample_matches_contract_shape(self):
         sample = json.loads((Path(__file__).resolve().parent.parent / "data" / "dashboard.sample.json").read_text())
         bd.validate_contract(sample)
+
+
+# ---------------------------------------------------------------------------
+# contrataciones — fecha oficial por prioridad de fuente
+# ---------------------------------------------------------------------------
+
+LATE_GENERATED_AT = bd.parse_generated_at("2026-10-10T18:00:00-06:00")
+
+
+def hired_candidate(cid, n, fecha_contratacion=None):
+    c = candidate(cid, n)
+    if fecha_contratacion is not None:
+        c["fechaContratacion"] = fecha_contratacion
+    return c
+
+
+def build_at(db, generated_at=LATE_GENERATED_AT):
+    dashboard, report, forbidden = bd.build_dashboard(db, generated_at)
+    bd.validate_contract(dashboard)
+    bd.validate_privacy(dashboard, forbidden)
+    return dashboard, report
+
+
+def hires(dashboard):
+    return metric_records(dashboard, "contrataciones")
+
+
+class OfficialHireDate(unittest.TestCase):
+    def hired_db(self, effective=None, applied="2026-10-02T17:00:00Z", transition_at="2026-10-02T17:00:00Z",
+                 etapa="contratado"):
+        extra = {"fechaContratacionAplicada": applied} if applied is not None else {}
+        audit = [transition("app-1", "oferta", "contratado", transition_at)] if transition_at else []
+        return make_db(candidates=[hired_candidate("cand-1", 1, effective)],
+                       applications=[app("app-1", etapa, **extra)], audit=audit)
+
+    def test_T1_effective_date_wins_over_technical_timestamp(self):
+        d, r = build_at(self.hired_db(effective="2026-09-28"))
+        self.assertEqual(hires(d), [("2026-09-28", "contrataciones", "vac-a", 1)])
+        self.assertEqual(r["evidencia"]["fuentes"]["contrataciones"], {"candidato:fechaContratacion": 1})
+
+    def test_T2_without_effective_date_uses_applied_timestamp_not_earlier_transition(self):
+        d, _ = build_at(self.hired_db(transition_at="2026-09-30T17:00:00Z"))
+        self.assertEqual(hires(d), [("2026-10-02", "contrataciones", "vac-a", 1)])
+
+    def test_T3_without_effective_or_applied_uses_first_transition(self):
+        db = self.hired_db(applied=None, transition_at="2026-07-15T17:00:00Z")
+        db["audit"].append(transition("app-1", "oferta", "contratado", "2026-07-20T17:00:00Z"))
+        d, r = build_at(db)
+        self.assertEqual(hires(d), [("2026-07-15", "contrataciones", "vac-a", 1)])
+        self.assertEqual(r["evidencia"]["fuentes"]["contrataciones"], {"transicion:audit": 1})
+
+    def test_T4_invalid_effective_date_falls_back_to_applied_timestamp(self):
+        for invalid in ("", None, "2026-02-30", "pendiente", "2026-09-28T10:00:00Z", "28/09/2026", " 2026-09-28"):
+            with self.subTest(invalid=invalid):
+                db = self.hired_db()
+                db["workspaces"][0]["store"]["candidatos"][0]["fechaContratacion"] = invalid
+                d, r = build_at(db)
+                self.assertEqual(hires(d), [("2026-10-02", "contrataciones", "vac-a", 1)])
+                self.assertEqual(r["evidencia"].get("contratacionFechaEfectivaNoValida", 0), int(invalid not in ("", None)))
+
+    def test_T5_priority_is_by_source_not_min_date(self):
+        d, _ = build_at(self.hired_db(effective="2026-10-05"))
+        self.assertEqual(hires(d), [("2026-10-05", "contrataciones", "vac-a", 1)])
+
+    def test_T6_effective_date_without_hire_evidence_creates_no_hire(self):
+        db = self.hired_db(effective="2026-09-28", applied=None, transition_at=None, etapa="oferta")
+        d, r = build_at(db)
+        self.assertEqual(hires(d), [])
+        self.assertIsNone(d["metadata"]["coberturaPorMetrica"]["contrataciones"])
+        self.assertNotIn(("app-1", "contrataciones"), legacy_first(db))
+        self.assertEqual(vac(d)["metricas"]["contrataciones"], 0)
+        self.assertNotIn("contrataciones", r["evidencia"]["fuentes"])
+
+    def test_T6b_hire_is_never_inferred_from_text_closure_or_activity(self):
+        db = make_db(candidates=[hired_candidate("cand-1", 1, "2026-09-28")],
+                     applications=[app("app-1", "oferta", resultadoFinal="Contratado", fechaCierre="2026-09-28T17:00:00Z",
+                                       ultimaActividad="Contratado hoy", notasCH="Contratado el 28 de septiembre")],
+                     events=[{**event("app-1", "vac-a", "nota", "2026-09-28T17:00:00Z"), "resumen": "Contratado"},
+                             event("app-1", "vac-a", "cambio_etapa", "2026-09-28T17:00:00Z", {"stageId": "etapa_inexistente"})])
+        d, _ = build_at(db)
+        self.assertEqual(hires(d), [])
+
+    def test_T7_current_hired_stage_with_effective_date_and_no_timestamp(self):
+        d, _ = build_at(self.hired_db(effective="2026-09-28", applied=None, transition_at=None))
+        self.assertEqual(hires(d), [("2026-09-28", "contrataciones", "vac-a", 1)])
+        self.assertEqual(vac(d)["metricas"]["contrataciones"], 1)
+
+    def test_T7b_current_hired_stage_without_any_date_has_no_history(self):
+        d, _ = build_at(self.hired_db(applied=None, transition_at=None))
+        self.assertEqual(hires(d), [])
+        self.assertEqual(vac(d)["metricas"]["contrataciones"], 1)  # snapshot 1.1.0 sí cuenta la etapa actual
+
+    def test_T8_reactivated_application_keeps_historical_hire_and_effective_date_wins(self):
+        db = self.hired_db(effective="2026-07-08", applied="2026-07-10T17:00:00Z",
+                           transition_at="2026-07-10T17:00:00Z", etapa="contactado")
+        db["audit"] += [discard_audit("app-1", "vac-a", "2026-07-20T17:00:00Z"),
+                        {"id": "aud_sint_react_hire", "type": "application_reactivated", "organizationId": ORG,
+                         "entityType": "application", "entityId": "app-1", "at": "2026-07-21T17:00:00Z",
+                         "metadata": {"previousStageId": "descartado", "targetStageId": "contactado"}}]
+        d, _ = build_at(db)
+        self.assertEqual(hires(d), [("2026-07-08", "contrataciones", "vac-a", 1)])
+        self.assertEqual(vac(d)["alCorte"]["contratado"], 0)
+
+    def test_T9_editing_effective_date_reattributes_on_next_generation(self):
+        db = self.hired_db()
+        first, _ = build_at(copy.deepcopy(db))
+        self.assertEqual(hires(first), [("2026-10-02", "contrataciones", "vac-a", 1)])
+        edited = copy.deepcopy(db)
+        edited["workspaces"][0]["store"]["candidatos"][0]["fechaContratacion"] = "2026-09-28"
+        second, _ = build_at(edited)
+        self.assertEqual(hires(second), [("2026-09-28", "contrataciones", "vac-a", 1)])
+        self.assertEqual(edited["workspaces"][0]["store"]["postulaciones"][0]["fechaContratacionAplicada"],
+                         "2026-10-02T17:00:00Z")
+
+    def test_T10_two_hired_applications_of_same_candidate_count_per_application(self):
+        db = make_db(vacancies=[vacancy("vac-a", "REQ-2026-0001"), vacancy("vac-b", "REQ-2026-0002")],
+                     candidates=[hired_candidate("cand-1", 1, "2026-09-28")],
+                     applications=[application("app-1", "cand-1", "vac-a", "contratado", fechaCaptura=CAP,
+                                               fechaContratacionAplicada="2026-10-02T17:00:00Z"),
+                                   application("app-2", "cand-1", "vac-b", "contratado", fechaCaptura=CAP,
+                                               fechaContratacionAplicada="2026-10-03T17:00:00Z")])
+        d, r = build_at(db)
+        self.assertEqual(hires(d), [("2026-09-28", "contrataciones", "vac-a", 1), ("2026-09-28", "contrataciones", "vac-b", 1)])
+        self.assertEqual(r["historico"]["totales"]["contrataciones"], 2)
+
+    def test_T11_source_is_not_mutated(self):
+        db = self.hired_db(effective="2026-09-28")
+        before = copy.deepcopy(db)
+        build_at(db)
+        legacy_first(db)
+        self.assertEqual(db, before)
+        self.assertEqual(db["workspaces"][0]["store"]["postulaciones"][0]["fechaContratacionAplicada"], "2026-10-02T17:00:00Z")
+
+    def full_activity_db(self, effective=None):
+        hm = interview("int-1", "app-1", "cand-1", "vac-a", "2026-08-01", tipo="Hiring Manager", resultado="Avanza")
+        return make_db(
+            candidates=[hired_candidate("cand-1", 1, effective), hired_candidate("cand-2", 2, effective)],
+            applications=[app("app-1", "contratado", resultadoHM="Avanza", fechaPrimerContacto="2026-06-02T17:00:00Z",
+                              fechaPrimeraEntrevistaRealizada="2026-07-01", fechaOfertaRealizada="2026-09-01T17:00:00Z",
+                              fechaContratacionAplicada="2026-10-02T17:00:00Z"),
+                          app("app-2", "descartado")],
+            interviews=[hm],
+            events=[event("app-1", "vac-a", "resultado_hm", "2026-08-02T17:00:00Z"),
+                    {**event("app-1", "vac-a", "entrevista_agendada", "2026-07-25T17:00:00Z"), "entrevistaId": "int-1"}],
+            audit=[transition("app-1", "nuevo", "contactado", "2026-06-02T17:00:00Z"),
+                   transition("app-1", "contactado", "entrevista_ch_agendada", "2026-06-10T17:00:00Z"),
+                   transition("app-1", "validado_ch", "enviado_a_hm", "2026-07-20T17:00:00Z"),
+                   transition("app-1", "oferta", "contratado", "2026-10-02T17:00:00Z"),
+                   transition("app-2", "nuevo", "descartado", "2026-06-05T17:00:00Z")])
+
+    def test_T12_other_seven_metrics_are_unchanged(self):
+        without, _ = build_at(self.full_activity_db())
+        with_effective, _ = build_at(self.full_activity_db("2026-09-28"))
+        others = lambda d: [r for r in activity(d) if r[1] != "contrataciones"]
+        self.assertEqual(others(without), others(with_effective))
+        self.assertEqual({r[1] for r in others(without)}, set(bd.METRICS) - {"contrataciones"})
+        self.assertEqual(hires(without), [("2026-10-02", "contrataciones", "vac-a", 1)])
+        self.assertEqual(hires(with_effective), [("2026-09-28", "contrataciones", "vac-a", 1)])
+        self.assertEqual(without["estadoActual"], with_effective["estadoActual"])
+
+    def test_T13_effective_date_adds_no_fields_or_individual_data(self):
+        without, _ = build_at(self.full_activity_db())
+        with_effective, _ = build_at(self.full_activity_db("2026-09-28"))
+        text = json.dumps(with_effective, ensure_ascii=False)
+        for needle in ("fechaContratacion", "candidatoId", "cand-1", "cand-2", "app-1", "Nombreprueba", "correo-sintetico"):
+            self.assertNotIn(needle, text)
+        keys = lambda d: {(k, tuple(sorted(r))) for k in ("actividad",) for r in d["historico"][k]}
+        self.assertEqual(keys(without), keys(with_effective))
+        self.assertEqual(set(with_effective["metadata"]), set(without["metadata"]))
+
+    def test_T14_contract_remains_schema_1_2_0(self):
+        d, _ = build_at(self.full_activity_db("2026-09-28"))
+        self.assertEqual(d["schemaVersion"], "1.2.0")
+        self.assertEqual(set(d), bd.TOP_KEYS)
+        self.assertEqual(set(d["metadata"]), bd.METADATA_KEYS)
+        self.assertEqual(d["metadata"]["coberturaPorMetrica"]["contrataciones"],
+                         {"desdeEvidencia": "2026-09-28", "hastaEvidencia": "2026-09-28"})
+
+    def test_T15_legacy_uses_same_hire_date_without_touching_other_legacy_metrics(self):
+        without_db, with_db = self.full_activity_db(), self.full_activity_db("2026-09-28")
+        legacy_without, legacy_with = legacy_first(without_db), legacy_first(with_db)
+        self.assertEqual(legacy_without[("app-1", "contrataciones")], "2026-10-02")
+        self.assertEqual(legacy_with[("app-1", "contrataciones")], "2026-09-28")
+        strip = lambda first: {k: v for k, v in first.items() if k[1] != "contrataciones"}
+        self.assertEqual(strip(legacy_without), strip(legacy_with))
+        _, r_without = build_at(without_db)
+        _, r_with = build_at(with_db)
+        self.assertEqual(r_with["legacy"]["porMes"]["contrataciones"], {"2026-09": 1})
+        for metric in ("contactados", "entrevistados", "ofertas"):
+            self.assertEqual(r_with["legacy"]["porMes"][metric], r_without["legacy"]["porMes"][metric])
+        self.assertEqual(r_with["snapshot"]["acumuladosLegacy"], r_without["snapshot"]["acumuladosLegacy"])
+
+    def test_resolver_reads_candidate_only_from_organization_scope(self):
+        db = self.hired_db()
+        db["workspaces"][0]["store"]["candidatos"][0]["organizationId"] = "otra-org"
+        db["workspaces"][0]["store"]["candidatos"][0]["fechaContratacion"] = "2026-09-28"
+        d, _ = build_at(db)
+        self.assertEqual(hires(d), [("2026-10-02", "contrataciones", "vac-a", 1)])
+
+    def test_embedded_baseline_is_unchanged(self):
+        self.assertEqual(bd.EXPECTED_BASELINE["metricas"]["contrataciones"],
+                         {"2026-05": 1, "2026-07": 7, "2026-08": 1, "2026-09": 1})
+        self.assertEqual(bd.EXPECTED_BASELINE["legacy"]["contrataciones"],
+                         {"2026-05": 1, "2026-07": 7, "2026-08": 1, "2026-09": 1})
+        self.assertEqual(bd.EXPECTED_BASELINE["totales"]["contrataciones"], 10)
 
 
 

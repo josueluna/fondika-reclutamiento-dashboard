@@ -12,6 +12,8 @@ Garantías:
 - Histórico (8 métricas de actividad): la unidad es la postulación a una vacante; cada métrica
   cuenta una vez por postulación, en su primera evidencia estructurada con fecha.
   Ausencia de evidencia != cero. Nunca se lee texto libre (resumen/nota) para inferir nada.
+  Excepción: contrataciones usa la fecha oficial por prioridad de fuente (fecha efectiva de
+  Capital Humano > fechaContratacionAplicada > transición a contratado), no la más antigua.
 - Estado al corte (alCorte): etapa actual de cada postulación; independiente del histórico.
 - Snapshot 1.1.0 (metricas.*): se conserva con su semántica original por compatibilidad;
   entrevistados/ofertas quedan obsoletos (metadata.metricasObsoletas) y se eliminarán en 2.0.0.
@@ -96,6 +98,10 @@ ACTIVITY_STAGE_METRIC = {
 }
 # Hitos write-once que alimentan la actividad (misma lógica 1.1.0 de contactados/contrataciones).
 ACTIVITY_MILESTONE_METRIC = {"fechaPrimerContacto": "contactados", "fechaContratacionAplicada": "contrataciones"}
+# contrataciones no toma la primera fecha entre fuentes: su fecha oficial se resuelve por prioridad
+# de fuente (resolve_official_hire_day), igual en la actividad 1.2.0 y en el legacy 1.1.0.
+HIRE_METRIC = "contrataciones"
+HIRED_STAGE = "contratado"
 
 # Entrevistas: tipo estructurado -> métrica de entrevista agendada.
 INTERVIEW_KIND_METRIC = {"CH": "entrevistados_ch", "Hiring Manager": "entrevistados_hm", "HM": "entrevistados_hm"}
@@ -319,6 +325,8 @@ def scope_entities(db, organization_id, workspace):
                      if isinstance(m, dict) and m.get("organizationId") == organization_id and m.get("applicationId") in app_ids]
     return {
         "store": store,
+        # Solo para resolver candidatoId -> fechaContratacion en memoria; nunca sale del generador.
+        "candidates": pick("candidatos"),
         "vacancies": pick("vacantes"),
         "applications": applications,
         "interviews": pick("entrevistas"),
@@ -517,9 +525,65 @@ def excluded_deleted_applications(audit_org, events, app_ids, resolver):
     }
 
 
-def legacy_first_evidence(applications, interviews, transitions, resolver, stats):
+def effective_hire_date(value):
+    """Candidato.fechaContratacion (fecha efectiva capturada por Capital Humano) como fecha local,
+    o None. Solo 'YYYY-MM-DD' de calendario válido; sin conversión de zona horaria."""
+    if not isinstance(value, str) or not ISO_DATE.match(value):
+        return None
+    return to_local_date(value)
+
+
+def first_hire_transitions(transitions, resolver):
+    """{appId: (fecha, origen)} de la primera transición estructurada hacia la etapa canónica contratado."""
+    first = {}
+    for app_id, target, day, source in transitions:
+        if resolver.canon(target) == HIRED_STAGE and (app_id not in first or day < first[app_id][0]):
+            first[app_id] = (day, source)
+    return first
+
+
+def resolve_official_hire_day(app, candidate, hire_transition, resolver):
+    """(fecha local, fuente) oficial de contratación de una postulación, o None.
+
+    1. Evidencia estructurada de contratación de la postulación: etapa actual canónica contratado,
+       fechaContratacionAplicada válida o transición estructurada a contratado (una postulación
+       reactivada conserva su evidencia histórica). Sin ella no hay contratación, aunque el
+       candidato tenga fecha efectiva.
+    2. Fecha por prioridad de fuente (nunca la mínima entre fuentes):
+       Candidato.fechaContratacion válida > fechaContratacionAplicada válida > primera transición.
+    Solo lee; no modifica la postulación ni el candidato.
+    """
+    raw_applied = app.get("fechaContratacionAplicada")
+    applied = to_local_date(raw_applied) if raw_applied not in (None, "") else None
+    hired = resolver.canon(app.get("etapa")) == HIRED_STAGE or applied is not None or hire_transition is not None
+    if not hired:
+        return None
+    effective = effective_hire_date((candidate or {}).get("fechaContratacion"))
+    if effective is not None:
+        return effective, "candidato:fechaContratacion"
+    if applied is not None:
+        return applied, "hito:fechaContratacionAplicada"
+    if hire_transition is not None:
+        return hire_transition[0], f"transicion:{hire_transition[1]}"
+    return None
+
+
+def official_hire_days(applications, candidates_by_id, transitions, resolver):
+    """{appId: (fecha, fuente)} de las postulaciones contratadas con fecha oficial resoluble."""
+    hire_transitions = first_hire_transitions(transitions, resolver)
+    out = {}
+    for app in applications:
+        candidate = candidates_by_id.get(app.get("candidatoId"))
+        resolved = resolve_official_hire_day(app, candidate, hire_transitions.get(app.get("id")), resolver)
+        if resolved is not None:
+            out[app.get("id")] = resolved
+    return out
+
+
+def legacy_first_evidence(applications, interviews, transitions, resolver, stats, candidates_by_id=None):
     """Evidencia 1.1.0 (contactados/entrevistados/ofertas/contrataciones) para los acumulados del
-    snapshot compatible. Semántica idéntica a 1.1.0; no alimenta historico.actividad."""
+    snapshot compatible. Semántica idéntica a 1.1.0, salvo la fecha de contrataciones, que usa la
+    misma fecha oficial que la actividad. No alimenta historico.actividad."""
     first = {}
     sources = defaultdict(Counter)
 
@@ -537,7 +601,8 @@ def legacy_first_evidence(applications, interviews, transitions, resolver, stats
             if day is None:
                 stats["hitosFechaNoValida"] += 1
                 continue
-            offer(app.get("id"), metric, day, f"hito:{field}")
+            if metric != HIRE_METRIC:
+                offer(app.get("id"), metric, day, f"hito:{field}")
 
     apps_by_id = {a.get("id"): a for a in applications}
     for interview in interviews:
@@ -555,8 +620,11 @@ def legacy_first_evidence(applications, interviews, transitions, resolver, stats
 
     for app_id, target, day, source in transitions:
         metric = STAGE_METRIC.get(resolver.canon(target))
-        if metric and app_id in apps_by_id:
+        if metric and metric != HIRE_METRIC and app_id in apps_by_id:
             offer(app_id, metric, day, f"transicion:{source}")
+
+    for app_id, (day, source) in official_hire_days(applications, candidates_by_id or {}, transitions, resolver).items():
+        offer(app_id, HIRE_METRIC, day, source)
 
     return first, {m: dict(sorted(c.items())) for m, c in sorted(sources.items())}
 
@@ -589,6 +657,8 @@ def activity_first_evidence(scope, transitions, resolver, stats):
         else:
             offer(app.get("id"), "nuevos", day, "fechaCaptura")
         for field, metric in ACTIVITY_MILESTONE_METRIC.items():
+            if metric == HIRE_METRIC:
+                continue
             day = to_local_date(app.get(field)) if app.get(field) not in (None, "") else None
             if day is not None:
                 offer(app.get("id"), metric, day, f"hito:{field}")
@@ -596,8 +666,17 @@ def activity_first_evidence(scope, transitions, resolver, stats):
     # Entrada exacta a la etapa destino (audit y eventos de etapa con destino estructurado).
     for app_id, target, day, source in transitions:
         metric = resolver.activity_metric(target)
-        if metric:
+        if metric and metric != HIRE_METRIC:
             offer(app_id, metric, day, f"transicion:{source}")
+
+    # contrataciones: fecha oficial por prioridad de fuente, una vez por postulación contratada.
+    candidates_by_id = {c.get("id"): c for c in scope.get("candidates", []) if c.get("id")}
+    for app_id, (day, source) in official_hire_days(applications, candidates_by_id, transitions, resolver).items():
+        offer(app_id, HIRE_METRIC, day, source)
+        # Diagnóstico agregado: fecha efectiva capturada pero no válida (cae al siguiente origen).
+        raw = (candidates_by_id.get(apps_by_id[app_id].get("candidatoId")) or {}).get("fechaContratacion")
+        if raw not in (None, "") and effective_hire_date(raw) is None:
+            stats["contratacionFechaEfectivaNoValida"] += 1
 
     # rechazados: descarte auditado. fechaCierre nunca sustituye evidencia histórica.
     for entry in scope["auditApplications"]:
@@ -872,7 +951,9 @@ def build_dashboard(db, generated_at, organization_id=None):
     app_ids = {a.get("id") for a in applications}
     transitions = collect_stage_transitions(scope["auditApplications"], scope["events"], app_ids, stats)
     first, sources = activity_first_evidence(scope, transitions, resolver, stats)
-    legacy_first, legacy_sources = legacy_first_evidence(applications, scope["interviews"], transitions, resolver, stats)
+    candidates_by_id = {c.get("id"): c for c in scope["candidates"] if c.get("id")}
+    legacy_first, legacy_sources = legacy_first_evidence(applications, scope["interviews"], transitions, resolver, stats,
+                                                         candidates_by_id)
     unknown_current = sorted({a.get("etapa") for a in applications if not resolver.known(a.get("etapa"))}, key=str)
     if unknown_current:
         stats["postulacionesEtapaActualDesconocida"] = sum(1 for a in applications if not resolver.known(a.get("etapa")))
