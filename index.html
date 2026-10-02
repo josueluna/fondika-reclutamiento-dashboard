@@ -29,7 +29,9 @@ button,select{font:inherit}
 button{cursor:pointer}
 .app{min-height:100vh;display:grid;grid-template-columns:92px 1fr}
 .rail{background:#fff;border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;align-items:center;gap:16px;position:sticky;top:0;height:100vh}
-.logo-mark{width:48px;height:48px;border-radius:15px;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#222;font:800 22px Outfit,Arial}
+.logo-mark{width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+.logo-mark img{width:48px;height:48px;display:block}
+.rumbo-mark{width:48px;height:48px;display:block;overflow:visible}
 .rail-btn{width:56px;height:56px;border:0;background:transparent;border-radius:14px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:.18s}
 .rail-btn:hover{background:#f1f1f2}
 .rail-btn.active{background:var(--turq-soft);color:var(--turq-text)}
@@ -199,7 +201,7 @@ th.n,td.n{text-align:right}
 <body>
 <div class="app">
   <aside class="rail">
-    <div class="logo-mark">F</div>
+    <div class="logo-mark"><span id="rumboMark" class="rumbo-mark" role="img" aria-label="Rumbo"></span></div>
     <button class="rail-btn active" id="navOverview" title="Overview" onclick="showPage('overview')">
       <svg class="kpi-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="grafica-linea" data-fondika="grafica-linea"><path d="M3.6 3.6v15.2a1.6 1.6 0 0 0 1.6 1.6h15.2"/><path d="M7 15.4l3.6-4.4 3 2.6 4.8-6.2"/></svg>
     </button>
@@ -1106,6 +1108,47 @@ bindMetricTiles('detailKpis', k => { detailMetric = k; openDetail(detailVacancy)
     el.addEventListener('focusin', e => { const g = e.target.closest('.group[data-tip]'); if(g){ const r = g.getBoundingClientRect(); show(g, r.left + r.width / 2, r.top); } });
     el.addEventListener('focusout', () => { tip.hidden = true; });
   });
+})();
+
+/* ===== Rumbo ===== */
+// Estado visual elegido al azar una vez por carga; no refleja el estado de los datos.
+const RUMBO_STATES = [
+  {key:'reposo',     label:'reposo'},
+  {key:'escuchando', label:'escuchando'},
+  {key:'pensando',   label:'pensando'},
+  {key:'cargando',   label:'cargando'},
+  {key:'exito',      label:'éxito'},
+];
+// El SVG se inserta inline (en un shadow root, para que sus estilos no afecten al
+// dashboard) porque un <img> recorta lo que la animación dibuja fuera del viewBox.
+(async () => {
+  const s = RUMBO_STATES[Math.floor(Math.random() * RUMBO_STATES.length)];
+  const host = document.getElementById('rumboMark');
+  const src = `assets/rumbo/rumbo-${s.key}.svg`;
+  host.setAttribute('aria-label', `Rumbo · ${s.label}`);
+  const root = host.attachShadow({mode:'open'});
+  try {
+    const res = await fetch(src);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const doc = new DOMParser().parseFromString(await res.text(), 'image/svg+xml');
+    const svg = doc.documentElement;
+    if(svg.localName !== 'svg' || doc.querySelector('parsererror')) throw new Error('SVG inválido');
+    svg.setAttribute('width', '48');
+    svg.setAttribute('height', '48');
+    svg.setAttribute('overflow', 'visible');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.removeAttribute('role');
+    svg.removeAttribute('aria-label');
+    svg.style.display = 'block';
+    root.append(document.importNode(svg, true));
+  } catch(e){
+    // Sin inline: se muestra el mismo asset como imagen (recortada, pero visible).
+    console.warn(`Rumbo: no se pudo cargar ${src} inline`, e);
+    const img = document.createElement('img');
+    img.src = src; img.alt = ''; img.width = 48; img.height = 48;
+    img.style.display = 'block';
+    root.append(img);
+  }
 })();
 
 /* ===== Inicio ===== */
