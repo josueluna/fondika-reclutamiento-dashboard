@@ -232,7 +232,7 @@ th.n,td.n{text-align:right}
         <div class="subtitle" id="mainSubtitle">Visibilidad ejecutiva de todos los procesos de reclutamiento</div>
       </div>
       <div class="header-actions">
-        <span class="badge dot">Vista general</span>
+        
         <span class="badge" id="headerCut">Corte —</span>
       </div>
     </header>
@@ -1162,7 +1162,7 @@ async function init(){
   }
   const {desdeEvidencia, hastaEvidencia} = store.metadata.cobertura;
   document.getElementById('headerCut').textContent = `Corte ${fmtDate(store.generatedDate)}`;
-  document.getElementById('overviewSnapshot').textContent = `Generado ${fmtGenerated()}`;
+  document.getElementById('overviewSnapshot').textContent = `Actualizado ${fmtGenerated()}`;
   document.getElementById('historySnapshot').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('footerSource').textContent =
     `Corte ${fmtDate(store.generatedDate)} · Evidencia de actividad: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
