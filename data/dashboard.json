@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.2.0",
   "metadata": {
-    "generatedAt": "2026-10-02T15:21:23-06:00",
+    "generatedAt": "2026-10-03T00:09:56-06:00",
     "timezone": "America/Mexico_City",
     "source": "Hira",
     "dimensionSemantics": "vacante_actual_al_generar",
@@ -26,15 +26,15 @@
     "coberturaPorMetrica": {
       "nuevos": {
         "desdeEvidencia": "2026-05-11",
-        "hastaEvidencia": "2026-10-01"
+        "hastaEvidencia": "2026-10-02"
       },
       "rechazados": {
         "desdeEvidencia": "2026-05-28",
-        "hastaEvidencia": "2026-09-30"
+        "hastaEvidencia": "2026-10-02"
       },
       "contactados": {
         "desdeEvidencia": "2026-05-27",
-        "hastaEvidencia": "2026-10-01"
+        "hastaEvidencia": "2026-10-02"
       },
       "entrevistados_ch": {
         "desdeEvidencia": "2026-05-15",
@@ -108,16 +108,16 @@
         "vacanteId": "v-8lyzyt",
         "reqId": "REQ-2026-0001",
         "nombre": "Asesor de Servicios Financieros",
-        "area": "Fuerza Comercial",
+        "area": "Comercial",
         "hiringManager": "Giovani Montes",
         "estatus": "Activa",
         "posiciones": 2000,
         "fechaApertura": "2026-05-06",
         "fechaCierre": null,
         "metricas": {
-          "postulaciones": 206,
-          "activas": 56,
-          "contactados": 149,
+          "postulaciones": 217,
+          "activas": 66,
+          "contactados": 160,
           "entrevistados": 45,
           "ofertas": 6,
           "contrataciones": 11,
@@ -126,14 +126,14 @@
         },
         "alCorte": {
           "nuevo": 10,
-          "contactado": 36,
+          "contactado": 47,
           "entrevistaCh": 4,
           "enviadoHm": 1,
           "entrevistaHm": 2,
           "contratado": 11,
-          "rechazado": 139,
-          "otros": 3,
-          "fueraDeNuevo": 196
+          "rechazado": 140,
+          "otros": 2,
+          "fueraDeNuevo": 207
         },
         "etapas": [
           {
@@ -146,7 +146,7 @@
             "id": "contactado",
             "label": "Contactado",
             "orden": 2,
-            "cantidad": 36
+            "cantidad": 47
           },
           {
             "id": "screening",
@@ -170,7 +170,7 @@
             "id": "enviar_a_hm",
             "label": "Enviar a Hiring Manager",
             "orden": 6,
-            "cantidad": 2
+            "cantidad": 1
           },
           {
             "id": "enviado_a_hm",
@@ -390,7 +390,13 @@
             "id": "entrevista_hm_agendada",
             "label": "Entrevista con HM agendada",
             "orden": 5,
-            "cantidad": 2
+            "cantidad": 1
+          },
+          {
+            "id": "feedback_hm_pendiente",
+            "label": "Feedback de HM pendiente",
+            "orden": 6,
+            "cantidad": 1
           }
         ]
       }
@@ -1879,6 +1885,24 @@
         "metrica": "entrevistados_hm",
         "vacanteId": "v-8lyzyt",
         "cantidad": 2
+      },
+      {
+        "fecha": "2026-10-02",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 11
+      },
+      {
+        "fecha": "2026-10-02",
+        "metrica": "rechazados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-10-02",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 11
       },
       {
         "fecha": "2026-10-02",
