@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="232.06 17.36 128.86 55.58" width="128.86" height="55.58" role="img" aria-label="Acento FÓNDIKA">
+  <title>Acento FÓNDIKA</title>
+  <style>
+    path { fill: #535659; }
+    @media (prefers-color-scheme: dark) {
+      path { fill: #FFFFFF; }
+    }
+  </style>
+
+  <path d="M360.917 17.363L232.059 64.183L232.059 72.945L360.917 72.945Z"/>
+</svg>
