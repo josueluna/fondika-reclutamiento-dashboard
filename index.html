@@ -1165,7 +1165,7 @@ async function init(){
   document.getElementById('overviewSnapshot').textContent = `Generado ${fmtGenerated()}`;
   document.getElementById('historySnapshot').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('footerSource').textContent =
-    `Fuente: ${store.metadata.source} · Corte ${fmtDate(store.generatedDate)} · Evidencia de actividad: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
+    `Corte ${fmtDate(store.generatedDate)} · Evidencia de actividad: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
 
   refreshFilterOptions();
   refreshHistoryOptions();
