@@ -519,7 +519,7 @@ html[data-theme="dark"] .funnel-note{
 
   .shell{
     width:100%;
-    padding:16px 14px 92px;
+    padding:16px 14px calc(96px + env(safe-area-inset-bottom));
     margin:0;
   }
 
@@ -535,7 +535,8 @@ html[data-theme="dark"] .funnel-note{
     top:auto;
 
     width:100%;
-    height:68px;
+    min-height:68px;
+    height:auto;
 
     padding:6px max(14px, env(safe-area-inset-right))
             calc(6px + env(safe-area-inset-bottom))
@@ -551,6 +552,22 @@ html[data-theme="dark"] .funnel-note{
 
     background:var(--white);
     box-shadow:0 -8px 24px rgba(83,86,89,.08);
+  }
+
+  /*
+    Backplate para Safari iOS.
+    Cubre el espacio que puede aparecer debajo de la barra fija
+    cuando la interfaz del navegador cambia de tama?o al hacer scroll.
+  */
+  .rail::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    height:180px;
+    background:var(--white);
+    pointer-events:none;
   }
 
   .rail .logo-mark,
