@@ -1166,12 +1166,13 @@ async function init(){
 
   const headerActions = document.querySelector('.header-actions');
   const overviewSnapshot = document.getElementById('overviewSnapshot');
+  const overviewSnapshotWrap = overviewSnapshot.closest('.snapshot');
   const headerCut = document.getElementById('headerCut');
 
-  if (headerActions && overviewSnapshot) {
+  if (headerActions && overviewSnapshotWrap) {
     if (headerCut) headerCut.remove();
-    if (!headerActions.contains(overviewSnapshot)) {
-      headerActions.appendChild(overviewSnapshot);
+    if (!headerActions.contains(overviewSnapshotWrap)) {
+      headerActions.appendChild(overviewSnapshotWrap);
     }
   }
   document.getElementById('historySnapshot').textContent = `Corte ${fmtDate(store.generatedDate)}`;
