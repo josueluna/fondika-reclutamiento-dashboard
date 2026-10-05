@@ -346,7 +346,6 @@ th.n,td.n{text-align:right}
           <button class="chip" data-status="Cancelada" onclick="setHistoryStatus('Cancelada')">Canceladas</button>
         </div>
         <div class="spacer"></div>
-        <div class="snapshot"><span class="pulse"></span><span id="historySnapshot">—</span></div>
       </div>
 
       <div class="kpis" id="historyKpis"></div>
@@ -1175,7 +1174,6 @@ async function init(){
       headerActions.appendChild(overviewSnapshotWrap);
     }
   }
-  document.getElementById('historySnapshot').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('footerSource').textContent =
     `Corte ${fmtDate(store.generatedDate)} · Evidencia de actividad: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
 
