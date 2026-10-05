@@ -1828,10 +1828,10 @@ function renderHistory(){
   const t = sumCorte(rows);   // estado al corte de los procesos filtrados
 
   renderKpis(document.getElementById('historyKpis'), [
-    {label:'Procesos históricos', value:rows.length,       icon:'calendar', note:'Procesos no activos'},
-    {label:'Postulaciones',       value:t.postulaciones,   icon:'interviewed',    note:'Al corte'},
-    {label:'Contratado',          value:t.contratado,      icon:'linked',   cls:'orange', note:'Etapa actual al corte'},
-    {label:'Rechazado',           value:t.rechazado,       icon:'rejected', note:'Etapa actual al corte'}
+    {label:'Procesos históricos', value:rows.length,       icon:'calendar',    note:'Procesos no activos'},
+    {label:'Postulaciones',       value:t.postulaciones,   icon:'interviewed', note:'Al corte'},
+    {label:'Rechazados',          value:t.rechazado,       icon:'rejected',    note:'Etapa actual al corte'},
+    {label:'Contrataciones',      value:t.contratado,      icon:'linked',      cls:'orange', note:'Etapa actual al corte'}
   ]);
 
   document.getElementById('historyRows').innerHTML = rows.map(v => {
