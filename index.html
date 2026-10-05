@@ -1163,6 +1163,17 @@ async function init(){
   const {desdeEvidencia, hastaEvidencia} = store.metadata.cobertura;
   document.getElementById('headerCut').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('overviewSnapshot').textContent = `Actualizado ${fmtGenerated()}`;
+
+  const headerActions = document.querySelector('.header-actions');
+  const overviewSnapshot = document.getElementById('overviewSnapshot');
+  const headerCut = document.getElementById('headerCut');
+
+  if (headerActions && overviewSnapshot) {
+    if (headerCut) headerCut.remove();
+    if (!headerActions.contains(overviewSnapshot)) {
+      headerActions.appendChild(overviewSnapshot);
+    }
+  }
   document.getElementById('historySnapshot').textContent = `Corte ${fmtDate(store.generatedDate)}`;
   document.getElementById('footerSource').textContent =
     `Corte ${fmtDate(store.generatedDate)} · Evidencia de actividad: ${fmtDate(desdeEvidencia)} – ${fmtDate(hastaEvidencia)}`;
