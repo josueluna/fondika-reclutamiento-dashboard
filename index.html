@@ -1301,7 +1301,25 @@ const ACTIVITY = [
 const ACTIVITY_KEYS = ACTIVITY.map(m => m.key);
 const ACT_BY_KEY = Object.fromEntries(ACTIVITY.map(m => [m.key, m]));
 // Orden visual de las tarjetas de "Actividad del periodo" en Overview (solo presentación).
-const OVERVIEW_ACTIVITY_ORDER = ['nuevos','contactados','rechazados','entrevistados_ch','enviados_hm','entrevistados_hm','aprobados_hm','contrataciones'];
+const HIRING_STAGE_LABELS = new Set([
+  'Candidato finalista',
+  'Oferta extendida',
+  'Oferta aceptada',
+  'Documentación solicitada',
+  'Documentación recibida',
+  'Elaboración de contrato',
+  'Contrato enviado'
+]);
+
+const HIRING_CARD = {
+  key:'en_contratacion',
+  label:'En contratación',
+  icon:'offers',
+  cls:'orange',
+  note:'Etapa actual al corte · no cambia con el periodo'
+};
+
+const OVERVIEW_ACTIVITY_ORDER = ['nuevos','contactados','rechazados','entrevistados_ch','enviados_hm','entrevistados_hm','en_contratacion','contrataciones'];
 // Funnel del detalle: hitos en orden de proceso (rechazados se informa aparte).
 const FUNNEL_KEYS = ['nuevos','contactados','entrevistados_ch','enviados_hm','entrevistados_hm','aprobados_hm','contrataciones'];
 
@@ -1586,6 +1604,19 @@ const sumCorte = vacs => {
   return t;
 };
 
+function countHiring(vacs){
+  return vacs.reduce((total, v) => {
+    const stages = Array.isArray(v.etapas) ? v.etapas : [];
+
+    return total + stages.reduce((sum, stage) =>
+      sum + (
+        HIRING_STAGE_LABELS.has(stage.label) &&
+        isCount(stage.cantidad)
+          ? stage.cantidad
+          : 0
+      ), 0);
+  }, 0);
+}
 // Suma una métrica de la foto: si alguna vacante del scope no tiene el dato, el agregado es desconocido (null).
 function sumNullable(vacs, field){
   if(vacs.some(v => v.metricas[field] === null || v.metricas[field] === undefined)) return null;
@@ -1731,10 +1762,34 @@ function renderActivity(rows){
   const ids = new Set(rows.map(v => v.vacanteId));
 
   document.getElementById('activityCaption').textContent = `${periodCaption(start, g)} · ${scopeSuffix(rows)}`;
-  renderKpis(document.getElementById('activityGrid'), OVERVIEW_ACTIVITY_ORDER.map(k => ACT_BY_KEY[k]).map(m => ({
-    label:m.label, value:metricValue(m.key, start, end, ids), icon:m.icon, cls:m.cls,
-    note:coverageNote(m.key, start, end, m.note), metric:m.key, active:m.key === chartMetric
-  })));
+  const overviewKpis = OVERVIEW_ACTIVITY_ORDER.map(k => {
+    if(k === 'en_contratacion'){
+      return {
+        label:HIRING_CARD.label,
+        value:countHiring(rows),
+        icon:HIRING_CARD.icon,
+        cls:HIRING_CARD.cls,
+        note:HIRING_CARD.note
+      };
+    }
+
+    const m = ACT_BY_KEY[k];
+
+    return {
+      label:m.label,
+      value:metricValue(m.key, start, end, ids),
+      icon:m.icon,
+      cls:m.cls,
+      note:coverageNote(m.key, start, end, m.note),
+      metric:m.key,
+      active:m.key === chartMetric
+    };
+  });
+
+  renderKpis(
+    document.getElementById('activityGrid'),
+    overviewKpis
+  );
 
   const metric = ACT_BY_KEY[chartMetric];
   const series = chartSeries(chartMetric, ids, currentPeriod, start);
