@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.2.0",
   "metadata": {
-    "generatedAt": "2026-10-09T17:30:46-06:00",
+    "generatedAt": "2026-10-19T09:48:11-06:00",
     "timezone": "America/Mexico_City",
     "source": "Hira",
     "dimensionSemantics": "vacante_actual_al_generar",
     "cobertura": {
       "desdeEvidencia": "2026-05-11",
-      "hastaEvidencia": "2026-10-09"
+      "hastaEvidencia": "2026-10-16"
     },
     "metricas": [
       "nuevos",
@@ -26,23 +26,23 @@
     "coberturaPorMetrica": {
       "nuevos": {
         "desdeEvidencia": "2026-05-11",
-        "hastaEvidencia": "2026-10-09"
+        "hastaEvidencia": "2026-10-15"
       },
       "rechazados": {
         "desdeEvidencia": "2026-05-28",
-        "hastaEvidencia": "2026-10-09"
+        "hastaEvidencia": "2026-10-15"
       },
       "contactados": {
         "desdeEvidencia": "2026-05-27",
-        "hastaEvidencia": "2026-10-07"
+        "hastaEvidencia": "2026-10-15"
       },
       "entrevistados_ch": {
         "desdeEvidencia": "2026-05-15",
-        "hastaEvidencia": "2026-10-09"
+        "hastaEvidencia": "2026-10-16"
       },
       "enviados_hm": {
         "desdeEvidencia": "2026-05-27",
-        "hastaEvidencia": "2026-10-09"
+        "hastaEvidencia": "2026-10-16"
       },
       "entrevistados_hm": {
         "desdeEvidencia": "2026-06-29",
@@ -115,9 +115,9 @@
         "fechaApertura": "2026-05-06",
         "fechaCierre": null,
         "metricas": {
-          "postulaciones": 222,
-          "activas": 68,
-          "contactados": 162,
+          "postulaciones": 225,
+          "activas": 71,
+          "contactados": 165,
           "entrevistados": 46,
           "ofertas": 6,
           "contrataciones": 12,
@@ -126,14 +126,14 @@
         },
         "alCorte": {
           "nuevo": 10,
-          "contactado": 44,
+          "contactado": 47,
           "entrevistaCh": 5,
           "enviadoHm": 1,
           "entrevistaHm": 2,
           "contratado": 12,
           "rechazado": 142,
           "otros": 6,
-          "fueraDeNuevo": 212
+          "fueraDeNuevo": 215
         },
         "etapas": [
           {
@@ -146,7 +146,7 @@
             "id": "contactado",
             "label": "Contactado",
             "orden": 2,
-            "cantidad": 44
+            "cantidad": 47
           },
           {
             "id": "screening",
@@ -277,50 +277,50 @@
         "fechaApertura": "2026-08-17",
         "fechaCierre": null,
         "metricas": {
-          "postulaciones": 18,
-          "activas": 10,
-          "contactados": 12,
-          "entrevistados": 5,
+          "postulaciones": 25,
+          "activas": 15,
+          "contactados": 20,
+          "entrevistados": 8,
           "ofertas": 0,
           "contrataciones": 0,
           "feedbackPendiente": null,
           "sinMovimiento7d": null
         },
         "alCorte": {
-          "nuevo": 3,
-          "contactado": 4,
-          "entrevistaCh": 1,
-          "enviadoHm": 0,
+          "nuevo": 0,
+          "contactado": 7,
+          "entrevistaCh": 3,
+          "enviadoHm": 3,
           "entrevistaHm": 1,
           "contratado": 0,
-          "rechazado": 8,
+          "rechazado": 10,
           "otros": 1,
-          "fueraDeNuevo": 15
+          "fueraDeNuevo": 25
         },
         "etapas": [
           {
-            "id": "nuevo",
-            "label": "Nuevo",
-            "orden": 1,
-            "cantidad": 3
-          },
-          {
             "id": "contactado",
             "label": "Contactado",
-            "orden": 2,
-            "cantidad": 4
+            "orden": 1,
+            "cantidad": 7
           },
           {
             "id": "screening",
             "label": "Screening",
-            "orden": 3,
+            "orden": 2,
             "cantidad": 1
           },
           {
             "id": "entrevista_ch_agendada",
             "label": "Entrevista CH agendada",
+            "orden": 3,
+            "cantidad": 3
+          },
+          {
+            "id": "enviado_a_hm",
+            "label": "Enviado a Hiring Manager",
             "orden": 4,
-            "cantidad": 1
+            "cantidad": 3
           },
           {
             "id": "entrevista_hm_agendada",
@@ -341,8 +341,8 @@
         "fechaApertura": "2026-08-27",
         "fechaCierre": null,
         "metricas": {
-          "postulaciones": 23,
-          "activas": 21,
+          "postulaciones": 43,
+          "activas": 29,
           "contactados": 17,
           "entrevistados": 3,
           "ofertas": 0,
@@ -351,22 +351,22 @@
           "sinMovimiento7d": null
         },
         "alCorte": {
-          "nuevo": 6,
+          "nuevo": 14,
           "contactado": 10,
           "entrevistaCh": 2,
           "enviadoHm": 1,
           "entrevistaHm": 2,
           "contratado": 0,
-          "rechazado": 2,
+          "rechazado": 14,
           "otros": 0,
-          "fueraDeNuevo": 17
+          "fueraDeNuevo": 29
         },
         "etapas": [
           {
             "id": "nuevo",
             "label": "Nuevo",
             "orden": 1,
-            "cantidad": 6
+            "cantidad": 14
           },
           {
             "id": "contactado",
@@ -1993,6 +1993,66 @@
         "metrica": "entrevistados_hm",
         "vacanteId": "v-8lyzyt",
         "cantidad": 4
+      },
+      {
+        "fecha": "2026-10-13",
+        "metrica": "nuevos",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 7
+      },
+      {
+        "fecha": "2026-10-14",
+        "metrica": "nuevos",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 20
+      },
+      {
+        "fecha": "2026-10-15",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-10-15",
+        "metrica": "rechazados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 2
+      },
+      {
+        "fecha": "2026-10-15",
+        "metrica": "rechazados",
+        "vacanteId": "vac_da58e6b0a5910f78b7826a92",
+        "cantidad": 12
+      },
+      {
+        "fecha": "2026-10-15",
+        "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 3
+      },
+      {
+        "fecha": "2026-10-15",
+        "metrica": "contactados",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 8
+      },
+      {
+        "fecha": "2026-10-15",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 4
+      },
+      {
+        "fecha": "2026-10-16",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-10-16",
+        "metrica": "enviados_hm",
+        "vacanteId": "vac_d38f58e321b0f69a704a9107",
+        "cantidad": 3
       }
     ]
   }
