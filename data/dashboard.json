@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.2.0",
   "metadata": {
-    "generatedAt": "2026-10-30T15:38:07-06:00",
+    "generatedAt": "2026-10-30T16:04:39-06:00",
     "timezone": "America/Mexico_City",
     "source": "Hira",
     "dimensionSemantics": "vacante_actual_al_generar",
@@ -152,7 +152,7 @@
             "id": "screening",
             "label": "Screening",
             "orden": 3,
-            "cantidad": 1
+            "cantidad": 3
           },
           {
             "id": "entrevista_ch_agendada",
@@ -179,28 +179,22 @@
             "cantidad": 2
           },
           {
-            "id": "custom_stage_88da4652-6ea0-4084-9fbf-b3a3cdea871f",
-            "label": "Candidato finalista",
-            "orden": 8,
-            "cantidad": 2
-          },
-          {
             "id": "custom_stage_54561ca7-6169-45cf-b449-3d26517a635b",
             "label": "Oferta extendida",
-            "orden": 9,
+            "orden": 8,
             "cantidad": 1
           },
           {
             "id": "custom_stage_14fe1c33-3b48-457b-bb10-85785c44a38b",
             "label": "Documentación solicitada",
-            "orden": 10,
-            "cantidad": 3
+            "orden": 9,
+            "cantidad": 2
           },
           {
             "id": "custom_stage_c3023a57-4e26-4cf3-8d45-d8ac449b895d",
             "label": "Contrato enviado",
-            "orden": 11,
-            "cantidad": 1
+            "orden": 10,
+            "cantidad": 2
           }
         ]
       },
