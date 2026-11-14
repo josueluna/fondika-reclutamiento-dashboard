@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.2.0",
   "metadata": {
-    "generatedAt": "2026-11-09T10:27:51-06:00",
+    "generatedAt": "2026-11-13T18:07:48-06:00",
     "timezone": "America/Mexico_City",
     "source": "Hira",
     "dimensionSemantics": "vacante_actual_al_generar",
     "cobertura": {
       "desdeEvidencia": "2026-05-11",
-      "hastaEvidencia": "2026-11-06"
+      "hastaEvidencia": "2026-11-13"
     },
     "metricas": [
       "nuevos",
@@ -26,7 +26,7 @@
     "coberturaPorMetrica": {
       "nuevos": {
         "desdeEvidencia": "2026-05-11",
-        "hastaEvidencia": "2026-11-06"
+        "hastaEvidencia": "2026-11-11"
       },
       "rechazados": {
         "desdeEvidencia": "2026-05-28",
@@ -38,15 +38,15 @@
       },
       "entrevistados_ch": {
         "desdeEvidencia": "2026-05-15",
-        "hastaEvidencia": "2026-10-29"
+        "hastaEvidencia": "2026-11-11"
       },
       "enviados_hm": {
         "desdeEvidencia": "2026-05-27",
-        "hastaEvidencia": "2026-11-03"
+        "hastaEvidencia": "2026-11-11"
       },
       "entrevistados_hm": {
         "desdeEvidencia": "2026-06-29",
-        "hastaEvidencia": "2026-10-29"
+        "hastaEvidencia": "2026-11-11"
       },
       "aprobados_hm": {
         "desdeEvidencia": "2026-05-16",
@@ -54,7 +54,7 @@
       },
       "contrataciones": {
         "desdeEvidencia": "2026-05-21",
-        "hastaEvidencia": "2026-11-03"
+        "hastaEvidencia": "2026-11-13"
       }
     },
     "etapasAlCorte": {
@@ -115,12 +115,12 @@
         "fechaApertura": "2026-05-06",
         "fechaCierre": null,
         "metricas": {
-          "postulaciones": 253,
+          "postulaciones": 254,
           "activas": 93,
           "contactados": 194,
           "entrevistados": 50,
           "ofertas": 6,
-          "contrataciones": 14,
+          "contrataciones": 15,
           "feedbackPendiente": null,
           "sinMovimiento7d": null
         },
@@ -130,10 +130,10 @@
           "entrevistaCh": 9,
           "enviadoHm": 1,
           "entrevistaHm": 2,
-          "contratado": 14,
+          "contratado": 15,
           "rechazado": 146,
           "otros": 8,
-          "fueraDeNuevo": 244
+          "fueraDeNuevo": 245
         },
         "etapas": [
           {
@@ -290,7 +290,7 @@
         "nombre": "Asesor CAP",
         "area": "Comercial",
         "hiringManager": "Maricela Curiel",
-        "estatus": "Activa",
+        "estatus": "Pausada",
         "posiciones": 1,
         "fechaApertura": "2026-08-17",
         "fechaCierre": null,
@@ -354,7 +354,7 @@
         "nombre": "Director Comercial",
         "area": "Comercial",
         "hiringManager": "Juan Carlos Pelayo",
-        "estatus": "Activa",
+        "estatus": "Pausada",
         "posiciones": 1,
         "fechaApertura": "2026-08-27",
         "fechaCierre": null,
@@ -2225,6 +2225,36 @@
       {
         "fecha": "2026-11-06",
         "metrica": "contactados",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-11-11",
+        "metrica": "nuevos",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-11-11",
+        "metrica": "entrevistados_ch",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-11-11",
+        "metrica": "enviados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-11-11",
+        "metrica": "entrevistados_hm",
+        "vacanteId": "v-8lyzyt",
+        "cantidad": 1
+      },
+      {
+        "fecha": "2026-11-13",
+        "metrica": "contrataciones",
         "vacanteId": "v-8lyzyt",
         "cantidad": 1
       }
